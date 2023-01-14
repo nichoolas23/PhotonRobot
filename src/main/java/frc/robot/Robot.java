@@ -7,9 +7,14 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.AprilTags.AprilSetup;
+import frc.Field.RoboField;
 import org.photonvision.RobotPoseEstimator;
 
 /**
@@ -20,16 +25,20 @@ import org.photonvision.RobotPoseEstimator;
  */
 public class Robot extends TimedRobot
 {
-   
-   AHRS gyro = new AHRS();
+    AHRS gyro = new AHRS();
     private final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSRX(1),new WPI_TalonSRX(3),new WPI_TalonSRX(2),new WPI_TalonSRX(4)};
     private final MotorControllerGroup leftDrive = new MotorControllerGroup(wpi_talonSRXES[0],wpi_talonSRXES[1]);
     private final MotorControllerGroup rightDrive = new MotorControllerGroup(wpi_talonSRXES[2],wpi_talonSRXES[3]);
     private static double rotateVal;
-    private static RobotPoseEstimator poseEstimator;
-    private XboxController m_controller = new XboxController(0);
+     private XboxController m_controller = new XboxController(0);
     private final Timer timer = new Timer();
-    //private static final PhotonCamera camera = new PhotonCamera("photonvision");
+    private static RobotPoseEstimator poseEstimator;
+
+    private static Pose3d robotPose3d;
+    private static Pose2d robotPose2d;
+
+
+
 
 
     /**
@@ -39,10 +48,12 @@ public class Robot extends TimedRobot
     @Override
     public void robotInit()
     {
+        RoboField.fieldSetup();
         m_controller = new XboxController(0);
         rightDrive.setInverted(true);
-
         poseEstimator = AprilSetup.getRobotPoseEstimator();
+        poseEstimator.update();
+        robotPose3d = poseEstimator.getReferencePose();
     }
     
     
@@ -60,7 +71,8 @@ public class Robot extends TimedRobot
     @Override
     public void autonomousPeriodic()
     {
-      var poseAuto = poseEstimator.update();
+      robotPose2d = RoboField.fieldUpdate(AprilSetup.getEstimatedGlobalPose(robotPose3d.toPose2d()).getFirst()); // position of robot on the field
+
     }
     
     
