@@ -5,10 +5,8 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.Timer;
-import frc.Field.RoboField;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +16,8 @@ import org.photonvision.RobotPoseEstimator.PoseStrategy;
 
 public class AprilSetup extends RobotConstants {
 
-  public static PhotonCamera photonCamera = new PhotonCamera("robotCam");;
+  public static PhotonCamera photonCamera = new PhotonCamera("robotCam");
+  ;
   private static RobotPoseEstimator robotPoseEstimator;
 
   public AprilSetup() {
@@ -29,13 +28,15 @@ public class AprilSetup extends RobotConstants {
     aprilTags.add(FieldConstants.tagFour);
     aprilTags.add(FieldConstants.tagSix);
 
-    AprilTagFieldLayout aprilTagFieldLayout = new AprilTagFieldLayout(aprilTags, 3.27, 4.234);
+    AprilTagFieldLayout aprilTagFieldLayout = new AprilTagFieldLayout(aprilTags,
+        FieldConstants.fieldLength, FieldConstants.fieldWidth);
 
     var camList = new ArrayList<Pair<PhotonCamera, Transform3d>>();
 
     camList.add(new Pair<PhotonCamera, Transform3d>(photonCamera, VisionConstants.robotToCam));
 
-    robotPoseEstimator = new RobotPoseEstimator(aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camList);
+    robotPoseEstimator = new RobotPoseEstimator(aprilTagFieldLayout,
+        PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camList);
   }
 
   public static RobotPoseEstimator getRobotPoseEstimator() {
