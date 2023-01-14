@@ -1,3 +1,3 @@
-#   Example Robot: Getting Started
+#   Big fella
 
-An example project which demonstrates the simplest autonomous and teleoperated routines.
+Robot
