@@ -14,13 +14,13 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.RobotPoseEstimator;
 import org.photonvision.RobotPoseEstimator.PoseStrategy;
 
-public class AprilSetup extends RobotConstants {
+public class AprilMain extends Constants {
 
   public static PhotonCamera photonCamera = new PhotonCamera("robotCam");
   ;
   private static RobotPoseEstimator robotPoseEstimator;
 
-  public AprilSetup() {
+  public AprilMain() {
 
     List<AprilTag> aprilTags = new ArrayList<>();
 
