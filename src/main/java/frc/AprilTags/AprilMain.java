@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.Timer;
+import frc.Robot.Constants;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,16 +23,19 @@ public class AprilMain extends Constants {
 
   public AprilMain() {
 
+    // Initialize april tags
     List<AprilTag> aprilTags = new ArrayList<>();
 
     aprilTags.add(FieldConstants.tagThree);
     aprilTags.add(FieldConstants.tagFour);
     aprilTags.add(FieldConstants.tagSix);
 
+    // Setup AprilTags and field layout
     AprilTagFieldLayout aprilTagFieldLayout = new AprilTagFieldLayout(aprilTags,
         FieldConstants.fieldLength, FieldConstants.fieldWidth);
 
-    var camList = new ArrayList<Pair<PhotonCamera, Transform3d>>();
+
+    var camList = new ArrayList<Pair<PhotonCamera, Transform3d>>();     //If we add multiple cameras we just add them here
 
     camList.add(new Pair<PhotonCamera, Transform3d>(photonCamera, VisionConstants.robotToCam));
 
@@ -42,7 +46,6 @@ public class AprilMain extends Constants {
   public static RobotPoseEstimator getRobotPoseEstimator() {
     return robotPoseEstimator;
   }
-
 
   public static Pair<Pose2d, Double> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
     getRobotPoseEstimator().setReferencePose(prevEstimatedRobotPose);

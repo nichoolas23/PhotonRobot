@@ -5,17 +5,15 @@
 
 package frc.Robot;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import frc.AprilTags.AprilMain;
 import frc.Field.RoboField;
-import frc.Robot.Drivetrain.Drivetrain;
+import frc.Robot.RobotSystems.Drivetrain;
 import org.photonvision.RobotPoseEstimator;
 
 /**
@@ -32,7 +30,7 @@ public class Robot extends TimedRobot {
   private static Pose2d robotPose2d;
   Drivetrain drivetrain = new Drivetrain();
   private final Timer timer = new Timer();
-  AHRS gyro = new AHRS();
+
   private XboxController m_controller = new XboxController(0);
 
   /**
