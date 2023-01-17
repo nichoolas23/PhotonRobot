@@ -24,7 +24,7 @@ public class AprilMain extends Constants {
   public AprilMain() {
 
     // Initialize april tags
-    List<AprilTag> aprilTags = new ArrayList<>();
+    List<AprilTag> aprilTags = new ArrayList<>(); //vision targets
 
     aprilTags.add(FieldConstants.tagThree);
     aprilTags.add(FieldConstants.tagFour);
@@ -34,13 +34,11 @@ public class AprilMain extends Constants {
     AprilTagFieldLayout aprilTagFieldLayout = new AprilTagFieldLayout(aprilTags,
         FieldConstants.fieldLength, FieldConstants.fieldWidth);
 
-
     var camList = new ArrayList<Pair<PhotonCamera, Transform3d>>();     //If we add multiple cameras we just add them here
 
     camList.add(new Pair<PhotonCamera, Transform3d>(photonCamera, VisionConstants.robotToCam));
 
-    robotPoseEstimator = new RobotPoseEstimator(aprilTagFieldLayout,
-        PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camList);
+    robotPoseEstimator = new RobotPoseEstimator(aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camList);
   }
 
   public static RobotPoseEstimator getRobotPoseEstimator() {
@@ -51,12 +49,13 @@ public class AprilMain extends Constants {
     getRobotPoseEstimator().setReferencePose(prevEstimatedRobotPose);
 
     double currentTime = Timer.getFPGATimestamp();
-    Optional<Pair<Pose3d, Double>> result = getRobotPoseEstimator().update();
+    Optional<Pair<Pose3d, Double>> result = getRobotPoseEstimator().update(); // Most recent pose
+
     if (result.isPresent()) {
-      return new Pair<Pose2d, Double>(
+      return new Pair<>(
           result.get().getFirst().toPose2d(), currentTime - result.get().getSecond());
     } else {
-      return new Pair<Pose2d, Double>(null, 0.0);
+      return new Pair<>(null, 0.0);
     }
   }
 }

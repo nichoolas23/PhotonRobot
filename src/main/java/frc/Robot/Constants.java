@@ -18,8 +18,7 @@ public class Constants {
 
   public static class FieldConstants {
     //APRIL TAGS
-    public static AprilTag tagThree = new AprilTag(3,
-        new Pose3d(new Pose2d((3.270 - .721), 4.234, Rotation2d.fromDegrees(180))));
+    public static AprilTag tagThree = new AprilTag(3, new Pose3d(new Pose2d((3.270 - .721), 4.234, Rotation2d.fromDegrees(180))));
     public static AprilTag tagFour = new AprilTag(4,
         new Pose3d(new Pose2d(0.0, 3.5189, Rotation2d.fromDegrees(270))));
 
