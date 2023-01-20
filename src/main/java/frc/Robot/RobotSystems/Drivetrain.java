@@ -9,9 +9,7 @@ public class Drivetrain {
   private final MotorControllerGroup leftDrive = new MotorControllerGroup(wpi_talonSRXES[0], wpi_talonSRXES[1]);
   private final MotorControllerGroup rightDrive = new MotorControllerGroup(wpi_talonSRXES[2], wpi_talonSRXES[3]);
 
-  public MotorControllerGroup getLeftDrive() {
-    return leftDrive;
-  }
+  public MotorControllerGroup getLeftDrive() {return leftDrive;}
 
   public MotorControllerGroup getRightDrive() {
     return rightDrive;
