@@ -1,6 +1,7 @@
 package frc.Robot;
 
 import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -20,7 +21,9 @@ public class Constants {
   }
 
   public static class FieldConstants  {
-    //APRIL TAGS
+    /**
+     *April Tags
+     */
     public static AprilTag tagThree = new AprilTag(3, new Pose3d(new Pose2d((3.270 - .721), 4.234, Rotation2d.fromDegrees(180))));
     public static AprilTag tagFour = new AprilTag(4,
         new Pose3d(new Pose2d(0.0, 3.5189, Rotation2d.fromDegrees(270))));
@@ -30,10 +33,22 @@ public class Constants {
         new Pose3d(new Pose2d(3.27, 2.66, Rotation2d.fromDegrees(90))));
 
 
-    //FIELD DIMENSIONS
+    /**
+     *  Field Dimensions
+     */
     public static double fieldLength = 3.27;
     public static double fieldWidth = 4.234;
 
+    /**
+     *Forward PID
+     */
+    final double LINEAR_P = 0.1;
+    final double LINEAR_D = 0.0;
+    /**
+     *Turning PID
+     */
+    final double ANGULAR_P = 0.1;
+    final double ANGULAR_D = 0.0;
   }
   static class RobotConstants {
 
