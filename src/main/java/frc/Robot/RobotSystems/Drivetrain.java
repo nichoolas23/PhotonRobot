@@ -11,6 +11,12 @@ public class Drivetrain {
   private final MotorControllerGroup leftDrive = new MotorControllerGroup(wpi_talonSRXES[0], wpi_talonSRXES[1]);
   private final MotorControllerGroup rightDrive = new MotorControllerGroup(wpi_talonSRXES[2], wpi_talonSRXES[3]);
 
+  public MotorControllerGroup getLeftDrive() {return leftDrive;}
+
+  public MotorControllerGroup getRightDrive() {
+    return rightDrive;
+  }
+
 
 
   private final  DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(.5);
@@ -22,13 +28,5 @@ public class Drivetrain {
   final double ANGULAR_P = 0.1;
   final double ANGULAR_D = 0.0;
   PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
-
-
-  public MotorControllerGroup getLeftDrive() {return leftDrive;}
-
-  public MotorControllerGroup getRightDrive() {
-    return rightDrive;
-  }
-
 
 }

@@ -15,7 +15,11 @@ import frc.AprilTags.AprilMain;
 import frc.Field.RoboField;
 import frc.Robot.RobotSystems.Drivetrain;
 import frc.Robot.RobotSystems.RobotNav;
+import java.util.ArrayList;
+import java.util.List;
+import org.photonvision.PhotonCamera;
 import org.photonvision.RobotPoseEstimator;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 /**
  * The VM is configured to automatically run this class, and to call the methods corresponding to
@@ -31,8 +35,10 @@ public class Robot extends TimedRobot {
   private static Pose2d robotPose2d;
   Drivetrain drivetrain = new Drivetrain();
   private final Timer timer = new Timer();
-
   private XboxController m_controller = new XboxController(0);
+
+  public static List<PhotonTrackedTarget> photonTrackedTargets = new ArrayList<>();
+  public static PhotonCamera camera = new PhotonCamera("photonCam");
 
   /**
    * This method is run when the robot is first started up and should be used for any initialization
@@ -46,9 +52,8 @@ public class Robot extends TimedRobot {
     poseEstimator = AprilMain.getRobotPoseEstimator();
     poseEstimator.update();
     robotPose3d = poseEstimator.getReferencePose();
-
-
   }
+
 
 
   /**
@@ -83,12 +88,10 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledPeriodic() {
-  }
-
-  @Override
   public void robotPeriodic() {
-
+      if(camera.getLatestResult().hasTargets()){
+       photonTrackedTargets = camera.getLatestResult().targets;
+      }
   }
 
   /**
@@ -115,23 +118,4 @@ public class Robot extends TimedRobot {
   }
 
 
-  //TODO: Setup photonvision sim testing
-  @Override
-  public void testInit() {
-
-  }
-
-  @Override
-  public void simulationInit() {
-
-  }
-
-  @Override
-  public void simulationPeriodic() {
-
-  }
-
-  @Override
-  public void testPeriodic() {
-  }
 }
