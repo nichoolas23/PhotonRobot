@@ -49,6 +49,7 @@ public class Robot extends TimedRobot {
     RoboField.fieldSetup();
     m_controller = new XboxController(0);
     drivetrain.getRightDrive().setInverted(true);
+
     poseEstimator = AprilMain.getRobotPoseEstimator();
     poseEstimator.update();
     robotPose3d = poseEstimator.getReferencePose();

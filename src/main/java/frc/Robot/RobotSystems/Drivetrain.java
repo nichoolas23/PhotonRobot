@@ -13,9 +13,7 @@ public class Drivetrain {
 
   public MotorControllerGroup getLeftDrive() {return leftDrive;}
 
-  public MotorControllerGroup getRightDrive() {
-    return rightDrive;
-  }
+  public MotorControllerGroup getRightDrive() {return rightDrive;}
 
 
 

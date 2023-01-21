@@ -1,6 +1,7 @@
 package frc.Robot.AutoDrive;
 
 import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import frc.Robot.Robot;
 import frc.Robot.RobotSystems.Drivetrain;
@@ -23,16 +24,21 @@ public class AutoMode  {
     // Try using Robot.photonTrackedTargets which is a list of all the tracked vision targets use the PathPlanner class to create a path to desired point
 
 
-
-
-
-
-
-
-
-
-
     PathPlanner planner = new PathPlanner();
+    PathPlannerTrajectory pathPlannerTrajectory = new PathPlannerTrajectory();
+
+
+
+
+
+
+
+
+
+
+
+
+    //PathPlanner planner = new PathPlanner();
     //TODO: (for nick later) implement A* algorithm taking current pos and end point and puts all points into path planner
 
 
