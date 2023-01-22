@@ -35,8 +35,7 @@ public class AutoMode extends TimedRobot {
 
     PathPlanner planner = new PathPlanner();
     PathPlannerTrajectory pathPlannerTrajectory = new PathPlannerTrajectory();
-
-
+    
 
 
 
