@@ -1,20 +1,29 @@
-package frc.Robot.AutoDrive;
+package frc.Robot.DriveModes.AutoDrive;
 
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-import frc.Robot.Robot;
-import frc.Robot.RobotSystems.Drivetrain;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import frc.Robot.RobotSystems.RobotNav;
-import org.photonvision.PhotonCamera;
 
 
-public class AutoMode  {
+public class AutoMode extends TimedRobot {
+  private final Timer timer = new Timer();
   public static void autoDriver(RobotNav robotNavData){
       // Do any initial stuff here
 
     executeAuto(robotNavData);
 
+  }
+  @Override
+  public void autonomousInit() {
+    timer.reset();
+    timer.start();
+
+  }
+  @Override
+  public void autonomousPeriodic() {
+    RobotNav.updatePose();
   }
 
 
@@ -26,8 +35,7 @@ public class AutoMode  {
 
     PathPlanner planner = new PathPlanner();
     PathPlannerTrajectory pathPlannerTrajectory = new PathPlannerTrajectory();
-
-
+    
 
 
 
