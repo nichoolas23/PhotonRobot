@@ -1,21 +1,22 @@
 package frc.Robot.DriveModes.TeleopDrive;
 
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.Robot.RobotSystems.Drivetrain;
-import frc.Robot.RobotSystems.RobotNav;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.Robot.subsystems.Drivetrain;
+import frc.Robot.subsystems.RobotNav;
 
-public class TeleopMode extends TimedRobot {
+public class TeleopMode extends SubsystemBase {
   Drivetrain drivetrain = new Drivetrain();
   private XboxController m_controller = new XboxController(0);
 
-  @Override
+
   public void teleopInit() {
     drivetrain.getLeftDrive().set(0);
     drivetrain.getRightDrive().set(0);
   }
-  @Override
-  public void teleopPeriodic(){
+
+@Override
+  public void periodic(){
 
     if (m_controller.getAButtonPressed()) {
       drivetrain.getLeftDrive().stopMotor();

@@ -4,10 +4,12 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import frc.Robot.RobotSystems.RobotNav;
+import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.Robot.subsystems.RobotNav;
 
 
-public class AutoMode extends TimedRobot {
+public class AutoMode extends SubsystemBase {
   private final Timer timer = new Timer();
   public static void autoDriver(RobotNav robotNavData){
       // Do any initial stuff here
@@ -15,13 +17,13 @@ public class AutoMode extends TimedRobot {
     executeAuto(robotNavData);
 
   }
-  @Override
+
   public void autonomousInit() {
     timer.reset();
     timer.start();
 
   }
-  @Override
+
   public void autonomousPeriodic() {
     RobotNav.updatePose();
   }
