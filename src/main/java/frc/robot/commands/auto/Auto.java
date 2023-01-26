@@ -16,7 +16,7 @@ public final class Auto
   /** Example static factory for an autonomous command. */
   public static CommandBase autoFactory(Drivetrain subsystem)
   {
-    return Commands.sequence(subsystem.exampleMethodCommand());
+    return Commands.sequence();
   }
 
 

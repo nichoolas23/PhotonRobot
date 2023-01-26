@@ -5,10 +5,28 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.RobotConstants;
 import frc.robot.commands.ControllerDriveCmd;
+import frc.robot.commands.PistonExtendCmd;
+import frc.robot.subsystems.AprilMain;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.RobotNav;
+import java.util.List;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -16,9 +34,11 @@ import frc.robot.commands.ControllerDriveCmd;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
+@SuppressWarnings( "ClassNamePrefixedWithPackageName")
 public class RobotContainer
 {
-  private XboxController driveController = new XboxController(0);
+
+  private XboxController _driveController = new XboxController(0);
   public RobotContainer()
   {
 
@@ -30,11 +50,8 @@ public class RobotContainer
   /** Use this method to define your trigger->command mappings. */
   private void configureBindings()
   {
-  /*  new Trigger(() -> (driveController.getRightTriggerAxis() != 0)
-        || driveController.getLeftTriggerAxis() != 0 || driveController.getRightX() != 0).onTrue(
-        new ControllerDriveCmd(driveController.getRightTriggerAxis(),
-            driveController.getLeftTriggerAxis(),
-            driveController.getRightX()));*/
+    new Trigger( ()-> _driveController.getAButtonPressed()).onTrue(new PistonExtendCmd());
+
   }
 
 
@@ -46,7 +63,60 @@ public class RobotContainer
    */
   public Command getAutonomousCommand()
   {
-    // An example command will be run in autonomous
-    return Auto.exampleAuto(exampleSubsystem);
+    // Create a voltage constraint to ensure we don't accelerate too fast
+    var autoVoltageConstraint =
+        new DifferentialDriveVoltageConstraint(
+            new SimpleMotorFeedforward(
+                DriveConstants.ksVolts,
+                DriveConstants.kvVoltSecondsPerMeter,
+                DriveConstants.kaVoltSecondsSquaredPerMeter),
+            DriveConstants.kDriveKinematics,
+            10);
+
+    // Create config for trajectory
+    TrajectoryConfig config =
+        new TrajectoryConfig(
+            RobotConstants.AUTO_MAX_SPEED,
+            RobotConstants.AUTO_MAX_ACCEL)
+            // Add kinematics to ensure max speed is actually obeyed
+            .setKinematics(RobotConstants.DIFFERENTIAL_DRIVE_KINEMATICS)
+            // Apply the voltage constraint
+            .addConstraint(autoVoltageConstraint);
+
+    // An example trajectory to follow.  All units in meters.
+    Trajectory exampleTrajectory =
+        TrajectoryGenerator.generateTrajectory(
+            // Start at the origin facing the +X direction
+            new Pose2d(0, 0, new Rotation2d(0)),
+            // Pass through these two interior waypoints, making an 's' curve path
+            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+            // End 3 meters straight ahead of where we started, facing forward
+            new Pose2d(3, 0, new Rotation2d(0)),
+            // Pass config
+            config);
+
+    RamseteCommand ramseteCommand =
+        new RamseteCommand(
+            exampleTrajectory,
+            RobotNav::get_robotPose2d,
+            new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
+            new SimpleMotorFeedforward(
+                RobotConstants.VOLTS_PER_METER,
+                RobotConstants.VOLTS_SECONDS_PER_METER,
+                RobotConstants.VOLTS_SECONDS_SQ_PER_METER),
+            RobotConstants.DIFFERENTIAL_DRIVE_KINEMATICS,
+            Drivetrain::get_WheelSpeed,
+            new PIDController(DriveConstants.kPDriveVel, 0, 0),
+            new PIDController(DriveConstants.kPDriveVel, 0, 0),
+            // RamseteCommand passes volts to the callback
+            m_robotDrive::tankDriveVolts,
+            m_robotDrive);
+
+    // Reset odometry to the starting pose of the trajectory.
+    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
+
+    // Run path following command, then stop at the end.
+    return ramseteCommand.andThen(() -> m_robotDrive.tankDriveVolts(0, 0));
+  }
   }
 }

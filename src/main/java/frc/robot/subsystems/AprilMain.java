@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.VisionConstants;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ and returns our current estimated robot pose along with how long ago it was calc
 (in seconds).This is useful for knowing if you are using stale data or not when you are trying to drive towards something based on vision data!
  */
 
-public class AprilMain  {
+public class AprilMain extends SubsystemBase {
 
   public static PhotonCamera photonCamera = new PhotonCamera("robotCam");
   private static RobotPoseEstimator robotPoseEstimator;

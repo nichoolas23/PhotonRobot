@@ -40,6 +40,7 @@ public class Robot extends TimedRobot {
     PathPlannerServer.startServer(5811);
     RoboField.fieldSetup();
     RobotNav.navInit();
+    CommandScheduler.getInstance().run();
     _robotContainer = new RobotContainer();
 
   }

@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
 
 public class Constants {
@@ -53,19 +54,18 @@ public class Constants {
 
 
   }
-  static class RobotConstants {
+  public static class RobotConstants {
 
-    /**
-     *Forward PID
-     */
-    final double LINEAR_P = 0.1;
-    final double LINEAR_D = 0.0;
-    /**
-     *Turning PID
-     */
-    final double ANGULAR_P = 0.1;
-    final double ANGULAR_D = 0.0;
-    //robot measurements need to go here, so we can set up the robot's kinematics
+    public static final double RAMSETE_B = 2; // Tuning parameter (b > 0 rad²/m²) for which larger values make convergence more aggressive like a proportional term.
+    public static final double RAMSETE_ZETA = 0.7; // Tuning parameter (0 rad⁻¹ < zeta < 1 rad⁻¹) for which larger values provide more damping in response.
+    public static double TRACK_WIDTH = 0.5;
+    public static double AUTO_MAX_SPEED = 0.0;
+    public static double AUTO_MAX_ACCEL = 0.0;
+    public static double VOLTS_PER_METER = 0.0;
+    public static double VOLTS_SECONDS_PER_METER = 0.0;
+    public static double VOLTS_SECONDS_SQ_PER_METER = 0.0;
+
+    public static final DifferentialDriveKinematics DIFFERENTIAL_DRIVE_KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH);
   }
 
 
