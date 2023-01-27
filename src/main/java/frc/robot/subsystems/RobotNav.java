@@ -17,9 +17,15 @@ public class RobotNav extends SubsystemBase {
 
 
   public static void navInit(){
+    new AprilMain();
+
     poseEstimator = AprilMain.getRobotPoseEstimator();
+    poseEstimator.setReferencePose(new Pose3d());
+
     poseEstimator.update();
+
     _robotPose3d = poseEstimator.getReferencePose();
+
   }
 
   public static void updatePose(){

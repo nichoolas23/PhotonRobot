@@ -9,6 +9,7 @@ public class PathFindCommand extends CommandBase {
 
 
   public PathFindCommand() {
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(_apriltagController);
   }

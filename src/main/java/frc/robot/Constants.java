@@ -56,8 +56,8 @@ public class Constants {
   }
   public static class RobotConstants {
 
-    public static final double RAMSETE_B = 2; // Tuning parameter (b > 0 rad²/m²) for which larger values make convergence more aggressive like a proportional term.
-    public static final double RAMSETE_ZETA = 0.7; // Tuning parameter (0 rad⁻¹ < zeta < 1 rad⁻¹) for which larger values provide more damping in response.
+    public static final double RAMSETE_B = 2; // Tuning parameter (b > 0 rad^2/m^2) for which larger values make convergence more aggressive like a proportional term.
+    public static final double RAMSETE_ZETA = 0.7; // Tuning parameter (0 rad-1 < zeta < 1 rad-1) for which larger values provide more damping in response.
     public static double TRACK_WIDTH = 0.5;
     public static double AUTO_MAX_SPEED = 0.0;
     public static double AUTO_MAX_ACCEL = 0.0;
@@ -66,6 +66,19 @@ public class Constants {
     public static double VOLTS_SECONDS_SQ_PER_METER = 0.0;
 
     public static final DifferentialDriveKinematics DIFFERENTIAL_DRIVE_KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH);
+
+    public static class PnuematicsConstants{
+      public static final int PCM_WRIST_ID = 3;
+      public enum PistonSelect{
+        WRIST_PISTON,
+        ARM_PISTON,
+        CLAW_PISTON_R,
+        CLAW_PISTON_L
+      }
+
+
+    }
+
   }
 
 

@@ -18,6 +18,7 @@ public class ControllerDriveCmd extends CommandBase {
     addRequirements(_drivetrain);
   }
 
+
   @Override
   public void initialize() {
   }
@@ -34,8 +35,4 @@ public class ControllerDriveCmd extends CommandBase {
   }
 
   // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-
-    return false;
-  }}
+ }

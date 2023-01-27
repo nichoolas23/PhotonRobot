@@ -8,6 +8,7 @@ import com.pathplanner.lib.server.PathPlannerServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.Field.RoboField;
 import frc.robot.subsystems.RobotNav;
 import java.util.ArrayList;
@@ -24,10 +25,12 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 public class Robot extends TimedRobot {
 
   private Command _autonomousCommand;
+  private Command _teleopCommand;
+
 
   private RobotContainer _robotContainer;
   public static List<PhotonTrackedTarget> photonTrackedTargets = new ArrayList<>();
-  public static PhotonCamera camera = new PhotonCamera("photonCam");
+  //public static PhotonCamera camera = new PhotonCamera("photonCam");
 
   /**
    * This method is run when the robot is first started up and should be used for any initialization
@@ -47,30 +50,35 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    _teleopCommand = _robotContainer.getTeleopCommand();
     if (_autonomousCommand != null)
     {
       _autonomousCommand.cancel();
+      _teleopCommand.execute();
+
     }
   }
 
   @Override
   public void autonomousInit() {
-    _autonomousCommand = _robotContainer.getAutonomousCommand();
+    //_autonomousCommand = _robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (_autonomousCommand != null)
     {
       _autonomousCommand.schedule();
+
     }
 
   }
 
   @Override
   public void robotPeriodic() {
-      CommandScheduler.getInstance().run();
-      if(camera.getLatestResult().hasTargets()){
+
+
+      /*if(camera.getLatestResult().hasTargets()){
        photonTrackedTargets = camera.getLatestResult().targets;
-      }
+      }*/
   }
 
 

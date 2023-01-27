@@ -33,7 +33,7 @@ and returns our current estimated robot pose along with how long ago it was calc
 
 public class AprilMain extends SubsystemBase {
 
-  public static PhotonCamera photonCamera = new PhotonCamera("robotCam");
+  public static PhotonCamera photonCamera = new PhotonCamera("photonvision");
   private static RobotPoseEstimator robotPoseEstimator;
 
   public AprilMain() {
