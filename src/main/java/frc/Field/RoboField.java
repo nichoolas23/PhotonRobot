@@ -6,14 +6,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class RoboField {
 
-  private static final Field2d field = new Field2d();
+  private static final Field2d _field = new Field2d();
 
   public static void fieldSetup() {
-    SmartDashboard.putData("Field", field);
+    SmartDashboard.putData("Field", _field);
   }
 
   public static Pose2d fieldUpdate(Pose2d robotPos) {
-    field.setRobotPose(robotPos);
+    _field.setRobotPose(robotPos);
     return robotPos;
   }
 }

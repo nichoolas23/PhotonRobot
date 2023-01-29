@@ -1,4 +1,4 @@
-package frc.AprilTags;
+package frc.robot.subsystems;
 
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -7,8 +7,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.Timer;
-import frc.Robot.Constants.FieldConstants;
-import frc.Robot.Constants.VisionConstants;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.VisionConstants;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,9 +31,9 @@ and returns our current estimated robot pose along with how long ago it was calc
 (in seconds).This is useful for knowing if you are using stale data or not when you are trying to drive towards something based on vision data!
  */
 
-public class AprilMain  {
+public class AprilMain extends SubsystemBase {
 
-  public static PhotonCamera photonCamera = new PhotonCamera("robotCam");
+  public static PhotonCamera photonCamera = new PhotonCamera("photonvision");
   private static RobotPoseEstimator robotPoseEstimator;
 
   public AprilMain() {
@@ -40,18 +41,18 @@ public class AprilMain  {
     // Initialize april tags
     List<AprilTag> aprilTags = new ArrayList<>(); //vision targets
 
-    aprilTags.add(FieldConstants.tagThree);
-    aprilTags.add(FieldConstants.tagFour);
-    aprilTags.add(FieldConstants.tagSix);
+    aprilTags.add(FieldConstants.TAG_THREE);
+    aprilTags.add(FieldConstants.TAG_FOUR);
+    aprilTags.add(FieldConstants.TAG_SIX);
 
 
     // Setup AprilTags and field layout
     AprilTagFieldLayout aprilTagFieldLayout = new AprilTagFieldLayout(aprilTags,
-        FieldConstants.fieldLength, FieldConstants.fieldWidth);
+        FieldConstants.FIELD_LENGTH, FieldConstants.FIELD_WIDTH);
 
     var camList = new ArrayList<Pair<PhotonCamera, Transform3d>>();     //If we add multiple cameras we just add them here
 
-    camList.add(new Pair<PhotonCamera, Transform3d>(photonCamera, VisionConstants.robotToCam));
+    camList.add(new Pair<PhotonCamera, Transform3d>(photonCamera, VisionConstants.ROBOT_TO_CAM));
 
     robotPoseEstimator = new RobotPoseEstimator(aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camList);
   }
