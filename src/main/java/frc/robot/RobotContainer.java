@@ -5,32 +5,14 @@
 
 package frc.robot;
 
-import static frc.robot.Constants.RobotConstants.PnuematicsConstants.PistonSelect.WRIST_PISTON;
+import static frc.robot.Constants.RobotConstants.PneumaticsConstants.PistonSelect.WRIST_PISTON;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.RobotConstants;
-import frc.robot.commands.ControllerDriveCmd;
 import frc.robot.commands.DriveForwardCmd;
 import frc.robot.commands.PistonExtendCmd;
-import frc.robot.subsystems.AprilMain;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.RobotNav;
-import java.util.List;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a

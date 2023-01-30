@@ -1,14 +1,12 @@
 package frc.robot.commands;
 
-import static frc.robot.Constants.RobotConstants.PnuematicsConstants.PistonSelect.WRIST_PISTON;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.RobotConstants.PnuematicsConstants.PistonSelect;
+import frc.robot.Constants.RobotConstants.PneumaticsConstants.PistonSelect;
 
 public class PistonExtendCmd extends CommandBase {
 
   private record Piston(int channel, double pulseDuration, boolean isExtend) {}
-  private Piston _
+
   public PistonExtendCmd(PistonSelect config) {
     switch(config){
       case WRIST_PISTON:
