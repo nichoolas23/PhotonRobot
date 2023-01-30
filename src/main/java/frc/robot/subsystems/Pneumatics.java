@@ -1,19 +1,13 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.RobotConstants.PneumaticsConstants.RPiston;
 
 public class Pneumatics extends SubsystemBase {
 
 
 
-  public Pneumatics(int[] channels,double[] pulseDuration,boolean[] isExtend) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    for (int i = 0; i < channels.length; i++) {
-     // _activePistons.add(new Solenoid(PneumaticsModuleType.CTREPCM, channels[i]));
-
-    }
-
-
+  public Pneumatics() {
 
 
   }
@@ -22,7 +16,17 @@ public class Pneumatics extends SubsystemBase {
   public void periodic() {
   }
 
-  public void setPiston() {
-
+/**
+* Sets the piston to the desired state.
+ * @param piston
+*/
+  public static void setPiston(RPiston piston) {
+    piston.solenoid().setPulseDuration(piston.pulseDuration());
+    try {
+      Thread.sleep(piston.delay()*1000);
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+    piston.solenoid().startPulse();
   }
 }

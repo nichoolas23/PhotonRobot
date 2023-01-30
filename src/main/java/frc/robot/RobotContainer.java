@@ -5,13 +5,18 @@
 
 package frc.robot;
 
-import static frc.robot.Constants.RobotConstants.PneumaticsConstants.PistonSelect.WRIST_PISTON;
 
+
+import static frc.robot.Constants.RobotConstants.PneumaticsConstants.WRIST_PISTON;
+
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.RobotConstants.PneumaticsConstants.RPiston;
 import frc.robot.commands.ControllerDriveCmd;
 import frc.robot.commands.PistonExtendCmd;
+
 import frc.robot.subsystems.Drivetrain;
 
 /**
@@ -36,7 +41,7 @@ public class RobotContainer
   /** Use this method to define your trigger->command mappings. */
   private void configureBindings()
   {
-    new Trigger(_driveController::getAButtonPressed).onTrue(new PistonExtendCmd(WRIST_PISTON));
+    new Trigger(_driveController::getAButtonPressed).onTrue(new PistonExtendCmd(new RPiston(WRIST_PISTON, null, 1.0,0)));
 
   }
 

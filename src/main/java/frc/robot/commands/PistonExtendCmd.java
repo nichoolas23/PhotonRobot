@@ -1,23 +1,21 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.RobotConstants.PneumaticsConstants.PistonSelect;
+import frc.robot.Constants.RobotConstants.PneumaticsConstants.RPiston;
+import frc.robot.subsystems.Pneumatics;
 
+
+/**
+* Command used to control any piston on the robot dynamically.
+ *  This will be used for any inputs outside standard open/close up down where finer control is needed.
+*/
 public class PistonExtendCmd extends CommandBase {
+  private final RPiston[] _pistons;
+  public PistonExtendCmd(RPiston... pistons) {
 
-  private record RPiston(int channel, double pulseDuration, boolean isExtend) {}
-
-  public PistonExtendCmd(PistonSelect config) {
-    switch(config){
-      case WRIST_PISTON:
-        new RPiston(0,2.0,true);
-        break;
-      case ARM_PISTON:
-        break;
-      default:
-        throw new IllegalStateException("Unexpected value: " + config);
-    }
-    // Use addRequirements() here to declare subsystem dependencies.
+    _pistons = pistons;
+    addRequirements();
   }
   @Override
   public void initialize() {
@@ -25,7 +23,10 @@ public class PistonExtendCmd extends CommandBase {
 
   @Override
   public void execute() {
+    for (RPiston piston : _pistons) {
+      Pneumatics.setPiston(piston);
 
+    }
   }
 
   @Override

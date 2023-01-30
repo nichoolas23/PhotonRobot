@@ -8,6 +8,9 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 
 
 public class Constants {
@@ -68,15 +71,8 @@ public class Constants {
     public static final DifferentialDriveKinematics DIFFERENTIAL_DRIVE_KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH);
 
     public static class PneumaticsConstants {
-
-      public enum PistonSelect{
-        WRIST_PISTON,
-        ARM_PISTON,
-        CLAW_PISTON_R,
-        CLAW_PISTON_L
-      }
-
-
+      public record RPiston(Solenoid solenoid, DoubleSolenoid doubleSolenoid, double pulseDuration, long delay) {}
+      public static Solenoid WRIST_PISTON = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
     }
 
   }
