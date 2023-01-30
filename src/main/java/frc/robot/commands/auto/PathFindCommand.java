@@ -1,17 +1,27 @@
 package frc.robot.commands.auto;
 
+import com.pathplanner.lib.PathPlannerTrajectory;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.subsystems.AprilMain;
+import frc.robot.subsystems.RobotNav;
+import java.lang.reflect.Field;
+import java.util.List;
 
 public class PathFindCommand extends CommandBase {
 
-  private AprilMain _apriltagController = new AprilMain();
+
 
 
   public PathFindCommand() {
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(_apriltagController);
+    addRequirements();
   }
 
   // Called when the command is initially scheduled.
@@ -23,7 +33,13 @@ public class PathFindCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    var globalRobotPose = RobotNav.get_robotPose2d();
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+            globalRobotPose,
+            List.of(),
+        FieldConstants.FIRST_RED_GRID,
+            new TrajectoryConfig(2, 2)
+    );
 
   }
 

@@ -68,7 +68,7 @@ public class Constants {
     public static final DifferentialDriveKinematics DIFFERENTIAL_DRIVE_KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH);
 
     public static class PneumaticsConstants {
-      public static final int PCM_WRIST_ID = 3;
+
       public enum PistonSelect{
         WRIST_PISTON,
         ARM_PISTON,

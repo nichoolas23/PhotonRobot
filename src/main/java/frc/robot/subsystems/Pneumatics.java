@@ -20,12 +20,9 @@ public class Pneumatics extends SubsystemBase {
 
   @Override
   public void periodic() {
-
-
-    // This method will be called once per scheduler run
   }
 
-  public void set_piston() {
-    // This method will be called once per scheduler run during simulation
+  public void setPiston() {
+
   }
 }

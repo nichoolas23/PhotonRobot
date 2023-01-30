@@ -10,7 +10,7 @@ public class ControllerDriveCmd extends CommandBase {
 
   private Drivetrain _drivetrain = new Drivetrain();
 
-  private XboxController _controller = new XboxController(0);
+  private final XboxController _controller;
 
   public ControllerDriveCmd(Drivetrain drive, XboxController controller) {
     _drivetrain = drive;

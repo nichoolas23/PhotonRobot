@@ -8,7 +8,7 @@ package frc.robot.commands.auto;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.Drivetrain;
-
+import java.nio.file.Path;
 
 
 public final class Auto
@@ -16,7 +16,7 @@ public final class Auto
   /** Example static factory for an autonomous command. */
   public static CommandBase autoFactory(Drivetrain subsystem)
   {
-    return Commands.sequence();
+    return Commands.sequence(new PathFindCommand());
   }
 
 

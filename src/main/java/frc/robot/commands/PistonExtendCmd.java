@@ -5,12 +5,12 @@ import frc.robot.Constants.RobotConstants.PneumaticsConstants.PistonSelect;
 
 public class PistonExtendCmd extends CommandBase {
 
-  private record Piston(int channel, double pulseDuration, boolean isExtend) {}
+  private record RPiston(int channel, double pulseDuration, boolean isExtend) {}
 
   public PistonExtendCmd(PistonSelect config) {
     switch(config){
       case WRIST_PISTON:
-        new Piston(0,2.0,true);
+        new RPiston(0,2.0,true);
         break;
       case ARM_PISTON:
         break;
