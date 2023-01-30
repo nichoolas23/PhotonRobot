@@ -18,6 +18,9 @@ public class PathFindCommand extends CommandBase {
 
 
 
+/**
+* Command that finds a path from the robot's current position to the target position and sends it to the drive train.
+*/
   public PathFindCommand() {
 
     // Use addRequirements() here to declare subsystem dependencies.

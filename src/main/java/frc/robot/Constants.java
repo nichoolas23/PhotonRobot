@@ -13,8 +13,12 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 
 
+/**
+* The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean values.
+ * This class should not be used for any other purpose. All constants should be declared globally (i.e. public static). Do not put anything functional in this class.
+*/
 public class Constants {
-  //Constants setup for field at home
+
 
   public static class VisionConstants {
     public static final Transform3d ROBOT_TO_CAM = new Transform3d(new Translation3d(0.00, .38, 0.15),
@@ -28,8 +32,6 @@ public class Constants {
     public static AprilTag TAG_THREE = new AprilTag(3, new Pose3d(new Pose2d((3.270 - .721), 4.234, Rotation2d.fromDegrees(180))));
     public static AprilTag TAG_FOUR = new AprilTag(4,
         new Pose3d(new Pose2d(0.0, 3.5189, Rotation2d.fromDegrees(270))));
-
-    //TODO set to correct values
     public static AprilTag TAG_SIX = new AprilTag(6,
         new Pose3d(new Pose2d(3.27, 2.66, Rotation2d.fromDegrees(90))));
 
@@ -62,17 +64,17 @@ public class Constants {
     public static final double RAMSETE_B = 2; // Tuning parameter (b > 0 rad^2/m^2) for which larger values make convergence more aggressive like a proportional term.
     public static final double RAMSETE_ZETA = 0.7; // Tuning parameter (0 rad-1 < zeta < 1 rad-1) for which larger values provide more damping in response.
     public static double TRACK_WIDTH = 0.5;
+    public static final DifferentialDriveKinematics DIFFERENTIAL_DRIVE_KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH);
     public static double AUTO_MAX_SPEED = 0.0;
     public static double AUTO_MAX_ACCEL = 0.0;
     public static double VOLTS_PER_METER = 0.0;
     public static double VOLTS_SECONDS_PER_METER = 0.0;
     public static double VOLTS_SECONDS_SQ_PER_METER = 0.0;
 
-    public static final DifferentialDriveKinematics DIFFERENTIAL_DRIVE_KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH);
-
     public static class PneumaticsConstants {
-      public record RPiston(Solenoid solenoid, DoubleSolenoid doubleSolenoid, double pulseDuration, long delay) {}
       public static Solenoid WRIST_PISTON = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
+
+      public record RPiston(Solenoid solenoid, DoubleSolenoid doubleSolenoid, double pulseDuration, long delay) {}
     }
 
   }

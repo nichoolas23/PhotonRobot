@@ -1,18 +1,9 @@
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.RobotConstants.TRACK_WIDTH;
-
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
-import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 
 public class Drivetrain extends SubsystemBase {
 
@@ -23,18 +14,15 @@ public class Drivetrain extends SubsystemBase {
   private final MotorControllerGroup leftDrive = new MotorControllerGroup(wpi_talonSRXES[0], wpi_talonSRXES[1]);
   private final MotorControllerGroup rightDrive = new MotorControllerGroup(wpi_talonSRXES[2], wpi_talonSRXES[3]);
 
-  public MotorControllerGroup getLeftDrive() {return leftDrive;}
-  public MotorControllerGroup getRightDrive() {return rightDrive;}
-
   // End motor setup
 
   //private Encoder _leftEncoder = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
   // private Encoder _rightEncoder = new Encoder(2, 3, true, Encoder.EncodingType.k4X);
 
-//  Start DifferentialDrive setup
+  //  Start DifferentialDrive setup
   private final DifferentialDrive _differentialDrive = new DifferentialDrive(leftDrive, rightDrive);
 
-//  private DifferentialDriveOdometry _odometry = new DifferentialDriveOdometry(RobotNav.get_gyro().getRotation2d(),_leftEncoder.getDistance(),_rightEncoder.getDistance());
+  //  private DifferentialDriveOdometry _odometry = new DifferentialDriveOdometry(RobotNav.get_gyro().getRotation2d(),_leftEncoder.getDistance(),_rightEncoder.getDistance());
 
   public Drivetrain() {
     rightDrive.setInverted(true);
@@ -56,6 +44,12 @@ public class Drivetrain extends SubsystemBase {
         _rightEncoder.getDistance()));*/
   }
 
+/**
+* Controls the driving mechanism of the robot.
+ * @param forwardSpeed Between 0 and 1.0
+ * @param reverseSpeed Between 0 and 1.0 inverted for driving backwards
+ * @param rot Between -1.0 and 1.0 for turning
+*/
   public void drive(double forwardSpeed, double reverseSpeed, double rot) {
 
     _differentialDrive.arcadeDrive(reverseSpeed > 0 ? reverseSpeed*-1 : forwardSpeed, rot);

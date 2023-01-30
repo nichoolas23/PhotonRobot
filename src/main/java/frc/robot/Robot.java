@@ -4,17 +4,14 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+
 import com.pathplanner.lib.server.PathPlannerServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.Field.RoboField;
 import frc.robot.subsystems.RobotNav;
-import java.util.ArrayList;
-import java.util.List;
-import org.photonvision.PhotonCamera;
-import org.photonvision.targeting.PhotonTrackedTarget;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the methods corresponding to
@@ -24,13 +21,11 @@ import org.photonvision.targeting.PhotonTrackedTarget;
  */
 public class Robot extends TimedRobot {
 
+
   private Command _autonomousCommand;
   private Command _teleopCommand;
-
-
   private RobotContainer _robotContainer;
-  public static List<PhotonTrackedTarget> photonTrackedTargets = new ArrayList<>();
-  //public static PhotonCamera camera = new PhotonCamera("photonCam");
+
 
   /**
    * This method is run when the robot is first started up and should be used for any initialization
@@ -43,7 +38,6 @@ public class Robot extends TimedRobot {
     PathPlannerServer.startServer(5811);
     RoboField.fieldSetup();
     RobotNav.navInit();
-    CommandScheduler.getInstance().run();
     _robotContainer = new RobotContainer();
 
   }
@@ -51,12 +45,11 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     _teleopCommand = _robotContainer.getTeleopCommand();
-    if (_autonomousCommand != null)
-    {
+    if (_autonomousCommand != null) {
       _autonomousCommand.cancel();
-      _teleopCommand.execute();
 
     }
+    _teleopCommand.schedule();
   }
 
   @Override
@@ -64,8 +57,7 @@ public class Robot extends TimedRobot {
     //_autonomousCommand = _robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
-    if (_autonomousCommand != null)
-    {
+    if (_autonomousCommand != null) {
       _autonomousCommand.schedule();
 
     }
@@ -74,14 +66,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-
-
-      /*if(camera.getLatestResult().hasTargets()){
-       photonTrackedTargets = camera.getLatestResult().targets;
-      }*/
+    CommandScheduler.getInstance().run();
   }
-
-
 
 
 }

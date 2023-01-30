@@ -12,10 +12,6 @@ public class Pneumatics extends SubsystemBase {
 
   }
 
-  @Override
-  public void periodic() {
-  }
-
 /**
 * Sets the piston to the desired state.
  * @param piston
@@ -28,5 +24,9 @@ public class Pneumatics extends SubsystemBase {
       throw new RuntimeException(e);
     }
     piston.solenoid().startPulse();
+  }
+
+  @Override
+  public void periodic() {
   }
 }
