@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.RobotNav;
+import frc.robot.utilities.RobotNav;
 import java.util.List;
 
 public class PathFollowCommand extends CommandBase {
@@ -33,7 +33,7 @@ private Drivetrain _drivetrain;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    getFollowCommand().
   }
   public Command getFollowCommand(){
     var autoVoltageConstraint =
@@ -71,23 +71,22 @@ private Drivetrain _drivetrain;
     RamseteCommand ramseteCommand =
         new RamseteCommand(
             pathTrajectory,
-            RobotNav::get_robotPose2d,
+            RobotNav::getRobotPose2d,
             new RamseteController(RobotConstants.RAMSETE_B, RobotConstants.RAMSETE_ZETA),
             new SimpleMotorFeedforward(
                 RobotConstants.VOLTS_MAX,
                 RobotConstants.VOLTS_SECONDS_PER_METER,
                 RobotConstants.VOLTS_SECONDS_SQ_PER_METER),
             RobotConstants.DIFFERENTIAL_DRIVE_KINEMATICS,
-            Drivetrain::get_wheelSpeeds,
-            new PIDController(DriveConstants.kPDriveVel, 0, 0),
-            new PIDController(DriveConstants.kPDriveVel, 0, 0),
+            _drivetrain::getWheelSpeeds,
+            new PIDController(RobotConstants.P_GAIN_DRIVE_VEL, 0, 0),
+            new PIDController(RobotConstants.P_GAIN_DRIVE_VEL, 0, 0),
             // RamseteCommand passes volts to the callback
             _drivetrain::setDriveVolts,
             _drivetrain);
 
     // Reset odometry to the starting pose of the trajectory.
     _drivetrain.resetOdometry(pathTrajectory.getInitialPose());
-    m_robotDrive.resetOdometry(pathTrajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
     return ramseteCommand.andThen(() -> _drivetrain.setDriveVolts(0, 0));
@@ -97,6 +96,7 @@ private Drivetrain _drivetrain;
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+
   }
 
   // Returns true when the command should end.

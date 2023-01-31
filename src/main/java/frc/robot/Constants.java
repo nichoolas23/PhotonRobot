@@ -11,6 +11,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import org.photonvision.PhotonCamera;
 
 
 /**
@@ -21,6 +22,7 @@ public class Constants {
 
 
   public static class VisionConstants {
+    public static PhotonCamera PHOTON_CAMERA = new PhotonCamera("photonvision");
     public static final Transform3d ROBOT_TO_CAM = new Transform3d(new Translation3d(0.00, .38, 0.15),
         new Rotation3d(0, 0, 0));
   }
@@ -64,10 +66,11 @@ public class Constants {
     public static final double RAMSETE_B = 2; // Tuning parameter (b > 0 rad^2/m^2) for which larger values make convergence more aggressive like a proportional term.
     public static final double RAMSETE_ZETA = 0.7; // Tuning parameter (0 rad-1 < zeta < 1 rad-1) for which larger values provide more damping in response.
     public static double TRACK_WIDTH = 0.5;
-    public static final DifferentialDriveKinematics DIFFERENTIAL_DRIVE_KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH);
     public static double DISTANCE_PER_PULSE = 0.0;
     public static double AUTO_MAX_SPEED = 0.0;
     public static double AUTO_MAX_ACCEL = 0.0;
+
+    public static double P_GAIN_DRIVE_VEL = 0.0;
     public static double VOLTS_MAX = 0.0;
     public static double VOLTS_SECONDS_PER_METER = 0.0;
     public static double VOLTS_SECONDS_SQ_PER_METER = 0.0;

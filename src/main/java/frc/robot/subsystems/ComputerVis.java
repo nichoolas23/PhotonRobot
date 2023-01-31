@@ -1,5 +1,8 @@
 package frc.robot.subsystems;
 
+import static frc.robot.Constants.VisionConstants.PHOTON_CAMERA;
+import static frc.robot.Constants.VisionConstants.photonCamera;
+
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.Pair;
@@ -31,12 +34,12 @@ and returns our current estimated robot pose along with how long ago it was calc
 (in seconds).This is useful for knowing if you are using stale data or not when you are trying to drive towards something based on vision data!
  */
 
-public class AprilMain extends SubsystemBase {
+public class ComputerVis extends SubsystemBase {
 
-  public static PhotonCamera photonCamera = new PhotonCamera("photonvision");
+
   private static RobotPoseEstimator robotPoseEstimator;
 
-  public AprilMain() {
+  public ComputerVis() {
 
     // Initialize april tags
     List<AprilTag> aprilTags = new ArrayList<>(); //vision targets
@@ -52,7 +55,7 @@ public class AprilMain extends SubsystemBase {
 
     var camList = new ArrayList<Pair<PhotonCamera, Transform3d>>();     //If we add multiple cameras we just add them here
 
-    camList.add(new Pair<PhotonCamera, Transform3d>(photonCamera, VisionConstants.ROBOT_TO_CAM));
+    camList.add(new Pair<PhotonCamera, Transform3d>(PHOTON_CAMERA, VisionConstants.ROBOT_TO_CAM));
 
     robotPoseEstimator = new RobotPoseEstimator(aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camList);
   }

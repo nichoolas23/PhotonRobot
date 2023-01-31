@@ -26,7 +26,7 @@ public class ControllerDriveCmd extends CommandBase {
 
   @Override
   public void execute() {
-    _drivetrain.drive(_controller.getRightTriggerAxis(),_controller.getLeftTriggerAxis(), _controller.getRightX());
+    _drivetrain.drive(_controller.getRightTriggerAxis(),_controller.getLeftTriggerAxis(), _controller.getRightX(),false);
   }
 
 

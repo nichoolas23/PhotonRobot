@@ -1,10 +1,11 @@
-package frc.robot.subsystems;
+package frc.robot.utilities;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Field.RoboField;
+import frc.robot.subsystems.ComputerVis;
 import org.photonvision.RobotPoseEstimator;
 
 public class RobotNav extends SubsystemBase {
@@ -17,43 +18,31 @@ public class RobotNav extends SubsystemBase {
 
 
   public static void navInit(){
-    new AprilMain();
+    new ComputerVis();
 
-    poseEstimator = AprilMain.getRobotPoseEstimator();
+    poseEstimator = ComputerVis.getRobotPoseEstimator();
     poseEstimator.setReferencePose(new Pose3d());
-
     poseEstimator.update();
-
+    updatePose();
     _robotPose3d = poseEstimator.getReferencePose();
 
   }
 
   public static void updatePose(){
     //Updates simulated field at the same time
-    _robotPose2d = RoboField.fieldUpdate(AprilMain.getEstimatedGlobalPose(_robotPose3d.toPose2d()).getFirst()); // position of robot on the field
+    _robotPose2d = RoboField.fieldUpdate(
+        ComputerVis.getEstimatedGlobalPose(_robotPose3d.toPose2d()).getFirst()); // position of robot on the field
   }
 
-  public static Pose2d get_robotPose2d() {
+  public static Pose2d getRobotPose2d() {
     return _robotPose2d;
   }
 
-  public static void set_robotPose2d(Pose2d _robotPose2d) {
-    RobotNav._robotPose2d = _robotPose2d;
-  }
-
-  public static AHRS get_gyro() {
+  public static AHRS getGyro() {
     return _gyro;
   }
 
-  public static void set_gyro(AHRS _gyro) {
-    RobotNav._gyro = _gyro;
-  }
-
-  public static double get_rotateVal() {
-    return _rotateVal;
-  }
-
-  public static void set_rotateVal(double _rotateVal) {
+  public static void setRotateVal(double _rotateVal) {
     RobotNav._rotateVal = _rotateVal;
   }
   }

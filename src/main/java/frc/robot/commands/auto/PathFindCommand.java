@@ -1,16 +1,11 @@
 package frc.robot.commands.auto;
 
-import com.pathplanner.lib.PathPlannerTrajectory;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.FieldConstants;
-import frc.robot.subsystems.AprilMain;
-import frc.robot.subsystems.RobotNav;
-import java.lang.reflect.Field;
+import frc.robot.utilities.RobotNav;
 import java.util.List;
 
 public class PathFindCommand extends CommandBase {
@@ -36,7 +31,7 @@ public class PathFindCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    var globalRobotPose = RobotNav.get_robotPose2d();
+    var globalRobotPose = RobotNav.getRobotPose2d();
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
             globalRobotPose,
             List.of(),
