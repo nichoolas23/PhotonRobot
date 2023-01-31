@@ -33,7 +33,7 @@ private Drivetrain _drivetrain;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    getFollowCommand().
+    getFollowCommand().schedule();
   }
   public Command getFollowCommand(){
     var autoVoltageConstraint =
@@ -42,7 +42,7 @@ private Drivetrain _drivetrain;
                 RobotConstants.VOLTS_MAX,
                 RobotConstants.VOLTS_SECONDS_PER_METER,
                 RobotConstants.VOLTS_SECONDS_SQ_PER_METER),
-            RobotConstants.DIFFERENTIAL_DRIVE_KINEMATICS,
+            _drivetrain.getDriveKinematics(),
             10);
 
     // Create config for trajectory
@@ -51,7 +51,7 @@ private Drivetrain _drivetrain;
             RobotConstants.AUTO_MAX_SPEED,
             RobotConstants.AUTO_MAX_ACCEL)
             // Add kinematics to ensure max speed is actually obeyed
-            .setKinematics(RobotConstants.DIFFERENTIAL_DRIVE_KINEMATICS)
+            .setKinematics(_drivetrain.getDriveKinematics())
             // Apply the voltage constraint
             .addConstraint(autoVoltageConstraint);
 
@@ -77,7 +77,7 @@ private Drivetrain _drivetrain;
                 RobotConstants.VOLTS_MAX,
                 RobotConstants.VOLTS_SECONDS_PER_METER,
                 RobotConstants.VOLTS_SECONDS_SQ_PER_METER),
-            RobotConstants.DIFFERENTIAL_DRIVE_KINEMATICS,
+            _drivetrain.getDriveKinematics(),
             _drivetrain::getWheelSpeeds,
             new PIDController(RobotConstants.P_GAIN_DRIVE_VEL, 0, 0),
             new PIDController(RobotConstants.P_GAIN_DRIVE_VEL, 0, 0),

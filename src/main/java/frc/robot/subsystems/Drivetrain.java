@@ -58,6 +58,8 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
   updateOdometry();
+  cvCorrectPose(_leftEncoder.getDistance(), _rightEncoder.getDistance());
+
   }
 
   public void updateOdometry() {
@@ -119,6 +121,9 @@ public class Drivetrain extends SubsystemBase {
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(_leftEncoder.getRate(), _rightEncoder.getRate());
+  }
+  public DifferentialDriveKinematics getDriveKinematics() {
+    return _driveKinematics;
   }
 
 }

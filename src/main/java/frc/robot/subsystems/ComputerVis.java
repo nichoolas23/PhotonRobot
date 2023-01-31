@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import static frc.robot.Constants.VisionConstants.PHOTON_CAMERA;
-import static frc.robot.Constants.VisionConstants.photonCamera;
+
 
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -53,7 +53,7 @@ public class ComputerVis extends SubsystemBase {
     AprilTagFieldLayout aprilTagFieldLayout = new AprilTagFieldLayout(aprilTags,
         FieldConstants.FIELD_LENGTH, FieldConstants.FIELD_WIDTH);
 
-    var camList = new ArrayList<Pair<PhotonCamera, Transform3d>>();     //If we add multiple cameras we just add them here
+    var camList = new ArrayList<Pair<PhotonCamera, Transform3d>>();    //If we add multiple cameras we just add them here
 
     camList.add(new Pair<PhotonCamera, Transform3d>(PHOTON_CAMERA, VisionConstants.ROBOT_TO_CAM));
 

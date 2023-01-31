@@ -8,7 +8,7 @@ import frc.Field.RoboField;
 import frc.robot.subsystems.ComputerVis;
 import org.photonvision.RobotPoseEstimator;
 
-public class RobotNav extends SubsystemBase {
+public class RobotNav {
 
   private static RobotPoseEstimator poseEstimator;
   private static Pose3d _robotPose3d;
@@ -17,6 +17,10 @@ public class RobotNav extends SubsystemBase {
   private static double _rotateVal;
 
 
+  /**
+   * Initializes the robot navigation data
+   * Updates all poses so they aren't null when called
+   */
   public static void navInit(){
     new ComputerVis();
 
