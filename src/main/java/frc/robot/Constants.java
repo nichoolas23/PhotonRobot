@@ -65,9 +65,10 @@ public class Constants {
     public static final double RAMSETE_ZETA = 0.7; // Tuning parameter (0 rad-1 < zeta < 1 rad-1) for which larger values provide more damping in response.
     public static double TRACK_WIDTH = 0.5;
     public static final DifferentialDriveKinematics DIFFERENTIAL_DRIVE_KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH);
+    public static double DISTANCE_PER_PULSE = 0.0;
     public static double AUTO_MAX_SPEED = 0.0;
     public static double AUTO_MAX_ACCEL = 0.0;
-    public static double VOLTS_PER_METER = 0.0;
+    public static double VOLTS_MAX = 0.0;
     public static double VOLTS_SECONDS_PER_METER = 0.0;
     public static double VOLTS_SECONDS_SQ_PER_METER = 0.0;
 

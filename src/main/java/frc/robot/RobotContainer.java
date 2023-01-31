@@ -17,6 +17,8 @@ import frc.robot.Constants.RobotConstants.PneumaticsConstants.RPiston;
 import frc.robot.commands.ControllerDriveCmd;
 import frc.robot.commands.PistonExtendCmd;
 
+import frc.robot.commands.auto.PathFindCommand;
+import frc.robot.commands.auto.PathFollowCommand;
 import frc.robot.subsystems.Drivetrain;
 
 /**
@@ -55,62 +57,7 @@ public class RobotContainer
    *
    * @return the command to run in autonomous
    */
-/*  public Command getAutonomousCommand()
-  {*/
-    // Create a voltage constraint to ensure we don't accelerate too fast
-  /*  var autoVoltageConstraint =
-        new DifferentialDriveVoltageConstraint(
-            new SimpleMotorFeedforward(
-                DriveConstants.ksVolts,
-                DriveConstants.kvVoltSecondsPerMeter,
-                DriveConstants.kaVoltSecondsSquaredPerMeter),
-            DriveConstants.kDriveKinematics,
-            10);
-
-    // Create config for trajectory
-    TrajectoryConfig config =
-        new TrajectoryConfig(
-            RobotConstants.AUTO_MAX_SPEED,
-            RobotConstants.AUTO_MAX_ACCEL)
-            // Add kinematics to ensure max speed is actually obeyed
-            .setKinematics(RobotConstants.DIFFERENTIAL_DRIVE_KINEMATICS)
-            // Apply the voltage constraint
-            .addConstraint(autoVoltageConstraint);
-
-    // An example trajectory to follow.  All units in meters.
-    Trajectory exampleTrajectory =
-        TrajectoryGenerator.generateTrajectory(
-            // Start at the origin facing the +X direction
-            new Pose2d(0, 0, new Rotation2d(0)),
-            // Pass through these two interior waypoints, making an 's' curve path
-            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-            // End 3 meters straight ahead of where we started, facing forward
-            new Pose2d(3, 0, new Rotation2d(0)),
-            // Pass config
-            config);
-
-    RamseteCommand ramseteCommand =
-        new RamseteCommand(
-            exampleTrajectory,
-            RobotNav::get_robotPose2d,
-            new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
-            new SimpleMotorFeedforward(
-                RobotConstants.VOLTS_PER_METER,
-                RobotConstants.VOLTS_SECONDS_PER_METER,
-                RobotConstants.VOLTS_SECONDS_SQ_PER_METER),
-            RobotConstants.DIFFERENTIAL_DRIVE_KINEMATICS,
-            Drivetrain::get_WheelSpeed,
-            new PIDController(DriveConstants.kPDriveVel, 0, 0),
-            new PIDController(DriveConstants.kPDriveVel, 0, 0),
-            // RamseteCommand passes volts to the callback
-            m_robotDrive::tankDriveVolts,
-            m_robotDrive);
-
-    // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
-
-    // Run path following command, then stop at the end.
-    return ramseteCommand.andThen(() -> m_robotDrive.tankDriveVolts(0, 0));
-  }*/
- /* }*/
+  public Command getAutonomousCommand(){
+    return new PathFollowCommand();
+  }
 }

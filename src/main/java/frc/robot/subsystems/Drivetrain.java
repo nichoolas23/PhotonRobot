@@ -1,9 +1,14 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Constants.RobotConstants;
 
 public class Drivetrain extends SubsystemBase {
 
@@ -16,15 +21,17 @@ public class Drivetrain extends SubsystemBase {
 
   // End motor setup
 
-  //private Encoder _leftEncoder = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
-  // private Encoder _rightEncoder = new Encoder(2, 3, true, Encoder.EncodingType.k4X);
+  private Encoder _leftEncoder = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
+   private Encoder _rightEncoder = new Encoder(2, 3, true, EncodingType.k1X);
 
   //  Start DifferentialDrive setup
   private final DifferentialDrive _differentialDrive = new DifferentialDrive(leftDrive, rightDrive);
+  private DifferentialDriveWheelSpeeds _wheelSpeeds = new DifferentialDriveWheelSpeeds(0, 0);
 
   //  private DifferentialDriveOdometry _odometry = new DifferentialDriveOdometry(RobotNav.get_gyro().getRotation2d(),_leftEncoder.getDistance(),_rightEncoder.getDistance());
 
   public Drivetrain() {
+    _leftEncoder.setDistancePerPulse(RobotConstants.DISTANCE_PER_PULSE);
     rightDrive.setInverted(true);
     _differentialDrive.setSafetyEnabled(false);
   }
@@ -32,16 +39,12 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
 
-  //  updateOdometry();
+  updateOdometry();
   }
 
   public void updateOdometry() {
     var gyroAngle = RobotNav.get_gyro().getRotation2d();
-
-    // Update the pose
-  /*  RobotNav.set_robotPose2d(_odometry.update(gyroAngle,
-        _leftEncoder.getDistance(),
-        _rightEncoder.getDistance()));*/
+    _wheelSpeeds = new DifferentialDriveWheelSpeeds(_leftEncoder.getRate(), _rightEncoder.getRate());
   }
 
 /**
@@ -55,6 +58,10 @@ public class Drivetrain extends SubsystemBase {
     _differentialDrive.arcadeDrive(reverseSpeed > 0 ? reverseSpeed*-1 : forwardSpeed, rot);
 
 
+  }
+
+  public DifferentialDriveWheelSpeeds get_wheelSpeeds() {
+    return _wheelSpeeds;
   }
 
 
