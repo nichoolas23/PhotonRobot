@@ -18,7 +18,7 @@ import frc.robot.commands.ControllerDriveCmd;
 import frc.robot.commands.PistonExtendCmd;
 
 import frc.robot.commands.auto.PathFindCommand;
-import frc.robot.commands.auto.PathFollowCommand;
+//import frc.robot.commands.auto.PathFollowCommand;
 import frc.robot.subsystems.Drivetrain;
 
 /**
@@ -57,7 +57,7 @@ public class RobotContainer
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand(){
+  /*public Command getAutonomousCommand(){
     return new PathFollowCommand();
-  }
+  }*/
 }

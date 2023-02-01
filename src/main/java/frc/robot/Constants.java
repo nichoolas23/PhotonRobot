@@ -31,9 +31,9 @@ public class Constants {
     /**
      *April Tags
      */
-    public static AprilTag TAG_THREE = new AprilTag(3, new Pose3d(new Pose2d((3.270 - .721), 4.234, Rotation2d.fromDegrees(180))));
-    public static AprilTag TAG_FOUR = new AprilTag(4,
-        new Pose3d(new Pose2d(0.0, 3.5189, Rotation2d.fromDegrees(270))));
+    public static AprilTag TAG_THREE = new AprilTag(1, new Pose3d(new Pose2d((2.25), .5, Rotation2d.fromDegrees(180))));
+    public static AprilTag TAG_FOUR = new AprilTag(2,
+        new Pose3d(new Pose2d(2.25, .5, Rotation2d.fromDegrees(180))));
     public static AprilTag TAG_SIX = new AprilTag(6,
         new Pose3d(new Pose2d(3.27, 2.66, Rotation2d.fromDegrees(90))));
 

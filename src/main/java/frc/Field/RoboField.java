@@ -13,7 +13,12 @@ public class RoboField {
   }
 
   public static Pose2d fieldUpdate(Pose2d robotPos) {
-    _field.setRobotPose(robotPos);
-    return robotPos;
+    if(robotPos != null){
+      _field.setRobotPose(robotPos);
+      return robotPos;
+    }else{
+      return robotPos;
+    }
+
   }
 }

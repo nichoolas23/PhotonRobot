@@ -6,7 +6,10 @@
 package frc.robot;
 
 import com.pathplanner.lib.server.PathPlannerServer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.Field.RoboField;
@@ -25,7 +28,7 @@ public class Robot extends TimedRobot {
   private Command _autonomousCommand;
   private Command _teleopCommand;
   private RobotContainer _robotContainer;
-
+RobotNav nav = new RobotNav();
 
   /**
    * This method is run when the robot is first started up and should be used for any initialization
@@ -54,7 +57,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    _autonomousCommand = _robotContainer.getAutonomousCommand();
+   /* _autonomousCommand = _robotContainer.getAutonomousCommand();*/
 
     // schedule the autonomous command (example)
     if (_autonomousCommand != null) {
@@ -67,6 +70,11 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+
+      System.out.println(nav);
+
+
+
 
   }
 
