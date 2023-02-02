@@ -31,13 +31,7 @@ public class ControllerDriveCmd extends CommandBase {
   @Override
   public void execute() {
     _drivetrain.drive(_controller.getRightTriggerAxis(),_controller.getLeftTriggerAxis(), _controller.getRightX(),false);
-    if(PHOTON_CAMERA.getLatestResult().hasTargets()){
-      SmartDashboard.putNumber("TargetYaw", PHOTON_CAMERA.getLatestResult().getBestTarget().getYaw());
-      SmartDashboard.putNumber("TargetPitch", PHOTON_CAMERA.getLatestResult().getBestTarget().getPitch());
-      SmartDashboard.putNumber("TargetArea", PHOTON_CAMERA.getLatestResult().getBestTarget().getArea());
-      SmartDashboard.putNumber("TargetSkew", PHOTON_CAMERA.getLatestResult().getBestTarget().getSkew());
 
-    }
   }
 
 

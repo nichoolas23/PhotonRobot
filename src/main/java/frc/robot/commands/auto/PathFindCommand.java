@@ -31,13 +31,13 @@ public class PathFindCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    var globalRobotPose = RobotNav.getRobotPose2d();
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+
+    /*Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
             globalRobotPose,
             List.of(),
         FieldConstants.FIRST_RED_GRID,
             new TrajectoryConfig(2, 2)
-    );
+    );*/
 
   }
 

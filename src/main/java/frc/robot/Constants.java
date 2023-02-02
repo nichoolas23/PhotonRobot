@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
 
 
 /**
@@ -25,6 +26,7 @@ public class Constants {
     public static PhotonCamera PHOTON_CAMERA = new PhotonCamera("photonvision");
     public static final Transform3d ROBOT_TO_CAM = new Transform3d(new Translation3d(0.00, .38, 0.15),
         new Rotation3d(0, 0, 0));
+    public static PhotonPoseEstimator POSE_ESTIMATOR;
   }
 
   public static class FieldConstants  {

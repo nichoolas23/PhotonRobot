@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.Field.RoboField;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.utilities.RobotNav;
 
 
@@ -24,7 +25,7 @@ import frc.robot.utilities.RobotNav;
  */
 public class Robot extends TimedRobot {
 
-
+private Drivetrain _drivetrain = new Drivetrain();
   private Command _autonomousCommand;
   private Command _teleopCommand;
   private RobotContainer _robotContainer;
@@ -70,12 +71,7 @@ RobotNav nav = new RobotNav();
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-
-      System.out.println(nav);
-
-
-
-
+    _drivetrain.updateOdometry();
   }
 
 
