@@ -5,8 +5,10 @@ import static frc.robot.Constants.VisionConstants.POSE_ESTIMATOR;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.Encoder;
@@ -34,7 +36,7 @@ private AHRS _gyro = new AHRS();
       new DifferentialDrivePoseEstimator(
           _kinematics, _gyro.getRotation2d(), 0.0, 0.0, new Pose2d());
 
-  private GlobalPoseCalc _globalPoseCalc;
+  private GlobalPoseCalc _globalPoseCalc = new GlobalPoseCalc();
 
   //private EncoderSim _leftEncoder = new EncoderSim(new Encoder(EncoderType.kQuadrature, 0, 1)));
   //private EncoderSim _rightEncoder = new EncoderSim(1);
@@ -62,7 +64,8 @@ private AHRS _gyro = new AHRS();
       //_globalPoseCalc.getEstimatedGlobalPose(POSE_ESTIMATOR.getReferencePose().toPose2d());
   }
   public void updateOdometry() {
-
+_diffPoseEstimator.update(
+        _gyro.getRotation2d(), 0, 0);
 
     // Also apply vision measurements. We use 0.3 seconds in the past as an example
     // -- on
@@ -90,10 +93,10 @@ private AHRS _gyro = new AHRS();
  * @param reverseSpeed Between 0 and 1.0 inverted for driving backwards
  * @param rot Between -1.0 and 1.0 for turning
 */
-  public void drive(double forwardSpeed, double reverseSpeed, double rot, boolean isAuto ) {
+  public void drive(double forwardSpeed, double reverseSpeed, double rot, boolean isAuto,boolean isTracking) {
 
     _differentialDrive.arcadeDrive(reverseSpeed > 0 ? reverseSpeed*-1 : forwardSpeed, rot*-1);
-
+    RamseteController ramseteController = new RamseteController();
   }
 
 

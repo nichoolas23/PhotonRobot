@@ -1,16 +1,20 @@
 package frc.robot.commands.auto;
 
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.server.PathPlannerServer;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.FieldConstants;
+import frc.robot.Robot;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.utilities.RobotNav;
 import java.util.List;
 
 public class PathFindCommand extends CommandBase {
 
-
+Drivetrain _drivetrain = new Drivetrain();
 
 
 /**
@@ -32,12 +36,16 @@ public class PathFindCommand extends CommandBase {
   @Override
   public void execute() {
 
-    /*Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-            globalRobotPose,
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+      RobotNav.get_estimatedRobotPose().estimatedPose.toPose2d(),
             List.of(),
         FieldConstants.FIRST_RED_GRID,
             new TrajectoryConfig(2, 2)
-    );*/
+    );
+    PathPlannerTrajectory pathPlannerTrajectory = new PathPlannerTrajectory();
+
+
+
 
   }
 

@@ -44,8 +44,8 @@ public class RobotContainer
   /** Use this method to define your trigger->command mappings. */
   private void configureBindings()
   {
-    new Trigger(_driveController::getAButtonPressed).onTrue(new AimAtTargetCmd());
-
+    new Trigger(_driveController::getAButtonPressed).toggleOnTrue(new AimAtTargetCmd());
+/*new Trigger(() -> _driveController.getRightX() != 0).onTrue()*/
   }
 
   public Command getTeleopCommand(){
