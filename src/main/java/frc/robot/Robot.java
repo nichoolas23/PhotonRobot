@@ -5,6 +5,8 @@
 
 package frc.robot;
 
+import static frc.robot.Constants.VisionConstants.POSE_ESTIMATOR;
+
 import com.pathplanner.lib.server.PathPlannerServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -25,11 +27,11 @@ import frc.robot.utilities.RobotNav;
  */
 public class Robot extends TimedRobot {
 
-private Drivetrain _drivetrain = new Drivetrain();
+  private Drivetrain _drivetrain = new Drivetrain();
   private Command _autonomousCommand;
   private Command _teleopCommand;
   private RobotContainer _robotContainer;
-RobotNav nav = new RobotNav();
+  RobotNav nav = new RobotNav();
 
   /**
    * This method is run when the robot is first started up and should be used for any initialization
@@ -58,7 +60,7 @@ RobotNav nav = new RobotNav();
 
   @Override
   public void autonomousInit() {
-   /* _autonomousCommand = _robotContainer.getAutonomousCommand();*/
+    /* _autonomousCommand = _robotContainer.getAutonomousCommand();*/
 
     // schedule the autonomous command (example)
     if (_autonomousCommand != null) {
@@ -72,7 +74,10 @@ RobotNav nav = new RobotNav();
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     _drivetrain.updateOdometry();
+    if (RobotNav.get_estimatedRobotPose() != null) {
+      RoboField.fieldUpdate(RobotNav.get_estimatedRobotPose().estimatedPose.toPose2d());
+    }
+
+
   }
-
-
 }

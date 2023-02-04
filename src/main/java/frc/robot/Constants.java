@@ -7,7 +7,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -23,7 +22,7 @@ public class Constants {
 
 
   public static class VisionConstants {
-    public static PhotonCamera PHOTON_CAMERA = new PhotonCamera("photonvision");
+    public static PhotonCamera PHOTON_CAMERA = new PhotonCamera("photoncamera");
     public static final Transform3d ROBOT_TO_CAM = new Transform3d(new Translation3d(0.00, .38, 0.15),
         new Rotation3d(0, 0, 0));
     public static PhotonPoseEstimator POSE_ESTIMATOR;
@@ -33,11 +32,16 @@ public class Constants {
     /**
      *April Tags
      */
-    public static AprilTag TAG_THREE = new AprilTag(1, new Pose3d(new Pose2d((2.25), .5, Rotation2d.fromDegrees(180))));
-    public static AprilTag TAG_FOUR = new AprilTag(2,
-        new Pose3d(new Pose2d(2.25, .5, Rotation2d.fromDegrees(180))));
-    public static AprilTag TAG_SIX = new AprilTag(6,
-        new Pose3d(new Pose2d(3.27, 2.66, Rotation2d.fromDegrees(90))));
+    public static AprilTag TAG_ONE = new AprilTag(1, new Pose3d(new Pose2d(2.607, 4.392, Rotation2d.fromDegrees(270))));//00
+
+    public static AprilTag TAG_TWO = new AprilTag(2, new Pose3d(new Pose2d(1.69, 4.392, Rotation2d.fromDegrees(270))));
+
+    public static AprilTag TAG_FOUR = new AprilTag(4, new Pose3d(new Pose2d(5.72, 2.357, Rotation2d.fromDegrees(180))));
+
+    public static AprilTag TAG_FIVE = new AprilTag(5, new Pose3d(new Pose2d(0, 2.164, Rotation2d.fromDegrees(0))));
+
+    public static AprilTag TAG_SIX = new AprilTag(6, new Pose3d(new Pose2d(5.720, 3.275, Rotation2d.fromDegrees(180))));
+
 
     public static Pose2d FIRST_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
     public static Pose2d SECOND_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
