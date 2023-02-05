@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import static frc.robot.Constants.RobotConstants.TRACK_WIDTH;
+import static frc.robot.Constants.RobotConstants._leftEncoder;
+import static frc.robot.Constants.RobotConstants._rightEncoder;
 import static frc.robot.Constants.VisionConstants.POSE_ESTIMATOR;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -15,7 +17,11 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.auto.PathFindCommand;
 import frc.robot.utilities.GlobalPoseCalc;
 import frc.robot.utilities.RobotNav;
 import java.util.Optional;
@@ -31,8 +37,8 @@ private AHRS _gyro = new AHRS();
   private final MotorControllerGroup _leftDrive = new MotorControllerGroup(wpi_talonSRXES[0], wpi_talonSRXES[1]);
   private final MotorControllerGroup _rightDrive = new MotorControllerGroup(wpi_talonSRXES[2], wpi_talonSRXES[3]);
   private final DifferentialDriveKinematics _kinematics =
-      new DifferentialDriveKinematics(TRACK_WIDTH);
-  private final DifferentialDrivePoseEstimator _diffPoseEstimator =
+      new DifferentialDriveKinematics(TRACK_WIDTH+.12);
+  private DifferentialDrivePoseEstimator _diffPoseEstimator =
       new DifferentialDrivePoseEstimator(
           _kinematics, _gyro.getRotation2d(), 0.0, 0.0, new Pose2d());
 
@@ -51,7 +57,9 @@ private AHRS _gyro = new AHRS();
 
   public Drivetrain() {
     //wpi_talonSRXES[1].getfee
-
+_leftEncoder.setDistancePerPulse(.6283185/357.75); // circum .6283185
+_leftEncoder.setReverseDirection(true);
+_rightEncoder.setDistancePerPulse(.6283185/355);
     _rightDrive.setInverted(true);
     _differentialDrive.setSafetyEnabled(false);
 
@@ -61,12 +69,16 @@ private AHRS _gyro = new AHRS();
   }
   @Override
   public void periodic() {
+/*Command command = new PathFindCommand();
+command.schedule();*/
       //_globalPoseCalc.getEstimatedGlobalPose(POSE_ESTIMATOR.getReferencePose().toPose2d());
   }
   public void updateOdometry() {
-_diffPoseEstimator.update(
-        _gyro.getRotation2d(), 0, 0);
 
+_diffPoseEstimator.update(
+        _gyro.getRotation2d(), _leftEncoder.getDistance(), _rightEncoder.getDistance());
+    SmartDashboard.putNumber("Left Encoder",_leftEncoder.getDistance());
+    SmartDashboard.putNumber("Right Encoder",_rightEncoder.getDistance());
     // Also apply vision measurements. We use 0.3 seconds in the past as an example
     // -- on
     // a real robot, this must be calculated based either on latency or timestamps.

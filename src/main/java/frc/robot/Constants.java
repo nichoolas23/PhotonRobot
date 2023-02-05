@@ -8,8 +8,10 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import java.nio.charset.StandardCharsets;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 
@@ -36,7 +38,7 @@ public class Constants {
 
     public static AprilTag TAG_TWO = new AprilTag(2, new Pose3d(new Pose2d(1.69, 4.392, Rotation2d.fromDegrees(270))));
 
-    public static AprilTag TAG_FOUR = new AprilTag(4, new Pose3d(new Pose2d(5.72, 2.357, Rotation2d.fromDegrees(180))));
+    public static AprilTag TAG_FOUR = new AprilTag(4, new Pose3d(new Pose2d(5.72, 2.357, Rotation2d.fromDegrees (180))));
 
     public static AprilTag TAG_FIVE = new AprilTag(5, new Pose3d(new Pose2d(0, 2.164, Rotation2d.fromDegrees(0))));
 
@@ -52,10 +54,14 @@ public class Constants {
     public static Pose2d BLUE_CHARGING_STATION = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
     public static Pose2d RED_CHARGING_STATION = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
 
-    public static Pose2d FIRST_RED_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
+    public static Pose2d FIRST_RED_GRID = new Pose2d(2.607, 4.392, Rotation2d.fromDegrees(270));
+
+    public static Pose2d LOLA = new Pose2d("LolaX".getBytes(StandardCharsets.UTF_8).length,
+        "LolaY".getBytes(StandardCharsets.UTF_8).length ,
+        Rotation2d.fromDegrees(270));
     public static Pose2d SECOND_RED_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
     public static Pose2d THIRD_RED_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
-    public static Pose2d FOURTH_RED_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
+    public static Pose2d FOURTH_RED_GRID = new Pose2d(5.72, 2.357, Rotation2d.fromDegrees (180));
     public static Pose2d FIFTH_RED_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
 
 
@@ -80,9 +86,11 @@ public class Constants {
     public static double VOLTS_MAX = 0.0;
     public static double VOLTS_SECONDS_PER_METER = 0.0;
     public static double VOLTS_SECONDS_SQ_PER_METER = 0.0;
+    public static Encoder _leftEncoder = new Encoder(0, 1);
+    public static Encoder _rightEncoder = new Encoder(2, 3);
 
     public static class PneumaticsConstants {
-      public static Solenoid WRIST_PISTON = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
+      public static Solenoid WRIST_PISTON = new Solenoid(PneumaticsModuleType.CTREPCM, 12);
 
       public record RPiston(Solenoid solenoid, DoubleSolenoid doubleSolenoid, double pulseDuration, long delay) {}
     }

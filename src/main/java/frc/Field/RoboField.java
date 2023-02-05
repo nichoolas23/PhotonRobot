@@ -1,6 +1,7 @@
 package frc.Field;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -10,6 +11,9 @@ public class RoboField {
 
   public static void fieldSetup() {
     SmartDashboard.putData("Field", _field);
+  }
+  public static void putTraj(Trajectory trajectory){
+    _field.getObject("Trajectory").setTrajectory(trajectory);
   }
 
   public static Pose2d fieldUpdate(Pose2d robotPos) {

@@ -5,16 +5,20 @@
 
 package frc.robot;
 
+import static frc.robot.Constants.RobotConstants._leftEncoder;
+import static frc.robot.Constants.RobotConstants._rightEncoder;
 import static frc.robot.Constants.VisionConstants.POSE_ESTIMATOR;
 
 import com.pathplanner.lib.server.PathPlannerServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.Field.RoboField;
+import frc.robot.commands.auto.PathFindCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.utilities.RobotNav;
 
@@ -26,6 +30,7 @@ import frc.robot.utilities.RobotNav;
  * directory.
  */
 public class Robot extends TimedRobot {
+  XboxController controller = new XboxController(0);
 
   private Drivetrain _drivetrain = new Drivetrain();
   private Command _autonomousCommand;
@@ -55,6 +60,8 @@ public class Robot extends TimedRobot {
       _autonomousCommand.cancel();
 
     }
+    var command = new PathFindCommand();
+    command.schedule();
     _teleopCommand.schedule();
   }
 
@@ -77,7 +84,10 @@ public class Robot extends TimedRobot {
     if (RobotNav.get_estimatedRobotPose() != null) {
       RoboField.fieldUpdate(RobotNav.get_estimatedRobotPose().estimatedPose.toPose2d());
     }
-
+if(controller.getBButton()){
+  _leftEncoder.reset(); //-357.750000
+  _rightEncoder.reset(); //355.000000
+}
 
   }
 }
