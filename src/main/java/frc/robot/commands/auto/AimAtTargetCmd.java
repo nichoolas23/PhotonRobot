@@ -33,7 +33,7 @@ Drivetrain _drivetrain = new Drivetrain();
       run = false;
     }
     double rotationSpeed;
-    var result = PHOTON_CAMERA.getLatestResult();
+  /*  var result = PHOTON_CAMERA.getLatestResult();
     if (result.hasTargets()) {
       DriverStation.reportError("HAS TARGETS",false);
       // Calculate angular turn power
@@ -45,7 +45,7 @@ Drivetrain _drivetrain = new Drivetrain();
     } else {
       // If we have no targets, stay still.
       run = false;
-    }
+    }*/
     //DriverStation.reportWarning("foundTarget: " + result.hasTargets() + " rotationSpeed: " + rotationSpeed, false);
 
   }

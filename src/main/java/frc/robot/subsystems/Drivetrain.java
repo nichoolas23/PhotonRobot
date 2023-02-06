@@ -4,7 +4,6 @@ import static frc.robot.Constants.RobotConstants.DRIVE_KINEMATICS;
 import static frc.robot.Constants.RobotConstants.LEFT_ENCODER;
 import static frc.robot.Constants.RobotConstants.PhysicalConstants.WHEEL_CIRCUM;
 import static frc.robot.Constants.RobotConstants.RIGHT_ENCODER;
-import static frc.robot.Constants.VisionConstants.POSE_ESTIMATOR;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
@@ -14,22 +13,10 @@ import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.FieldConstants;
-import frc.robot.commands.auto.PathFollowCmd;
-import frc.robot.utilities.GlobalPoseCalc;
-import frc.robot.utilities.RobotNav;
-import java.awt.Point;
-import java.util.List;
-import java.util.Optional;
-import org.photonvision.EstimatedRobotPose;
 
 public class Drivetrain extends SubsystemBase {
 
@@ -51,7 +38,7 @@ public class Drivetrain extends SubsystemBase {
   private DifferentialDriveWheelSpeeds _diffDriveWheelSpeeds = new DifferentialDriveWheelSpeeds();
   private DifferentialDriveWheelVoltages _diffDriveWheelVoltages = new DifferentialDriveWheelVoltages();
   private DifferentialDriveOdometry _diffDriveOdometry = new DifferentialDriveOdometry(_gyro.getRotation2d(),0,0);
-  private final GlobalPoseCalc _globalPoseCalc;
+
 
 
   public Drivetrain() {
@@ -63,14 +50,12 @@ public class Drivetrain extends SubsystemBase {
     _differentialDrive.setSafetyEnabled(false);
 
     _diffPoseEstimator.update(_gyro.getRotation2d(), 0, 0);
-
-    _globalPoseCalc = new GlobalPoseCalc();
   }
 
 
   @Override
   public void periodic() {
-    _globalPoseCalc.getEstimatedGlobalPose(POSE_ESTIMATOR.getReferencePose().toPose2d());
+
 
  /*   if(isNearLola()){
       Trajectory nickTrajectory = TrajectoryGenerator.generateTrajectory(
@@ -108,16 +93,7 @@ public class Drivetrain extends SubsystemBase {
     // Also apply vision measurements. We use 0.3 seconds in the past as an example
     // -- on
     // a real robot, this must be calculated based either on latency or timestamps.
-    Optional<EstimatedRobotPose> result = _globalPoseCalc.getEstimatedGlobalPose(
-        _diffPoseEstimator.getEstimatedPosition());
 
-    if (result.isPresent()) {
-      RobotNav.set_estimatedRobotPose(result.get());
-      EstimatedRobotPose camPose = RobotNav.getEstimatedRobotPose();
-      _diffPoseEstimator.addVisionMeasurement(camPose.estimatedPose.toPose2d(),
-          camPose.timestampSeconds);
-
-    }
   }
 
 
@@ -138,6 +114,7 @@ public class Drivetrain extends SubsystemBase {
     LEFT_ENCODER.reset();
     RIGHT_ENCODER.reset();
   }
+
 
 
 

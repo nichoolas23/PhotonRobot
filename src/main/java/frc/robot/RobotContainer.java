@@ -68,7 +68,7 @@ public class RobotContainer {
   }
 
 
-  public Command getAutonomousCommand() {
+/*  public Command getAutonomousCommand() {
     // Create a voltage constraint to ensure we don't accelerate too fast
     var autoVoltageConstraint =
         new DifferentialDriveVoltageConstraint(
@@ -118,5 +118,5 @@ public class RobotContainer {
 
     // Run path following command, then stop at the end.
     return ramseteCommand.andThen(() -> _drivetrain.setVoltages(0, 0));
-  }
+  }*/
 }

@@ -34,12 +34,12 @@ Drivetrain _drivetrain = new Drivetrain();
   @Override
   public void execute() {
 
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+   /* Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
         RobotNav.getEstimatedRobotPose().estimatedPose.toPose2d(), List.of(),
         FieldConstants.FIFTH_BLUE_GRID,
         new TrajectoryConfig(2, 2)
     );
-    RoboField.putTraj(trajectory);
+    RoboField.putTraj(trajectory);*/
 
   }
 
