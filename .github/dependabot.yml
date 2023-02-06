@@ -1,14 +1,21 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+name: build
+on:
+  push:
+    branches:
+      - develop # run the action on your projects default branch
 
-version: 2
-updates:
-  - package-ecosystem: "" # See documentation for possible values
-    directory: "/" # Location of package manifests
-    schedule:
-      interval: "weekly"
-  - name: Gradle Dependency Submission
-    uses: mikepenz/gradle-dependency-submission@v0.8.3
+jobs:
+  build:
+    name: Dependencies
+    runs-on: ubuntu-latest
+    permissions: # The Dependency Submission API requires write permission
+      contents: write
+    steps:
+      - name: 'Checkout Repository'
+        uses: actions/checkout@v3
 
+      - name: Run snapshot action
+        uses: mikepenz/gradle-dependency-submission@{latest}
+        with:
+          gradle-project-path: "gradle-example"
+          gradle-build-module: ":app"
