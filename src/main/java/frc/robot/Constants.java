@@ -1,5 +1,7 @@
 package frc.robot;
 
+import static frc.robot.Constants.RobotConstants.PhysicalConstants.TRACK_WIDTH;
+
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -32,6 +34,8 @@ public class Constants {
   }
 
   public static class FieldConstants  {
+
+    public static final Pose2d NICK = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
     /**
      *April Tags
      */
@@ -76,14 +80,20 @@ public class Constants {
   }
   public static class RobotConstants {
 
+   public static class PhysicalConstants {
+     public static final double WHEEL_CIRCUM = .6283185;
+     public static final double TRACK_WIDTH = 0.62;
+   }
+
+    // Max speed of the robot in m/s
+    public static DifferentialDriveKinematics DRIVE_KINEMATICS =
+        new DifferentialDriveKinematics(TRACK_WIDTH);
+
     public static final double RAMSETE_B = 2; // Tuning parameter (b > 0 rad^2/m^2) for which larger values make convergence more aggressive like a proportional term.
     public static final double RAMSETE_ZETA = 0.7; // Tuning parameter (0 rad-1 < zeta < 1 rad-1) for which larger values provide more damping in response.
-    public static double TRACK_WIDTH = 0.5;
-    public static DifferentialDriveKinematics DRIVE_KINEMATICS =
-        new DifferentialDriveKinematics(TRACK_WIDTH+.12);
 
 
-    public static double DISTANCE_PER_PULSE = 0.0;
+
     public static double AUTO_MAX_SPEED = 0.0;
     public static double AUTO_MAX_ACCEL = 0.0;
 

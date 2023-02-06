@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import static frc.robot.Constants.RobotConstants.DRIVE_KINEMATICS;
 import static frc.robot.Constants.RobotConstants.LEFT_ENCODER;
+import static frc.robot.Constants.RobotConstants.PhysicalConstants.WHEEL_CIRCUM;
 import static frc.robot.Constants.RobotConstants.RIGHT_ENCODER;
 import static frc.robot.Constants.VisionConstants.POSE_ESTIMATOR;
 
@@ -13,12 +14,20 @@ import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.FieldConstants;
+import frc.robot.commands.auto.PathFollowCmd;
 import frc.robot.utilities.GlobalPoseCalc;
 import frc.robot.utilities.RobotNav;
+import java.awt.Point;
+import java.util.List;
 import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 
@@ -42,25 +51,45 @@ public class Drivetrain extends SubsystemBase {
   private DifferentialDriveWheelSpeeds _diffDriveWheelSpeeds = new DifferentialDriveWheelSpeeds();
   private DifferentialDriveWheelVoltages _diffDriveWheelVoltages = new DifferentialDriveWheelVoltages();
   private DifferentialDriveOdometry _diffDriveOdometry = new DifferentialDriveOdometry(_gyro.getRotation2d(),0,0);
-  private GlobalPoseCalc _globalPoseCalc = new GlobalPoseCalc();
+  private final GlobalPoseCalc _globalPoseCalc;
 
 
   public Drivetrain() {
-    LEFT_ENCODER.setDistancePerPulse(.6283185 / 357.75); // circum .6283185
+    LEFT_ENCODER.setDistancePerPulse(WHEEL_CIRCUM/ 357.75);
     LEFT_ENCODER.setReverseDirection(true);
-    RIGHT_ENCODER.setDistancePerPulse(.6283185 / 355);
+    RIGHT_ENCODER.setDistancePerPulse(WHEEL_CIRCUM / 355);
+
     _rightDrive.setInverted(true);
     _differentialDrive.setSafetyEnabled(false);
 
-    _diffPoseEstimator.update(
-        _gyro.getRotation2d(), 0, 0);
+    _diffPoseEstimator.update(_gyro.getRotation2d(), 0, 0);
+
     _globalPoseCalc = new GlobalPoseCalc();
   }
+
 
   @Override
   public void periodic() {
     _globalPoseCalc.getEstimatedGlobalPose(POSE_ESTIMATOR.getReferencePose().toPose2d());
+
+ /*   if(isNearLola()){
+      Trajectory nickTrajectory = TrajectoryGenerator.generateTrajectory(
+          RobotNav.getEstimatedRobotPose().estimatedPose.toPose2d(), List.of(),
+          FieldConstants.NICK,
+          new TrajectoryConfig(2, 2)
+      );
+      Command escapeLola = new PathFollowCmd(nickTrajectory);
+      escapeLola.schedule();
+    }
   }
+  public boolean isNearLola(){
+    Point position = new Point((int) RobotNav.getEstimatedRobotPose().estimatedPose.getX(),
+        (int) RobotNav.getEstimatedRobotPose().estimatedPose.getY());
+
+    return position.distance(lola) < 10;
+  }*/
+  }
+
 
   public void updateOdometry() {
 
@@ -96,18 +125,20 @@ public class Drivetrain extends SubsystemBase {
     return _diffDriveWheelSpeeds;
   }
   public void setVoltages(double leftVolts, double rightVolts) {
-    _leftDrive.setVoltage(leftVolts);
-    _rightDrive.setVoltage(rightVolts);
+    _leftDrive.setVoltage(leftVolts*.25);
+    _rightDrive.setVoltage(rightVolts*.25);
   }
   public void resetOdometry(Pose2d initialPose) {
     resetEncoders();
     _diffDriveOdometry.resetPosition(
         _gyro.getRotation2d(), LEFT_ENCODER.getDistance(), RIGHT_ENCODER.getDistance(), initialPose);
   }
+
   public void resetEncoders() {
     LEFT_ENCODER.reset();
     RIGHT_ENCODER.reset();
   }
+
 
 
   /**
