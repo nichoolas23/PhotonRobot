@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.RobotConstants.PneumaticsConstants.RPiston;
+import frc.robot.Constants.RobotConstants.PneumaticsConstants.RPistonControl;
 
 public class Pneumatics extends SubsystemBase {
 
@@ -16,7 +16,7 @@ public class Pneumatics extends SubsystemBase {
 * Sets the piston to the desired state.
  * @param piston
 */
-  public static void setPiston(RPiston piston) {
+  public static void setPiston(RPistonControl piston) {
     piston.solenoid().setPulseDuration(piston.pulseDuration());
     try {
       Thread.sleep(piston.delay()*1000);

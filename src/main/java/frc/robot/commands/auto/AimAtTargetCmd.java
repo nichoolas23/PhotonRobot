@@ -35,7 +35,7 @@ Drivetrain _drivetrain = new Drivetrain();
     double rotationSpeed;
     var result = PHOTON_CAMERA.getLatestResult();
     if (result.hasTargets()) {
-      DriverStation.reportError("HAS TARGERTS",false);
+      DriverStation.reportError("HAS TARGETS",false);
       // Calculate angular turn power
       // -1.0 required to ensure positive PID controller effort _increases_ yaw
       rotationSpeed = -turnController.calculate(result.getBestTarget().getYaw(), 0);

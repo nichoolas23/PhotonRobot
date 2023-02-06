@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -78,6 +79,10 @@ public class Constants {
     public static final double RAMSETE_B = 2; // Tuning parameter (b > 0 rad^2/m^2) for which larger values make convergence more aggressive like a proportional term.
     public static final double RAMSETE_ZETA = 0.7; // Tuning parameter (0 rad-1 < zeta < 1 rad-1) for which larger values provide more damping in response.
     public static double TRACK_WIDTH = 0.5;
+    public static DifferentialDriveKinematics DRIVE_KINEMATICS =
+        new DifferentialDriveKinematics(TRACK_WIDTH+.12);
+
+
     public static double DISTANCE_PER_PULSE = 0.0;
     public static double AUTO_MAX_SPEED = 0.0;
     public static double AUTO_MAX_ACCEL = 0.0;
@@ -86,13 +91,17 @@ public class Constants {
     public static double VOLTS_MAX = 0.0;
     public static double VOLTS_SECONDS_PER_METER = 0.0;
     public static double VOLTS_SECONDS_SQ_PER_METER = 0.0;
-    public static Encoder _leftEncoder = new Encoder(0, 1);
-    public static Encoder _rightEncoder = new Encoder(2, 3);
+    public static Encoder LEFT_ENCODER = new Encoder(0, 1);
+    public static Encoder RIGHT_ENCODER = new Encoder(2, 3);
 
     public static class PneumaticsConstants {
       public static Solenoid WRIST_PISTON = new Solenoid(PneumaticsModuleType.CTREPCM, 12);
 
-      public record RPiston(Solenoid solenoid, DoubleSolenoid doubleSolenoid, double pulseDuration, long delay) {}
+      public record RPistonControl(Solenoid solenoid, DoubleSolenoid doubleSolenoid, double pulseDuration, long delay) {}
+    }
+
+    public static class ControlsConstants{
+
     }
 
   }

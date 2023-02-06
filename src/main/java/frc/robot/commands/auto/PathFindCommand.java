@@ -1,17 +1,11 @@
 package frc.robot.commands.auto;
 
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.server.PathPlannerServer;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.Field.RoboField;
 import frc.robot.Constants.FieldConstants;
-import frc.robot.Robot;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.utilities.RobotNav;
 import java.util.List;
@@ -41,17 +35,11 @@ Drivetrain _drivetrain = new Drivetrain();
   public void execute() {
 
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-      RobotNav.get_estimatedRobotPose().estimatedPose.toPose2d(), List.of(),
-        FieldConstants.LOLA,
-            new TrajectoryConfig(2, 2)
+        RobotNav.getEstimatedRobotPose().estimatedPose.toPose2d(), List.of(),
+        FieldConstants.FIFTH_BLUE_GRID,
+        new TrajectoryConfig(2, 2)
     );
     RoboField.putTraj(trajectory);
-    new Trigger(new XboxController(0)::getAButtonPressed).toggleOnTrue(new SaveLolaCmd());
-
-
-
-
-
 
   }
 

@@ -5,16 +5,12 @@
 
 package frc.robot;
 
-import static frc.robot.Constants.RobotConstants._leftEncoder;
-import static frc.robot.Constants.RobotConstants._rightEncoder;
-import static frc.robot.Constants.VisionConstants.POSE_ESTIMATOR;
+import static frc.robot.Constants.RobotConstants.LEFT_ENCODER;
+import static frc.robot.Constants.RobotConstants.RIGHT_ENCODER;
 
 import com.pathplanner.lib.server.PathPlannerServer;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.Field.RoboField;
@@ -67,8 +63,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    /* _autonomousCommand = _robotContainer.getAutonomousCommand();*/
-
+    _autonomousCommand = _robotContainer.getAutonomousCommand();
     // schedule the autonomous command (example)
     if (_autonomousCommand != null) {
       _autonomousCommand.schedule();
@@ -81,12 +76,12 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     _drivetrain.updateOdometry();
-    if (RobotNav.get_estimatedRobotPose() != null) {
-      RoboField.fieldUpdate(RobotNav.get_estimatedRobotPose().estimatedPose.toPose2d());
+    if (RobotNav.getEstimatedRobotPose() != null) {
+      RoboField.fieldUpdate(RobotNav.getEstimatedRobotPose().estimatedPose.toPose2d());
     }
 if(controller.getBButton()){
-  _leftEncoder.reset(); //-357.750000
-  _rightEncoder.reset(); //355.000000
+  LEFT_ENCODER.reset(); //-357.750000
+  RIGHT_ENCODER.reset(); //355.000000
 }
 
   }

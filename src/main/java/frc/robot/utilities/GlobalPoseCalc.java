@@ -45,11 +45,11 @@ public class GlobalPoseCalc {
     VisionConstants.POSE_ESTIMATOR =
         new PhotonPoseEstimator(
             atfl, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, PHOTON_CAMERA, ROBOT_TO_CAM);
-    if (RobotNav.get_estimatedRobotPose() == null) {
+    if (RobotNav.getEstimatedRobotPose() == null) {
       RobotNav.set_estimatedRobotPose(new EstimatedRobotPose(new Pose3d(), 0));
     }
     var resultPose = getEstimatedGlobalPose(
-        RobotNav.get_estimatedRobotPose().estimatedPose.toPose2d());
+        RobotNav.getEstimatedRobotPose().estimatedPose.toPose2d());
     resultPose.ifPresent(RobotNav::set_estimatedRobotPose);
 
   }

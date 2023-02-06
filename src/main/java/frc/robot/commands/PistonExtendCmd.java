@@ -1,8 +1,7 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.RobotConstants.PneumaticsConstants.RPiston;
+import frc.robot.Constants.RobotConstants.PneumaticsConstants.RPistonControl;
 import frc.robot.subsystems.Pneumatics;
 
 
@@ -11,8 +10,8 @@ import frc.robot.subsystems.Pneumatics;
  *  This will be used for any inputs outside standard open/close up down where finer control is needed.
 */
 public class PistonExtendCmd extends CommandBase {
-  private final RPiston[] _pistons;
-  public PistonExtendCmd(RPiston... pistons) {
+  private final RPistonControl[] _pistons;
+  public PistonExtendCmd(RPistonControl... pistons) {
 
     _pistons = pistons;
     addRequirements();
@@ -23,7 +22,7 @@ public class PistonExtendCmd extends CommandBase {
 
   @Override
   public void execute() {
-    for (RPiston piston : _pistons) {
+    for (RPistonControl piston : _pistons) {
       Pneumatics.setPiston(piston);
 
     }

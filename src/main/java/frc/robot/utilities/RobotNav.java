@@ -1,11 +1,9 @@
 package frc.robot.utilities;
 
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import org.photonvision.EstimatedRobotPose;
-import org.photonvision.RobotPoseEstimator;
 
 public class RobotNav {
 
@@ -29,8 +27,11 @@ public class RobotNav {
     RobotNav._rotateVal = _rotateVal;
   }
 
-  public static EstimatedRobotPose get_estimatedRobotPose() {
+  public static EstimatedRobotPose getEstimatedRobotPose() {
     return _estimatedRobotPose;
+  }
+  public Pose2d getEstimatedRobotPose2d() {
+    return _estimatedRobotPose.estimatedPose.toPose2d();
   }
 
   public static void set_estimatedRobotPose(EstimatedRobotPose _estimatedRobotPose) {
