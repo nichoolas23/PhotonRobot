@@ -29,11 +29,10 @@ public class Robot extends TimedRobot {
 
   XboxController controller = new XboxController(0);
 
-  private Drivetrain _drivetrain = new Drivetrain();
+  private final Drivetrain _drivetrain = new Drivetrain();
   private Command _autonomousCommand;
-  private Command _teleopCommand;
   private RobotContainer _robotContainer;
-  private RobotNav _robotNav = new RobotNav();
+  private final RobotNav _robotNav = new RobotNav();
 
   /**
    * This method is run when the robot is first started up and should be used for any initialization
@@ -51,11 +50,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    _teleopCommand = _robotContainer.getTeleopCommand();
+    Command _teleopCommand = _robotContainer.getTeleopCommand();
     if (_autonomousCommand != null) {
       _autonomousCommand.cancel();
 
     }
+
     var command = new PathFindCommand();
     command.schedule();
     _teleopCommand.schedule();
@@ -63,7 +63,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    _autonomousCommand = _robotContainer.getAutonomousCommand();
+   // _autonomousCommand = _robotContainer.getAutonomousCommand();
     // schedule the autonomous command (example)
     if (_autonomousCommand != null) {
       _autonomousCommand.schedule();
