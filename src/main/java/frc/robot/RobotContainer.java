@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.commands.ControllerDriveCmd;
-import frc.robot.commands.auto.AimAtTargetCmd;
+
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.utilities.RobotNav;
 import java.util.List;
@@ -47,6 +47,7 @@ public class RobotContainer {
   private final Drivetrain _drivetrain = new Drivetrain();
   private final XboxController _driveController = new XboxController(0);
 
+
   public RobotContainer() {
 
     // Configure the trigger bindings
@@ -58,7 +59,7 @@ public class RobotContainer {
    * Use this method to define your trigger->command mappings.
    */
   private void configureBindings() {
-    new Trigger(_driveController::getAButtonPressed).toggleOnTrue(new AimAtTargetCmd());
+   // new Trigger(_driveController::getAButtonPressed).toggleOnTrue(new AimAtTargetCmd());
     /*new Trigger(() -> _driveController.getRightX() != 0).onTrue()*/
   }
 

@@ -8,7 +8,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
-public class RobotNav {
+public class RobotNav extends LimelightHelpers {
 
   private static AHRS _gyro = new AHRS();
   private static double _rotateVal;
@@ -47,38 +47,14 @@ public RobotNav(){
 
 
   public void updateLL(){
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-    NetworkTableEntry tx = table.getEntry("tx");
-    NetworkTableEntry ty = table.getEntry("ty");
-    NetworkTableEntry ta = table.getEntry("ta");
-    _hasTarget = _table.getEntry("tv").getInteger(0) == 1;
-    _pipelineLatency = _table.getEntry("tl").getInteger(0);
-    _camLatency =_pipelineLatency +11;
-
-    _globalBotPose = _table.getEntry("botpose").getDoubleArray(new double[6]);
-    _blueBotPose = _table.getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
-    _redBotPose = _table.getEntry("botpose_wpired").getDoubleArray(new double[6]);
-    _camPoseFromTarget = _table.getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
-
-
-//read values periodically
-    double x = tx.getDouble(0.0);
-    double y = ty.getDouble(0.0);
-    double area = ta.getDouble(0.0);
-
-//post to smart dashboard periodically
-    SmartDashboard.putNumber("LimelightX", x);
-    SmartDashboard.putNumber("LimelightY", y);
-    SmartDashboard.putNumber("LimelightArea", area);
-
-    SmartDashboard.putNumber("LimelightLatency", _camLatency);
-    SmartDashboard.putBoolean("LimelightHasTarget", _hasTarget);
-    SmartDashboard.putNumber("LimelightPipelineLatency", _pipelineLatency);
-    SmartDashboard.putNumberArray("LimelightGlobalBotPose", _globalBotPose);
-    SmartDashboard.putNumberArray("LimelightBlueBotPose", _blueBotPose);
-    SmartDashboard.putNumberArray("LimelightRedBotPose", _redBotPose);
-    SmartDashboard.putNumberArray("LimelightCamPoseFromTarget", _camPoseFromTarget);
-
+    LimelightHelpers.getLatestResults("limelight");
+    _hasTarget = LimelightHelpers.getTV("limelight");
+    if(_hasTarget){
+      SmartDashboard.putNumber("Limelight X", LimelightHelpers.getTX("limelight"));
+      SmartDashboard.putNumber("Limelight Y", LimelightHelpers.getTY("limelight"));
+      SmartDashboard.putNumber("Limelight Area", LimelightHelpers.getTA("limelight"));
+      SmartDashboard.putNumber("Limelight Short", LimelightHelpers.getFiducialID("limelight"));
+    }
   }
 }
 
