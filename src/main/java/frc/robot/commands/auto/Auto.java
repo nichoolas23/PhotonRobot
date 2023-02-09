@@ -8,7 +8,6 @@ package frc.robot.commands.auto;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.Drivetrain;
-import java.nio.file.Path;
 
 
 public final class Auto

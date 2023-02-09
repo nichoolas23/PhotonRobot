@@ -26,13 +26,13 @@ import frc.robot.utilities.RobotNav;
  * directory.
  */
 public class Robot extends TimedRobot {
+
   XboxController controller = new XboxController(0);
 
-  private Drivetrain _drivetrain = new Drivetrain();
+  private final Drivetrain _drivetrain = new Drivetrain();
   private Command _autonomousCommand;
-  private Command _teleopCommand;
   private RobotContainer _robotContainer;
-  RobotNav nav = new RobotNav();
+  private final RobotNav _robotNav = new RobotNav();
 
   /**
    * This method is run when the robot is first started up and should be used for any initialization
@@ -44,18 +44,18 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     PathPlannerServer.startServer(5811);
     RoboField.fieldSetup();
-    RobotNav.navInit();
     _robotContainer = new RobotContainer();
 
   }
 
   @Override
   public void teleopInit() {
-    _teleopCommand = _robotContainer.getTeleopCommand();
+    Command _teleopCommand = _robotContainer.getTeleopCommand();
     if (_autonomousCommand != null) {
       _autonomousCommand.cancel();
 
     }
+
     var command = new PathFindCommand();
     command.schedule();
     _teleopCommand.schedule();
@@ -63,7 +63,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    _autonomousCommand = _robotContainer.getAutonomousCommand();
+   // _autonomousCommand = _robotContainer.getAutonomousCommand();
     // schedule the autonomous command (example)
     if (_autonomousCommand != null) {
       _autonomousCommand.schedule();
@@ -76,13 +76,14 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     _drivetrain.updateOdometry();
-    if (RobotNav.getEstimatedRobotPose() != null) {
+    _robotNav.updateLL();
+  /*  if (RobotNav.getEstimatedRobotPose() != null) {
       RoboField.fieldUpdate(RobotNav.getEstimatedRobotPose().estimatedPose.toPose2d());
+    }*/
+    if (controller.getBButton()) {
+      LEFT_ENCODER.reset(); //-357.750000
+      RIGHT_ENCODER.reset(); //355.000000
     }
-if(controller.getBButton()){
-  LEFT_ENCODER.reset(); //-357.750000
-  RIGHT_ENCODER.reset(); //355.000000
-}
 
   }
 }

@@ -15,8 +15,6 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import java.nio.charset.StandardCharsets;
-import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonPoseEstimator;
 
 
 /**
@@ -27,15 +25,15 @@ public class Constants {
 
 
   public static class VisionConstants {
-    public static PhotonCamera PHOTON_CAMERA = new PhotonCamera("photoncamera");
+
     public static final Transform3d ROBOT_TO_CAM = new Transform3d(new Translation3d(0.00, .38, 0.15),
         new Rotation3d(0, 0, 0));
-    public static PhotonPoseEstimator POSE_ESTIMATOR;
+
   }
 
   public static class FieldConstants  {
 
-    public static final Pose2d NICK = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
+
     /**
      *April Tags
      */

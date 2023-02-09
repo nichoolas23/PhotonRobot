@@ -1,14 +1,12 @@
+/*
 package frc.robot.commands.auto;
 
-import static frc.robot.Constants.VisionConstants.PHOTON_CAMERA;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
-import org.photonvision.PhotonCamera;
+
 
 public class AimAtTargetCmd extends CommandBase {
   private boolean run = true;
@@ -18,7 +16,7 @@ public class AimAtTargetCmd extends CommandBase {
   private final XboxController _controller = new XboxController(0);
   PIDController turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
 
-Drivetrain _drivetrain = new Drivetrain();
+  Drivetrain _drivetrain = new Drivetrain();
   public AimAtTargetCmd(){
 
     addRequirements();
@@ -33,7 +31,7 @@ Drivetrain _drivetrain = new Drivetrain();
       run = false;
     }
     double rotationSpeed;
-    var result = PHOTON_CAMERA.getLatestResult();
+
     if (result.hasTargets()) {
       DriverStation.reportError("HAS TARGETS",false);
       // Calculate angular turn power
@@ -57,4 +55,4 @@ Drivetrain _drivetrain = new Drivetrain();
     return run;
   }
 
-}
+}*/
