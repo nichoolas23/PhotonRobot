@@ -37,6 +37,7 @@ private final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSR
   private final AHRS _gyro = new AHRS();
   private final DifferentialDrive _differentialDrive = new DifferentialDrive(_leftDrive,
       _rightDrive);
+
   // Start motor setup
 
   private DifferentialDrivePoseEstimator _diffPoseEstimator =
