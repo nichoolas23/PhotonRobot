@@ -1,9 +1,7 @@
 package frc.robot.utilities;
 
 import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -18,16 +16,9 @@ public class RobotNav extends LimelightHelpers {
   private static NetworkTable _table =  NetworkTableInstance.getDefault().getTable("limelight");
 
   private static boolean _hasTarget;
-  private static long _pipelineLatency;
-  private static long _camLatency;
 
-  private static double[] _globalBotPose;
 
-  private static double[] _redBotPose; // orgin set to red driverstation
 
-  private static double[] _blueBotPose;
-
-  private static double[] _camPoseFromTarget;
 
   /**
    * Initializes the robot navigation data

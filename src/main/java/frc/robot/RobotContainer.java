@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.commands.ControllerDriveCmd;
 
+import frc.robot.commands.auto.DriveForwardXCmd;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.utilities.RobotNav;
 import java.util.List;
@@ -67,7 +68,9 @@ public class RobotContainer {
 
     return new ControllerDriveCmd(new Drivetrain(), _driveController);
   }
-
+public Command getAutonomousCommand(){
+    return new DriveForwardXCmd();
+}
 
 /*  public Command getAutonomousCommand() {
     // Create a voltage constraint to ensure we don't accelerate too fast

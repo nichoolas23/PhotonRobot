@@ -20,13 +20,20 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Drivetrain extends SubsystemBase {
 
-
-  private final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSRX(1),
+/*
+private final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSRX(1),
       new WPI_TalonSRX(3), new WPI_TalonSRX(2), new WPI_TalonSRX(4)};
   private final MotorControllerGroup _leftDrive = new MotorControllerGroup(wpi_talonSRXES[0],
       wpi_talonSRXES[1]);
   private final MotorControllerGroup _rightDrive = new MotorControllerGroup(wpi_talonSRXES[2],
       wpi_talonSRXES[3]);
+ */
+  private final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSRX(1),
+      new WPI_TalonSRX(3), new WPI_TalonSRX(2), new WPI_TalonSRX(4)};
+  private final MotorControllerGroup _leftDrive = new MotorControllerGroup(wpi_talonSRXES[1],
+      wpi_talonSRXES[3]);
+  private final MotorControllerGroup _rightDrive = new MotorControllerGroup(wpi_talonSRXES[0],
+      wpi_talonSRXES[2]);
   private final AHRS _gyro = new AHRS();
   private final DifferentialDrive _differentialDrive = new DifferentialDrive(_leftDrive,
       _rightDrive);
