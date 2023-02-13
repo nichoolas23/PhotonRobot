@@ -4,65 +4,77 @@ import static frc.robot.Constants.RobotConstants.DRIVE_KINEMATICS;
 import static frc.robot.Constants.RobotConstants.LEFT_ENCODER;
 import static frc.robot.Constants.RobotConstants.PhysicalConstants.WHEEL_CIRCUM;
 import static frc.robot.Constants.RobotConstants.RIGHT_ENCODER;
+import static frc.robot.Constants.VisionConstants.VISION_STD_DEV;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.DifferentialDriveWheelVoltages;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.Field.RoboField;
+import frc.robot.utilities.LimelightHelpers;
+import frc.robot.utilities.RobotNav;
+import org.opencv.core.Mat.Tuple2;
 
 public class Drivetrain extends SubsystemBase {
 
-/*
+
 private final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSRX(1),
       new WPI_TalonSRX(3), new WPI_TalonSRX(2), new WPI_TalonSRX(4)};
   private final MotorControllerGroup _leftDrive = new MotorControllerGroup(wpi_talonSRXES[0],
       wpi_talonSRXES[1]);
   private final MotorControllerGroup _rightDrive = new MotorControllerGroup(wpi_talonSRXES[2],
       wpi_talonSRXES[3]);
- */
-  private final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSRX(1),
+  private final DifferentialDrive _differentialDrive = new DifferentialDrive(_leftDrive,
+      _rightDrive);
+  /*private final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSRX(1),
       new WPI_TalonSRX(3), new WPI_TalonSRX(2), new WPI_TalonSRX(4)};
   private final MotorControllerGroup _leftDrive = new MotorControllerGroup(wpi_talonSRXES[1],
       wpi_talonSRXES[3]);
   private final MotorControllerGroup _rightDrive = new MotorControllerGroup(wpi_talonSRXES[0],
-      wpi_talonSRXES[2]);
+      wpi_talonSRXES[2]);*/
   private final AHRS _gyro = new AHRS();
-  private final DifferentialDrive _differentialDrive = new DifferentialDrive(_leftDrive,
-      _rightDrive);
 
   // Start motor setup
-
-  private DifferentialDrivePoseEstimator _diffPoseEstimator =
+  private final DifferentialDrivePoseEstimator _diffPoseEstimator =
       new DifferentialDrivePoseEstimator(
           DRIVE_KINEMATICS, _gyro.getRotation2d(), 0.0, 0.0, new Pose2d());
-  private DifferentialDriveWheelSpeeds _diffDriveWheelSpeeds = new DifferentialDriveWheelSpeeds();
-  private DifferentialDriveWheelVoltages _diffDriveWheelVoltages = new DifferentialDriveWheelVoltages();
-  private DifferentialDriveOdometry _diffDriveOdometry = new DifferentialDriveOdometry(_gyro.getRotation2d(),0,0);
+  private final DifferentialDriveWheelSpeeds _diffDriveWheelSpeeds = new DifferentialDriveWheelSpeeds();
+  private final DifferentialDriveWheelVoltages _diffDriveWheelVoltages = new DifferentialDriveWheelVoltages();
+  private final DifferentialDriveOdometry _diffDriveOdometry = new DifferentialDriveOdometry(_gyro.getRotation2d(),0,0);
 
 
 
   public Drivetrain() {
     LEFT_ENCODER.setDistancePerPulse(WHEEL_CIRCUM/ 357.75);
     LEFT_ENCODER.setReverseDirection(true);
-    RIGHT_ENCODER.setDistancePerPulse(WHEEL_CIRCUM / 355);
+    RIGHT_ENCODER.setDistancePerPulse(WHEEL_CIRCUM / 357.75);
 
     _rightDrive.setInverted(true);
     _differentialDrive.setSafetyEnabled(false);
 
     _diffPoseEstimator.update(_gyro.getRotation2d(), 0, 0);
+
+    _diffPoseEstimator.setVisionMeasurementStdDevs(VISION_STD_DEV);
+
   }
 
 
   @Override
   public void periodic() {
+
 
 
  /*   if(isNearLola()){
@@ -94,14 +106,21 @@ private final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSR
     _diffDriveWheelVoltages.left = wpi_talonSRXES[0].getMotorOutputVoltage() + wpi_talonSRXES[1].getMotorOutputVoltage();
     _diffDriveWheelVoltages.right = wpi_talonSRXES[3].getMotorOutputVoltage() + wpi_talonSRXES[2].getMotorOutputVoltage();
 
-    _diffPoseEstimator.update(
-        _gyro.getRotation2d(), LEFT_ENCODER.getDistance(), RIGHT_ENCODER.getDistance());
+    _diffPoseEstimator.update(_gyro.getRotation2d(), LEFT_ENCODER.getDistance(), RIGHT_ENCODER.getDistance());
     SmartDashboard.putNumber("Left Encoder", LEFT_ENCODER.getDistance());
     SmartDashboard.putNumber("Right Encoder", RIGHT_ENCODER.getDistance());
+    SmartDashboard.putNumber("Left Encoder Rate", LEFT_ENCODER.getRate());
+    SmartDashboard.putNumber("Right Encoder Rate", RIGHT_ENCODER.getRate());
+
     // Also apply vision measurements. We use 0.3 seconds in the past as an example
     // -- on
     // a real robot, this must be calculated based either on latency or timestamps.
+    var limelightRes =LimelightHelpers.getLatestResults("");
+    if(LimelightHelpers.getTV("")){
+      _diffPoseEstimator.addVisionMeasurement(RobotNav.getFieldAdjPose(LimelightHelpers.getBotPose2d("")), Timer.getFPGATimestamp());
+    }
 
+    RoboField.fieldUpdate(_diffPoseEstimator.getEstimatedPosition());
   }
 
 
@@ -115,7 +134,10 @@ private final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSR
   public void resetOdometry(Pose2d initialPose) {
     resetEncoders();
     _diffDriveOdometry.resetPosition(
-        _gyro.getRotation2d(), LEFT_ENCODER.getDistance(), RIGHT_ENCODER.getDistance(), initialPose);
+        _gyro.getRotation2d(),
+        LEFT_ENCODER.getDistance(),
+        RIGHT_ENCODER.getDistance(),
+        initialPose);
   }
 
   public void resetEncoders() {

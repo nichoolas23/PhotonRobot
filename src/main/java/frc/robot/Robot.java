@@ -47,7 +47,7 @@ public class Robot extends TimedRobot {
     PathPlannerServer.startServer(5811);
     RoboField.fieldSetup();
     _robotContainer = new RobotContainer();
-
+    RobotNav.setStdDevVision();
   }
 
   @Override
@@ -65,12 +65,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-
+    Command _autonomousCommand;
     _autonomousCommand = _robotContainer.getAutonomousCommand();
     // schedule the autonomous command (example)
     if (_autonomousCommand != null) {
       _autonomousCommand.schedule();
-      DriverStation.reportError("sec",true);
+      DriverStation.reportError("sec", true);
 
     }
 
@@ -82,7 +82,9 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     _drivetrain.updateOdometry();
     _robotNav.updateLL();
-    SmartDashboard.putNumber("GyroYaw",RobotNav.getGyro().getYaw());
+    SmartDashboard.putNumber("GyroYaw", RobotNav.getGyro().getYaw());
+
+
   /*  if (RobotNav.getEstimatedRobotPose() != null) {
       RoboField.fieldUpdate(RobotNav.getEstimatedRobotPose().estimatedPose.toPose2d());
     }*/

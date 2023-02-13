@@ -3,6 +3,7 @@ package frc.robot;
 import static frc.robot.Constants.RobotConstants.PhysicalConstants.TRACK_WIDTH;
 
 import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -10,6 +11,8 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -28,6 +31,8 @@ public class Constants {
 
     public static final Transform3d ROBOT_TO_CAM = new Transform3d(new Translation3d(0.00, .38, 0.15),
         new Rotation3d(0, 0, 0));
+    public static Matrix<N3, N1> VISION_STD_DEV = new Matrix<>(N3.instance, N1.instance);
+
 
   }
 
@@ -52,7 +57,7 @@ public class Constants {
     public static Pose2d SECOND_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
     public static Pose2d THIRD_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
     public static Pose2d FOURTH_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
-    public static Pose2d FIFTH_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
+      public static Pose2d FIFTH_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
 
     public static Pose2d BLUE_CHARGING_STATION = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
     public static Pose2d RED_CHARGING_STATION = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
@@ -92,13 +97,13 @@ public class Constants {
 
 
 
-    public static double AUTO_MAX_SPEED = 0.0;
-    public static double AUTO_MAX_ACCEL = 0.0;
+    public static double AUTO_MAX_SPEED = 0.40;
+    public static double AUTO_MAX_ACCEL = .1;
 
-    public static double P_GAIN_DRIVE_VEL = 0.0;
-    public static double VOLTS_MAX = 0.0;
-    public static double VOLTS_SECONDS_PER_METER = 0.0;
-    public static double VOLTS_SECONDS_SQ_PER_METER = 0.0;
+    public static double P_GAIN_DRIVE_VEL = 8.5;
+    public static double VOLTS_MAX = .22;
+    public static double VOLTS_SECONDS_PER_METER = 1.98;
+    public static double VOLTS_SECONDS_SQ_PER_METER = .2;
     public static Encoder LEFT_ENCODER = new Encoder(0, 1);
     public static Encoder RIGHT_ENCODER = new Encoder(2, 3);
 

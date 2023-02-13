@@ -19,6 +19,7 @@ import static frc.robot.Constants.RobotConstants.VOLTS_SECONDS_SQ_PER_METER;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
@@ -27,12 +28,16 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.Field.RoboField;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.commands.ControllerDriveCmd;
 
+import frc.robot.commands.auto.AimAtTargetCmd;
 import frc.robot.commands.auto.DriveForwardXCmd;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.utilities.LimelightHelpers;
 import frc.robot.utilities.RobotNav;
+import java.lang.reflect.Field;
 import java.util.List;
 
 /**
@@ -60,7 +65,7 @@ public class RobotContainer {
    * Use this method to define your trigger->command mappings.
    */
   private void configureBindings() {
-   // new Trigger(_driveController::getAButtonPressed).toggleOnTrue(new AimAtTargetCmd());
+    new Trigger(_driveController::getAButtonPressed).onTrue(new AimAtTargetCmd());
     /*new Trigger(() -> _driveController.getRightX() != 0).onTrue()*/
   }
 
@@ -68,11 +73,9 @@ public class RobotContainer {
 
     return new ControllerDriveCmd(new Drivetrain(), _driveController);
   }
-public Command getAutonomousCommand(){
-    return new DriveForwardXCmd();
-}
 
-/*  public Command getAutonomousCommand() {
+
+  public Command getAutonomousCommand() {
     // Create a voltage constraint to ensure we don't accelerate too fast
     var autoVoltageConstraint =
         new DifferentialDriveVoltageConstraint(
@@ -95,15 +98,16 @@ public Command getAutonomousCommand(){
 
     // An example trajectory to follow.  All units in meters.
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-        RobotNav.getEstimatedRobotPose().estimatedPose.toPose2d(), List.of(),
+        LimelightHelpers.getBotPose3d_TargetSpace("").toPose2d(), List.of(),
         FieldConstants.FIFTH_BLUE_GRID,
         config
     );
 
+
     RamseteCommand ramseteCommand =
         new RamseteCommand(
             trajectory,
-            _robotNav::getEstimatedRobotPose2d,
+            RobotContainer::getbotpose,
             new RamseteController(RAMSETE_B, RAMSETE_ZETA),
             new SimpleMotorFeedforward(
                 VOLTS_MAX,
@@ -119,8 +123,10 @@ public Command getAutonomousCommand(){
 
     // Reset odometry to the starting pose of the trajectory.
     _drivetrain.resetOdometry(trajectory.getInitialPose());
-
+    RoboField.putTraj(trajectory);
     // Run path following command, then stop at the end.
     return ramseteCommand.andThen(() -> _drivetrain.setVoltages(0, 0));
-  }*/
+  }
+  private static Pose2d getbotpose(){
+    return LimelightHelpers.getBotPose3d_TargetSpace("").toPose2d();}
 }
