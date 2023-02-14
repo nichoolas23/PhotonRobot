@@ -48,6 +48,7 @@ public class Robot extends TimedRobot {
     RoboField.fieldSetup();
     _robotContainer = new RobotContainer();
     RobotNav.setStdDevVision();
+    _drivetrain.setBrakeMode();
   }
 
   @Override

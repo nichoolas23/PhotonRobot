@@ -3,22 +3,28 @@ package frc.robot.utilities;
 import static frc.robot.Constants.VisionConstants.VISION_STD_DEV;
 
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import frc.robot.utilities.LimelightHelpers.LimelightResults;
+import java.awt.Point;
+import java.awt.geom.Point2D;
 
 
 public class RobotNav {
 
+  private static DifferentialDrivePoseEstimator _diffDrivePose;
   private static AHRS _gyro = new AHRS();
   private static double _rotateVal;
+
 
   //Limelight data
 
 
   public static void setStdDevVision() {
-    VISION_STD_DEV.set(0, 0, 0.01);
-    VISION_STD_DEV.set(1, 0, 0.01);
-    VISION_STD_DEV.set(2, 0, Math.toRadians(2));
+    VISION_STD_DEV.set(0, 0, 0.5);
+    VISION_STD_DEV.set(1, 0, 0.5);
+    VISION_STD_DEV.set(2, 0, Math.toRadians(30));
   }
 
 
@@ -44,8 +50,20 @@ public class RobotNav {
 
   }
 
+  public static DifferentialDrivePoseEstimator get_diffDrivePose() {
+    return _diffDrivePose;
+  }
+
+  public static void set_diffDrivePose(
+      DifferentialDrivePoseEstimator _diffDrivePose) {
+    RobotNav._diffDrivePose = _diffDrivePose;
+  }
+
+
   public void updateLL() {
-    LimelightHelpers.getLatestResults("limelight");
+
+      LimelightHelpers.getLatestResults("limelight");
+
 
   }
 }

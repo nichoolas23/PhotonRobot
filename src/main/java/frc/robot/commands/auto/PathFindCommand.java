@@ -36,8 +36,8 @@ Drivetrain _drivetrain = new Drivetrain();
   public void execute() {
 
    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-        RobotNav.getFieldAdjPose(LimelightHelpers.getBotPose2d("")), List.of(),
-        FieldConstants.FIFTH_BLUE_GRID,
+        RobotNav.get_diffDrivePose().getEstimatedPosition(), List.of(),
+        FieldConstants.FIRST_BLUE_GRID,
         new TrajectoryConfig(2, 2)
     );
     RoboField.putTraj(trajectory);

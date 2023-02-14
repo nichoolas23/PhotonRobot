@@ -6,6 +6,9 @@ import static frc.robot.Constants.RobotConstants.PhysicalConstants.WHEEL_CIRCUM;
 import static frc.robot.Constants.RobotConstants.RIGHT_ENCODER;
 import static frc.robot.Constants.VisionConstants.VISION_STD_DEV;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.Matrix;
@@ -27,8 +30,10 @@ import frc.Field.RoboField;
 import frc.robot.utilities.LimelightHelpers;
 import frc.robot.utilities.RobotNav;
 import org.opencv.core.Mat.Tuple2;
+import org.opencv.core.Point;
 
 public class Drivetrain extends SubsystemBase {
+  private static boolean isCalibrated = false;
 
 
 private final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSRX(1),
@@ -37,18 +42,20 @@ private final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSR
       wpi_talonSRXES[1]);
   private final MotorControllerGroup _rightDrive = new MotorControllerGroup(wpi_talonSRXES[2],
       wpi_talonSRXES[3]);
-  private final DifferentialDrive _differentialDrive = new DifferentialDrive(_leftDrive,
-      _rightDrive);
+
+
   /*private final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSRX(1),
       new WPI_TalonSRX(3), new WPI_TalonSRX(2), new WPI_TalonSRX(4)};
   private final MotorControllerGroup _leftDrive = new MotorControllerGroup(wpi_talonSRXES[1],
       wpi_talonSRXES[3]);
   private final MotorControllerGroup _rightDrive = new MotorControllerGroup(wpi_talonSRXES[0],
       wpi_talonSRXES[2]);*/
+  private final DifferentialDrive _differentialDrive = new DifferentialDrive(_leftDrive,
+      _rightDrive);
   private final AHRS _gyro = new AHRS();
 
   // Start motor setup
-  private final DifferentialDrivePoseEstimator _diffPoseEstimator =
+  private DifferentialDrivePoseEstimator _diffPoseEstimator =
       new DifferentialDrivePoseEstimator(
           DRIVE_KINEMATICS, _gyro.getRotation2d(), 0.0, 0.0, new Pose2d());
   private final DifferentialDriveWheelSpeeds _diffDriveWheelSpeeds = new DifferentialDriveWheelSpeeds();
@@ -57,19 +64,25 @@ private final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSR
 
 
 
+
   public Drivetrain() {
+
     LEFT_ENCODER.setDistancePerPulse(WHEEL_CIRCUM/ 357.75);
     LEFT_ENCODER.setReverseDirection(true);
     RIGHT_ENCODER.setDistancePerPulse(WHEEL_CIRCUM / 357.75);
 
+
     _rightDrive.setInverted(true);
     _differentialDrive.setSafetyEnabled(false);
 
-    _diffPoseEstimator.update(_gyro.getRotation2d(), 0, 0);
+
+
+
 
     _diffPoseEstimator.setVisionMeasurementStdDevs(VISION_STD_DEV);
 
   }
+
 
 
   @Override
@@ -77,24 +90,8 @@ private final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSR
 
 
 
- /*   if(isNearLola()){
-      Trajectory nickTrajectory = TrajectoryGenerator.generateTrajectory(
-          RobotNav.getEstimatedRobotPose().estimatedPose.toPose2d(), List.of(),
-          FieldConstants.NICK,
-          new TrajectoryConfig(2, 2)
-      );
-      Command escapeLola = new PathFollowCmd(nickTrajectory);
-      escapeLola.schedule();
-    }
-  }
-  public boolean isNearLola(){
-    Point position = new Point((int) RobotNav.getEstimatedRobotPose().estimatedPose.getX(),
-        (int) RobotNav.getEstimatedRobotPose().estimatedPose.getY());
 
-    return position.distance(lola) < 10;
-  }*/
   }
-
 
   public void updateOdometry() {
 
@@ -117,12 +114,25 @@ private final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSR
     // a real robot, this must be calculated based either on latency or timestamps.
     var limelightRes =LimelightHelpers.getLatestResults("");
     if(LimelightHelpers.getTV("")){
-      _diffPoseEstimator.addVisionMeasurement(RobotNav.getFieldAdjPose(LimelightHelpers.getBotPose2d("")), Timer.getFPGATimestamp());
+      if(isCalibrated){
+        if(RobotNav.getFieldAdjPose(LimelightHelpers.getBotPose2d("")).getTranslation().getDistance(_diffPoseEstimator.getEstimatedPosition().getTranslation()) < 1){
+
+          _diffPoseEstimator.addVisionMeasurement(RobotNav.getFieldAdjPose(LimelightHelpers.getBotPose2d("")), Timer.getFPGATimestamp(),VISION_STD_DEV);
+        }
+      }else{
+        _diffPoseEstimator.addVisionMeasurement(RobotNav.getFieldAdjPose(LimelightHelpers.getBotPose2d("")), Timer.getFPGATimestamp(),VISION_STD_DEV);
+      }
+
     }
 
     RoboField.fieldUpdate(_diffPoseEstimator.getEstimatedPosition());
+    RobotNav.set_diffDrivePose(_diffPoseEstimator);
   }
-
+  public void setBrakeMode(){
+    for(var motor : wpi_talonSRXES){
+      motor.setNeutralMode(NeutralMode.Brake);
+    }
+  }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return _diffDriveWheelSpeeds;
@@ -145,6 +155,11 @@ private final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSR
     RIGHT_ENCODER.reset();
   }
 
+  public void initializeRobotPose(){
+    _diffPoseEstimator.update(_gyro.getRotation2d(), 0, 0);
+  }
+
+
 
 
 
@@ -159,6 +174,10 @@ private final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSR
       boolean isTracking) {
 
     _differentialDrive.arcadeDrive(reverseSpeed > 0 ? reverseSpeed * -1 : forwardSpeed, rot * -1);
+
+
+
+
     RamseteController ramseteController = new RamseteController();
   }
 

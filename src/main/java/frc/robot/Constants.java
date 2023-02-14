@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import frc.robot.subsystems.Drivetrain;
 import java.nio.charset.StandardCharsets;
 
 
@@ -53,7 +54,7 @@ public class Constants {
     public static AprilTag TAG_SIX = new AprilTag(6, new Pose3d(new Pose2d(5.720, 3.275, Rotation2d.fromDegrees(180))));
 
 
-    public static Pose2d FIRST_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
+    public static Pose2d FIRST_BLUE_GRID = new Pose2d( 2.56+1.8, 0.3065+ 1.8825, Rotation2d.fromDegrees(0));
     public static Pose2d SECOND_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
     public static Pose2d THIRD_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
     public static Pose2d FOURTH_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
@@ -83,6 +84,8 @@ public class Constants {
   }
   public static class RobotConstants {
 
+
+
    public static class PhysicalConstants {
      public static final double WHEEL_CIRCUM = .6283185;
      public static final double TRACK_WIDTH = 0.62;
@@ -97,13 +100,13 @@ public class Constants {
 
 
 
-    public static double AUTO_MAX_SPEED = 0.40;
-    public static double AUTO_MAX_ACCEL = .1;
+    public static double AUTO_MAX_SPEED = 0.5;
+    public static double AUTO_MAX_ACCEL = .5;
 
-    public static double P_GAIN_DRIVE_VEL = 8.5;
-    public static double VOLTS_MAX = .22;
+    public static double P_GAIN_DRIVE_VEL = 9.5;
+    public static double VOLTS_MAX = 2.5;
     public static double VOLTS_SECONDS_PER_METER = 1.98;
-    public static double VOLTS_SECONDS_SQ_PER_METER = .2;
+    public static double VOLTS_SECONDS_SQ_PER_METER = 1;
     public static Encoder LEFT_ENCODER = new Encoder(0, 1);
     public static Encoder RIGHT_ENCODER = new Encoder(2, 3);
 

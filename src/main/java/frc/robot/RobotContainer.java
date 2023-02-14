@@ -20,6 +20,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
@@ -50,7 +51,7 @@ import java.util.List;
 public class RobotContainer {
 
   private final RobotNav _robotNav = new RobotNav();
-  private final Drivetrain _drivetrain = new Drivetrain();
+  private Drivetrain _drivetrain = new Drivetrain();
   private final XboxController _driveController = new XboxController(0);
 
 
@@ -65,7 +66,9 @@ public class RobotContainer {
    * Use this method to define your trigger->command mappings.
    */
   private void configureBindings() {
+
     new Trigger(_driveController::getAButtonPressed).onTrue(new AimAtTargetCmd());
+    //new Trigger(_driveController::getXButtonPressed).onTrue(getAutonomousCommand());
     /*new Trigger(() -> _driveController.getRightX() != 0).onTrue()*/
   }
 
@@ -76,6 +79,7 @@ public class RobotContainer {
 
 
   public Command getAutonomousCommand() {
+    new Drivetrain();
     // Create a voltage constraint to ensure we don't accelerate too fast
     var autoVoltageConstraint =
         new DifferentialDriveVoltageConstraint(
@@ -98,11 +102,11 @@ public class RobotContainer {
 
     // An example trajectory to follow.  All units in meters.
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-        LimelightHelpers.getBotPose3d_TargetSpace("").toPose2d(), List.of(),
-        FieldConstants.FIFTH_BLUE_GRID,
+        RobotNav.get_diffDrivePose().getEstimatedPosition(), List.of(),
+        FieldConstants.FIRST_BLUE_GRID,
         config
     );
-
+    RoboField.putTraj(trajectory);
 
     RamseteCommand ramseteCommand =
         new RamseteCommand(
@@ -128,5 +132,5 @@ public class RobotContainer {
     return ramseteCommand.andThen(() -> _drivetrain.setVoltages(0, 0));
   }
   private static Pose2d getbotpose(){
-    return LimelightHelpers.getBotPose3d_TargetSpace("").toPose2d();}
+    return RobotNav.get_diffDrivePose().getEstimatedPosition();}
 }

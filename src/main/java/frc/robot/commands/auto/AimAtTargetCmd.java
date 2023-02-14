@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.utilities.LimelightHelpers;
+import frc.robot.utilities.RobotNav;
 
 
 public class AimAtTargetCmd extends CommandBase {
@@ -36,7 +37,7 @@ public class AimAtTargetCmd extends CommandBase {
     double rotationSpeed = 0;
 
     if (LimelightHelpers.getTV("")) {
-      DriverStation.reportError("HAS TARGETS", false);
+
       // Calculate angular turn power
       // -1.0 required to ensure positive PID controller effort _increases_ yaw
       var result = LimelightHelpers.getLatestResults("");
@@ -50,11 +51,10 @@ public class AimAtTargetCmd extends CommandBase {
 
       }
       if (targetTagPose != null) {
-        rotationSpeed = -turnController.calculate(targetTagPose.getX(), 0);
+        rotationSpeed = -turnController.calculate(RobotNav.get_diffDrivePose().getEstimatedPosition().getRotation().getDegrees(), targetTagPose.getRotation().toRotation2d().getDegrees());
       }
 
-      DriverStation.reportError(targetTagPose + "", false);
-      DriverStation.reportError(rotationSpeed + "", false);
+
       _drivetrain.drive(_controller.getRightTriggerAxis(), _controller.getLeftTriggerAxis(),
           rotationSpeed, false, true);
     }
