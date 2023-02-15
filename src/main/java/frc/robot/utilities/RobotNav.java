@@ -58,13 +58,15 @@ public class RobotNav {
       DifferentialDrivePoseEstimator _diffDrivePose) {
     RobotNav._diffDrivePose = _diffDrivePose;
   }
+  public static Pose2d getEstPose() {
+    return _diffDrivePose.getEstimatedPosition();
+  }
 
 
   public void updateLL() {
 
       LimelightHelpers.getLatestResults("limelight");
-
-
   }
+
 }
 

@@ -34,13 +34,14 @@ import org.opencv.core.Point;
 
 public class Drivetrain extends SubsystemBase {
   private static boolean isCalibrated = false;
+  private static boolean isAuto = false;
 
 
-private final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSRX(1),
+private static final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSRX(1),
       new WPI_TalonSRX(3), new WPI_TalonSRX(2), new WPI_TalonSRX(4)};
-  private final MotorControllerGroup _leftDrive = new MotorControllerGroup(wpi_talonSRXES[0],
+  private static final MotorControllerGroup _leftDrive = new MotorControllerGroup(wpi_talonSRXES[0],
       wpi_talonSRXES[1]);
-  private final MotorControllerGroup _rightDrive = new MotorControllerGroup(wpi_talonSRXES[2],
+  private static final MotorControllerGroup _rightDrive = new MotorControllerGroup(wpi_talonSRXES[2],
       wpi_talonSRXES[3]);
 
 
@@ -50,17 +51,17 @@ private final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSR
       wpi_talonSRXES[3]);
   private final MotorControllerGroup _rightDrive = new MotorControllerGroup(wpi_talonSRXES[0],
       wpi_talonSRXES[2]);*/
-  private final DifferentialDrive _differentialDrive = new DifferentialDrive(_leftDrive,
+  private static final DifferentialDrive _differentialDrive = new DifferentialDrive(_leftDrive,
       _rightDrive);
-  private final AHRS _gyro = new AHRS();
+  private static final AHRS _gyro = new AHRS();
 
   // Start motor setup
-  private DifferentialDrivePoseEstimator _diffPoseEstimator =
+  private static DifferentialDrivePoseEstimator _diffPoseEstimator =
       new DifferentialDrivePoseEstimator(
           DRIVE_KINEMATICS, _gyro.getRotation2d(), 0.0, 0.0, new Pose2d());
-  private final DifferentialDriveWheelSpeeds _diffDriveWheelSpeeds = new DifferentialDriveWheelSpeeds();
-  private final DifferentialDriveWheelVoltages _diffDriveWheelVoltages = new DifferentialDriveWheelVoltages();
-  private final DifferentialDriveOdometry _diffDriveOdometry = new DifferentialDriveOdometry(_gyro.getRotation2d(),0,0);
+  private static final DifferentialDriveWheelSpeeds _diffDriveWheelSpeeds = new DifferentialDriveWheelSpeeds(0,0);
+  private static final DifferentialDriveWheelVoltages _diffDriveWheelVoltages = new DifferentialDriveWheelVoltages();
+  private static final DifferentialDriveOdometry _diffDriveOdometry = new DifferentialDriveOdometry(_gyro.getRotation2d(),0,0);
 
 
 
@@ -83,6 +84,13 @@ private final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSR
 
   }
 
+  public static boolean isIsAuto() {
+    return isAuto;
+  }
+
+  public static void setIsAuto(boolean isAuto) {
+    Drivetrain.isAuto = isAuto;
+  }
 
 
   @Override
@@ -112,7 +120,6 @@ private final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSR
     // Also apply vision measurements. We use 0.3 seconds in the past as an example
     // -- on
     // a real robot, this must be calculated based either on latency or timestamps.
-    var limelightRes =LimelightHelpers.getLatestResults("");
     if(LimelightHelpers.getTV("")){
       if(isCalibrated){
         if(RobotNav.getFieldAdjPose(LimelightHelpers.getBotPose2d("")).getTranslation().getDistance(_diffPoseEstimator.getEstimatedPosition().getTranslation()) < 1){
@@ -130,11 +137,12 @@ private final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSR
   }
   public void setBrakeMode(){
     for(var motor : wpi_talonSRXES){
-      motor.setNeutralMode(NeutralMode.Brake);
+      motor.setNeutralMode(NeutralMode.Coast);
     }
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+
     return _diffDriveWheelSpeeds;
   }
   public void setVoltages(double leftVolts, double rightVolts) {
@@ -155,13 +163,6 @@ private final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSR
     RIGHT_ENCODER.reset();
   }
 
-  public void initializeRobotPose(){
-    _diffPoseEstimator.update(_gyro.getRotation2d(), 0, 0);
-  }
-
-
-
-
 
   /**
    * Controls the driving mechanism of the robot.
@@ -172,13 +173,12 @@ private final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSR
    */
   public void drive(double forwardSpeed, double reverseSpeed, double rot, boolean isAuto,
       boolean isTracking) {
+if(!this.isAuto){
+  _differentialDrive.arcadeDrive(reverseSpeed > 0 ? reverseSpeed * -1 : forwardSpeed, rot * -1);
+}
 
-    _differentialDrive.arcadeDrive(reverseSpeed > 0 ? reverseSpeed * -1 : forwardSpeed, rot * -1);
 
 
-
-
-    RamseteController ramseteController = new RamseteController();
   }
 
 

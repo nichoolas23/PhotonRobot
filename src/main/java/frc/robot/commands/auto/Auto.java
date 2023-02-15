@@ -13,9 +13,9 @@ import frc.robot.subsystems.Drivetrain;
 public final class Auto
 {
   /** Example static factory for an autonomous command. */
-  public static CommandBase autoFactory(Drivetrain subsystem)
+  public static CommandBase autoFactory(Drivetrain drivetrain)
   {
-    return Commands.sequence(new PathFindCommand());
+    return Commands.sequence(new PathFindCommand(drivetrain));//new PathFollowCmd()
   }
 
 

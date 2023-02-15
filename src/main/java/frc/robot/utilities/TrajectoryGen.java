@@ -1,5 +1,7 @@
-package frc.robot.commands.auto;
+package frc.robot.utilities;
 
+import static frc.robot.Constants.RobotConstants.AUTO_MAX_ACCEL;
+import static frc.robot.Constants.RobotConstants.AUTO_MAX_SPEED;
 import static frc.robot.Constants.RobotConstants.DRIVE_KINEMATICS;
 import static frc.robot.Constants.RobotConstants.P_GAIN_DRIVE_VEL;
 import static frc.robot.Constants.RobotConstants.RAMSETE_B;
@@ -7,53 +9,54 @@ import static frc.robot.Constants.RobotConstants.RAMSETE_ZETA;
 import static frc.robot.Constants.RobotConstants.VOLTS_MAX;
 import static frc.robot.Constants.RobotConstants.VOLTS_SECONDS_PER_METER;
 import static frc.robot.Constants.RobotConstants.VOLTS_SECONDS_SQ_PER_METER;
-import static frc.robot.Constants.RobotConstants.TRAJ_CONFIG;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.Field.RoboField;
 import frc.robot.Constants.FieldConstants;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.utilities.RobotNav;
-import frc.robot.utilities.TrajectoryGen;
 import java.util.List;
 
-public class PathFollowCmd extends CommandBase {
+public class TrajectoryGen {
 
-  private Drivetrain _drivetrain;
-  /**
-   * Creates a new PathFollowCmd.
-   */
-  public PathFollowCmd(Drivetrain drivetrain) {
-    _drivetrain = drivetrain;
-    // Use addRequirements() here to declare subsystem dependencies.
-addRequirements();
-  }
+  public static Command getTrajCmd(Drivetrain _drivetrain){
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-  }
+    // Create a voltage constraint to ensure we don't accelerate too fast
+    var autoVoltageConstraint =
+        new DifferentialDriveVoltageConstraint(
+            new SimpleMotorFeedforward(
+                VOLTS_MAX,
+                VOLTS_SECONDS_PER_METER,
+                VOLTS_SECONDS_SQ_PER_METER),
+            DRIVE_KINEMATICS,
+            10);
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    Drivetrain.setIsAuto(true);
-    TrajectoryGen.getTrajCmd(_drivetrain).schedule();
+    // Create TRAJ_CONFIG for trajectory
+    TrajectoryConfig config =
+        new TrajectoryConfig(
+            AUTO_MAX_SPEED,
+            AUTO_MAX_ACCEL)
+            // Add kinematics to ensure max speed is actually obeyed
+            .setKinematics(DRIVE_KINEMATICS)
+            // Apply the voltage constraint
+            .addConstraint(autoVoltageConstraint);
 
     // An example trajectory to follow.  All units in meters.
-   /* Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
         RobotNav.get_diffDrivePose().getEstimatedPosition(), List.of(),
         FieldConstants.FIRST_BLUE_GRID,
-        TRAJ_CONFIG
+        config
     );
     RoboField.putTraj(trajectory);
+
     RamseteCommand ramseteCommand =
         new RamseteCommand(
             trajectory,
@@ -70,29 +73,14 @@ addRequirements();
             // RamseteCommand passes volts to the callback
             _drivetrain::setVoltages,
             _drivetrain);
-    var toRun = ramseteCommand.andThen(() ->_drivetrain.setVoltages(0, 0));
-    toRun.schedule();
-
-
 
     // Reset odometry to the starting pose of the trajectory.
     _drivetrain.resetOdometry(trajectory.getInitialPose());
     RoboField.putTraj(trajectory);
     // Run path following command, then stop at the end.
-*/
+    return ramseteCommand.andThen(() -> _drivetrain.setVoltages(0, 0));
+  }
   }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    Drivetrain.setIsAuto(false);
-  }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
 
-    return false;
-  }
-
-}

@@ -19,6 +19,7 @@ import frc.Field.RoboField;
 import frc.robot.commands.auto.PathFindCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.utilities.RobotNav;
+import frc.robot.utilities.TrajectoryGen;
 
 
 /**
@@ -59,7 +60,7 @@ public class Robot extends TimedRobot {
 
     }
 
-    var command = new PathFindCommand();
+    var command = new PathFindCommand(_drivetrain);
     command.schedule();
     _teleopCommand.schedule();
   }
@@ -67,22 +68,21 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     Command _autonomousCommand;
-    _autonomousCommand = _robotContainer.getAutonomousCommand();
+    _autonomousCommand = TrajectoryGen.getTrajCmd(_drivetrain);
     // schedule the autonomous command (example)
     if (_autonomousCommand != null) {
       _autonomousCommand.schedule();
-      DriverStation.reportError("sec", true);
+
 
     }
-
   }
 
   @Override
   public void robotPeriodic() {
-
-    CommandScheduler.getInstance().run();
     _drivetrain.updateOdometry();
     _robotNav.updateLL();
+    CommandScheduler.getInstance().run();
+
     SmartDashboard.putNumber("GyroYaw", RobotNav.getGyro().getYaw());
 
 

@@ -10,13 +10,14 @@ import java.util.Timer;
 
 public class DriveForwardXCmd extends CommandBase {
 
-  private static Drivetrain _driveTrain = new Drivetrain();
+  private Drivetrain _driveTrain;
   private long _cTime;
 
   /**
    * Command that finds a path from the robot's current position to the target position and sends it to the drive train.
    */
-  public DriveForwardXCmd() {
+  public DriveForwardXCmd(Drivetrain driveTrain) {
+    _driveTrain = driveTrain;
     _cTime = System.currentTimeMillis();
 
     // Use addRequirements() here to declare subsystem dependencies.
