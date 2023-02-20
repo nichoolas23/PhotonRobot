@@ -1,41 +1,39 @@
 package frc.robot.utilities;
 
+import static frc.robot.Constants.VisionConstants.VISION_STD_DEV;
+
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import frc.robot.utilities.LimelightHelpers.LimelightResults;
+import java.awt.Point;
+import java.awt.geom.Point2D;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+public class RobotNav {
 
-public class RobotNav extends LimelightHelpers {
-
+  private static DifferentialDrivePoseEstimator _diffDrivePose;
   private static AHRS _gyro = new AHRS();
   private static double _rotateVal;
 
 
   //Limelight data
-  private static NetworkTable _table =  NetworkTableInstance.getDefault().getTable("limelight");
 
-  private static boolean _hasTarget;
-  private static long _pipelineLatency;
-  private static long _camLatency;
 
-  private static double[] _globalBotPose;
+  public static void setStdDevVision() {
+    VISION_STD_DEV.set(0, 0, 0.5);
+    VISION_STD_DEV.set(1, 0, 0.5);
+    VISION_STD_DEV.set(2, 0, Math.toRadians(30));
+  }
 
-  private static double[] _redBotPose; // orgin set to red driverstation
-
-  private static double[] _blueBotPose;
-
-  private static double[] _camPoseFromTarget;
 
   /**
-   * Initializes the robot navigation data
-   * Updates all poses so they aren't null when called
+   * Initializes the robot navigation data Updates all poses so they aren't null when called
    */
-public RobotNav(){
-  _table.getEntry("<variablename>").getDouble(0);
-}
+  public RobotNav() {
+
+  }
 
   public static AHRS getGyro() {
     return _gyro;
@@ -45,16 +43,30 @@ public RobotNav(){
     RobotNav._rotateVal = _rotateVal;
   }
 
+  public static Pose2d getFieldAdjPose(Pose2d pose2d) {
+    var megaBotPose = LimelightHelpers.getBotPose2d("");
+    return new Pose2d(new Translation2d(pose2d.getX() + 2.56, pose2d.getY() + 1.8825),
+        pose2d.getRotation());
 
-  public void updateLL(){
-    LimelightHelpers.getLatestResults("limelight");
-    _hasTarget = LimelightHelpers.getTV("limelight");
-    if(_hasTarget){
-      SmartDashboard.putNumber("Limelight X", LimelightHelpers.getTX("limelight"));
-      SmartDashboard.putNumber("Limelight Y", LimelightHelpers.getTY("limelight"));
-      SmartDashboard.putNumber("Limelight Area", LimelightHelpers.getTA("limelight"));
-      SmartDashboard.putNumber("Limelight Short", LimelightHelpers.getFiducialID("limelight"));
-    }
   }
+
+  public static DifferentialDrivePoseEstimator get_diffDrivePose() {
+    return _diffDrivePose;
+  }
+
+  public static void set_diffDrivePose(
+      DifferentialDrivePoseEstimator _diffDrivePose) {
+    RobotNav._diffDrivePose = _diffDrivePose;
+  }
+  public static Pose2d getEstPose() {
+    return _diffDrivePose.getEstimatedPosition();
+  }
+
+
+  public void updateLL() {
+
+      LimelightHelpers.getLatestResults("limelight");
+  }
+
 }
 

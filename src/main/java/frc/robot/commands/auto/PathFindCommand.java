@@ -7,18 +7,20 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.Field.RoboField;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.utilities.LimelightHelpers;
 import frc.robot.utilities.RobotNav;
 import java.util.List;
 
 public class PathFindCommand extends CommandBase {
 
-Drivetrain _drivetrain = new Drivetrain();
+Drivetrain _drivetrain;
 
 
 /**
 * Command that finds a path from the robot's current position to the target position and sends it to the drive train.
 */
-  public PathFindCommand() {
+  public PathFindCommand(Drivetrain drivetrain) {
+    _drivetrain = drivetrain;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements();
@@ -34,12 +36,12 @@ Drivetrain _drivetrain = new Drivetrain();
   @Override
   public void execute() {
 
-   /* Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-        RobotNav.getEstimatedRobotPose().estimatedPose.toPose2d(), List.of(),
-        FieldConstants.FIFTH_BLUE_GRID,
+   Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+        RobotNav.get_diffDrivePose().getEstimatedPosition(), List.of(),
+        FieldConstants.FIRST_BLUE_GRID,
         new TrajectoryConfig(2, 2)
     );
-    RoboField.putTraj(trajectory);*/
+    RoboField.putTraj(trajectory);
 
   }
 

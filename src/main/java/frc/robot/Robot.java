@@ -9,14 +9,17 @@ import static frc.robot.Constants.RobotConstants.LEFT_ENCODER;
 import static frc.robot.Constants.RobotConstants.RIGHT_ENCODER;
 
 import com.pathplanner.lib.server.PathPlannerServer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.Field.RoboField;
 import frc.robot.commands.auto.PathFindCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.utilities.RobotNav;
+import frc.robot.utilities.TrajectoryGen;
 
 
 /**
@@ -45,7 +48,8 @@ public class Robot extends TimedRobot {
     PathPlannerServer.startServer(5811);
     RoboField.fieldSetup();
     _robotContainer = new RobotContainer();
-
+    RobotNav.setStdDevVision();
+    _drivetrain.setBrakeMode();
   }
 
   @Override
@@ -56,27 +60,32 @@ public class Robot extends TimedRobot {
 
     }
 
-    var command = new PathFindCommand();
+    var command = new PathFindCommand(_drivetrain);
     command.schedule();
     _teleopCommand.schedule();
   }
 
   @Override
   public void autonomousInit() {
-   // _autonomousCommand = _robotContainer.getAutonomousCommand();
+    Command _autonomousCommand;
+    _autonomousCommand = TrajectoryGen.getTrajCmd(_drivetrain);
     // schedule the autonomous command (example)
     if (_autonomousCommand != null) {
       _autonomousCommand.schedule();
 
-    }
 
+    }
   }
 
   @Override
   public void robotPeriodic() {
-    CommandScheduler.getInstance().run();
     _drivetrain.updateOdometry();
     _robotNav.updateLL();
+    CommandScheduler.getInstance().run();
+
+    SmartDashboard.putNumber("GyroYaw", RobotNav.getGyro().getYaw());
+
+
   /*  if (RobotNav.getEstimatedRobotPose() != null) {
       RoboField.fieldUpdate(RobotNav.getEstimatedRobotPose().estimatedPose.toPose2d());
     }*/

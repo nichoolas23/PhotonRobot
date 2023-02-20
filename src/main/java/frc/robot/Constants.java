@@ -3,6 +3,8 @@ package frc.robot;
 import static frc.robot.Constants.RobotConstants.PhysicalConstants.TRACK_WIDTH;
 
 import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -10,6 +12,10 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -28,6 +34,8 @@ public class Constants {
 
     public static final Transform3d ROBOT_TO_CAM = new Transform3d(new Translation3d(0.00, .38, 0.15),
         new Rotation3d(0, 0, 0));
+    public static Matrix<N3, N1> VISION_STD_DEV = new Matrix<>(N3.instance, N1.instance);
+
 
   }
 
@@ -48,11 +56,11 @@ public class Constants {
     public static AprilTag TAG_SIX = new AprilTag(6, new Pose3d(new Pose2d(5.720, 3.275, Rotation2d.fromDegrees(180))));
 
 
-    public static Pose2d FIRST_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
+    public static Pose2d FIRST_BLUE_GRID = new Pose2d( 2.56+1.8, 0.3065+ 1.8825, Rotation2d.fromDegrees(0));
     public static Pose2d SECOND_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
     public static Pose2d THIRD_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
     public static Pose2d FOURTH_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
-    public static Pose2d FIFTH_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
+      public static Pose2d FIFTH_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
 
     public static Pose2d BLUE_CHARGING_STATION = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
     public static Pose2d RED_CHARGING_STATION = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
@@ -78,9 +86,11 @@ public class Constants {
   }
   public static class RobotConstants {
 
+
+
    public static class PhysicalConstants {
      public static final double WHEEL_CIRCUM = .6283185;
-     public static final double TRACK_WIDTH = 0.62;
+     public static final double TRACK_WIDTH = 0.72;
    }
 
     // Max speed of the robot in m/s
@@ -88,17 +98,35 @@ public class Constants {
         new DifferentialDriveKinematics(TRACK_WIDTH);
 
     public static final double RAMSETE_B = 2; // Tuning parameter (b > 0 rad^2/m^2) for which larger values make convergence more aggressive like a proportional term.
-    public static final double RAMSETE_ZETA = 0.7; // Tuning parameter (0 rad-1 < zeta < 1 rad-1) for which larger values provide more damping in response.
+    public static final double RAMSETE_ZETA = 0.5; // Tuning parameter (0 rad-1 < zeta < 1 rad-1) for which larger values provide more damping in response.
 
 
+//RAMSETE SETUP
+    public static double AUTO_MAX_SPEED = 3;
+    public static double AUTO_MAX_ACCEL = 3;
 
-    public static double AUTO_MAX_SPEED = 0.0;
-    public static double AUTO_MAX_ACCEL = 0.0;
+    public static double P_GAIN_DRIVE_VEL = 3.1519;
+    public static double VOLTS_MAX = 1.103;
+    public static double VOLTS_SECONDS_PER_METER = 2.0061;
+    public static double VOLTS_SECONDS_SQ_PER_METER = 1.4236;
 
-    public static double P_GAIN_DRIVE_VEL = 0.0;
-    public static double VOLTS_MAX = 0.0;
-    public static double VOLTS_SECONDS_PER_METER = 0.0;
-    public static double VOLTS_SECONDS_SQ_PER_METER = 0.0;
+    public static DifferentialDriveVoltageConstraint AUTO_VOLTAGE_CONSTRAINT =
+        new DifferentialDriveVoltageConstraint(
+            new SimpleMotorFeedforward(
+                VOLTS_MAX,
+                VOLTS_SECONDS_PER_METER,
+                VOLTS_SECONDS_SQ_PER_METER),
+            DRIVE_KINEMATICS,
+            10);
+
+    public static TrajectoryConfig TRAJ_CONFIG =
+        new TrajectoryConfig(
+            AUTO_MAX_SPEED,
+            AUTO_MAX_ACCEL)
+            // Add kinematics to ensure max speed is actually obeyed
+            .setKinematics(DRIVE_KINEMATICS)
+            // Apply the voltage constraint
+            .addConstraint(AUTO_VOLTAGE_CONSTRAINT);
     public static Encoder LEFT_ENCODER = new Encoder(0, 1);
     public static Encoder RIGHT_ENCODER = new Encoder(2, 3);
 
