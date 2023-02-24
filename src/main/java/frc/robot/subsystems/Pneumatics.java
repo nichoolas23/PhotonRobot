@@ -17,7 +17,7 @@ public class Pneumatics extends SubsystemBase {
  * @param piston
 */
   public static void setPiston(RPistonControl piston) {
-    piston.solenoid().setPulseDuration(piston.pulseDuration());
+  piston.solenoid().setPulseDuration(piston.pulseDuration());
     try {
       Thread.sleep(piston.delay()*1000);
     } catch (InterruptedException e) {

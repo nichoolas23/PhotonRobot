@@ -6,14 +6,28 @@
 package frc.robot;
 
 
+
+import static frc.robot.Constants.RobotConstants.STAB_PID_D;
+import static frc.robot.Constants.RobotConstants.STAB_PID_I;
+import static frc.robot.Constants.RobotConstants.STAB_PID_P;
+import static frc.robot.PhysicalInputs.XBOX_CONTROLLER;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ControllerDriveCmd;
 
+import frc.robot.commands.StabilizedDriveCmd;
+import frc.robot.commands.auto.AlignWithBlockGridCmd;
 import frc.robot.commands.auto.Auto;
+
+import frc.robot.commands.auto.TurnToAngleProfiled;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.RobotAlignment;
 import frc.robot.utilities.RobotNav;
 import frc.robot.utilities.TrajectoryGen;
 
@@ -42,13 +56,14 @@ public class RobotContainer {
    * Use this method to define your trigger->command mappings.
    */
   private void configureBindings() {
+    new Trigger(()->(XBOX_CONTROLLER.getRightX() > -.06 && XBOX_CONTROLLER.getRightX() <.06) && Math.abs(RobotNav.getGyro().getRate())<4).whileTrue(new StabilizedDriveCmd(_drivetrain,XBOX_CONTROLLER,_robotNav)).whileFalse(new ControllerDriveCmd(_drivetrain,XBOX_CONTROLLER));
+    new Trigger(_driveController::getAButtonPressed).onTrue(new AlignWithBlockGridCmd(_drivetrain,_driveController,6));
 
-    //new Trigger(_driveController::getAButtonPressed).onTrue(new AimAtTargetCmd());
-    new Trigger(_driveController::getXButtonPressed).onTrue(TrajectoryGen.getTrajCmd(_drivetrain));
-    /*new Trigger(() -> _driveController.getRightX() != 0).onTrue()*/
   }
 
+
   public Command getTeleopCommand() {
+
 
     return new ControllerDriveCmd(new Drivetrain(), _driveController);
   }

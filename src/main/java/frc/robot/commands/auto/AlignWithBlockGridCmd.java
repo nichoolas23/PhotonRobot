@@ -1,22 +1,27 @@
 package frc.robot.commands.auto;
 
 
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.RobotAlignment;
 import frc.robot.utilities.LimelightHelpers;
 import frc.robot.utilities.RobotNav;
 
 
 public class AlignWithBlockGridCmd extends CommandBase {
 
-  final double ANGULAR_P = 0.2;
+  final double ANGULAR_P = 3;
   final double ANGULAR_D = 0;
 
   private final XboxController _controller;
-  private PIDController _turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
+  private static RobotAlignment _alignment = new RobotAlignment(new PIDController(0.0, 0.0, 0.0),
+      RobotNav.getGyro().getFusedHeading());
+
   private Drivetrain _drivetrain;
   private Pose3d _targetTagPose;
 
@@ -25,7 +30,7 @@ public class AlignWithBlockGridCmd extends CommandBase {
   public AlignWithBlockGridCmd(Drivetrain drive, XboxController controller,int targetTagID) {
     _drivetrain = drive;
     _controller = controller;
-
+    _tagId = targetTagID;
     addRequirements();
   }
 
@@ -53,12 +58,12 @@ public class AlignWithBlockGridCmd extends CommandBase {
 
       }
       if (_targetTagPose != null) {
-        rotationSpeed = -_turnController.calculate(_targetTagPose.getRotation().getZ(), 0);
+        rotationSpeed = -_alignment.getController().calculate(_targetTagPose.getRotation().getZ(), 0);
       }
-
+      DriverStation.reportError(rotationSpeed+ "",true);
 
       _drivetrain.drive(_controller.getRightTriggerAxis(), _controller.getLeftTriggerAxis(),
-          rotationSpeed, false, true);
+          rotationSpeed*10);
     }
 
     //DriverStation.reportWarning("foundTarget: " + result.hasTargets() + " rotationSpeed: " + rotationSpeed, false);
@@ -79,7 +84,7 @@ public class AlignWithBlockGridCmd extends CommandBase {
    */
   @Override
   public boolean isFinished() {
-    return (_targetTagPose.getX() > -.1 && _targetTagPose.getX() < .1)
+    return (_targetTagPose.getRotation().getZ() > -.001 && _targetTagPose.getRotation().getZ() < .001)
         || Math.abs(_controller.getRightX()) > .3 || !LimelightHelpers.getTV("");
   }
 

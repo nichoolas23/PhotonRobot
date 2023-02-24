@@ -7,17 +7,23 @@ package frc.robot;
 
 import static frc.robot.Constants.RobotConstants.LEFT_ENCODER;
 import static frc.robot.Constants.RobotConstants.RIGHT_ENCODER;
+import static frc.robot.PhysicalInputs.XBOX_CONTROLLER;
 
 import com.pathplanner.lib.server.PathPlannerServer;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.Field.RoboField;
+import frc.robot.commands.StabilizedDriveCmd;
 import frc.robot.commands.auto.PathFindCommand;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.RobotAlignment;
 import frc.robot.utilities.RobotNav;
 import frc.robot.utilities.TrajectoryGen;
 
@@ -30,9 +36,10 @@ import frc.robot.utilities.TrajectoryGen;
  */
 public class Robot extends TimedRobot {
 
-  XboxController controller = new XboxController(0);
+
 
   private final Drivetrain _drivetrain = new Drivetrain();
+  private final RobotAlignment _robotAlignment = new RobotAlignment(new PIDController(0, 0, 0), 0);
   private Command _autonomousCommand;
   private RobotContainer _robotContainer;
   private final RobotNav _robotNav = new RobotNav();
@@ -45,11 +52,14 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    SmartDashboard.putNumber("num",RobotNav.getGyro().getRate());
     PathPlannerServer.startServer(5811);
+
     RoboField.fieldSetup();
     _robotContainer = new RobotContainer();
     RobotNav.setStdDevVision();
     _drivetrain.setBrakeMode();
+    SmartDashboard.putData("PID Controller",_robotAlignment.getController());
   }
 
   @Override
@@ -61,9 +71,13 @@ public class Robot extends TimedRobot {
     }
 
     var command = new PathFindCommand(_drivetrain);
-    command.schedule();
-    _teleopCommand.schedule();
+    //command.schedule();
+
   }
+@Override
+public void disabledInit()
+{CommandScheduler.getInstance().cancelAll();}
+
 
   @Override
   public void autonomousInit() {
@@ -79,20 +93,36 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+   SmartDashboard.putData("navx",RobotNav.getGyro());
+
+    /*if(Math.abs(RobotNav.getGyro().getRate())>1){
+      CommandScheduler.getInstance().cancelAll();
+      CommandScheduler.getInstance().disable();
+    }*/
     _drivetrain.updateOdometry();
     _robotNav.updateLL();
     CommandScheduler.getInstance().run();
 
-    SmartDashboard.putNumber("GyroYaw", RobotNav.getGyro().getYaw());
+
 
 
   /*  if (RobotNav.getEstimatedRobotPose() != null) {
       RoboField.fieldUpdate(RobotNav.getEstimatedRobotPose().estimatedPose.toPose2d());
     }*/
-    if (controller.getBButton()) {
+    if (XBOX_CONTROLLER.getBButton()) {
       LEFT_ENCODER.reset(); //-357.750000
       RIGHT_ENCODER.reset(); //355.000000
     }
+
+  }
+  @Override
+  public void testInit() {
+    // Cancels all running commands at the start of test mode.
+
+    CommandScheduler.getInstance().cancelAll();
+    ShuffleboardTab tab = Shuffleboard.getTab("Heading");
+    GenericEntry alignmentEnable = tab.add("Heading Enable", false).getEntry();
+    alignmentEnable.setBoolean(true);
 
   }
 }
