@@ -1,5 +1,7 @@
 package frc.robot.commands.auto;
 
+import static frc.robot.Constants.RobotConstants.LEFT_ENCODER;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -19,6 +21,8 @@ public class InitialDriveOutAutoCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+  //Get encoder data
+LEFT_ENCODER.getDistance();
 
   }
 

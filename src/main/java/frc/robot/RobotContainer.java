@@ -44,16 +44,16 @@ public class RobotContainer {
     configureBindings();
   }
   private void configureAutoChooser(){
-    _commandSendableChooser.setDefaultOption("Default Auto", new PathFindCommand(_drivetrain));
+  /*  _commandSendableChooser.setDefaultOption("Default Auto", new PathFindCommand(_drivetrain, new Pose2d(0,0,0)));
 
-    _commandSendableChooser.addOption("Far Left Blue Auto", new PathFindCommand(_drivetrain));
-    _commandSendableChooser.addOption("Middle Blue Auto", new PathFindCommand(_drivetrain));
-    _commandSendableChooser.addOption("Far Right Blue Auto", new PathFindCommand(_drivetrain));
+    _commandSendableChooser.addOption("Far Left Blue Auto", new PathFindCommand(_drivetrain, new Pose2d(0,0,0)
+    _commandSendableChooser.addOption("Middle Blue Auto", new PathFindCommand(_drivetrain, new Pose2d(0,0,0));
+    _commandSendableChooser.addOption("Far Right Blue Auto", new PathFindCommand(_drivetrain, new Pose2d(0,0,0));
 
-    _commandSendableChooser.addOption("Far Left Red Auto", new PathFindCommand(_drivetrain));
-    _commandSendableChooser.addOption("Middle Red Auto", new PathFindCommand(_drivetrain));
-    _commandSendableChooser.addOption("Far Right Red Auto", new PathFindCommand(_drivetrain));
-
+    _commandSendableChooser.addOption("Far Left Red Auto", new PathFindCommand(_drivetrain, new Pose2d(0,0,0));
+    _commandSendableChooser.addOption("Middle Red Auto", new PathFindCommand(_drivetrain, new Pose2d(0,0,0));
+    _commandSendableChooser.addOption("Far Right Red Auto", new PathFindCommand(_drivetrain,  new Pose2d(0,0,0));
+*/
   }
 
 
@@ -66,7 +66,6 @@ public class RobotContainer {
         .whileFalse(new ControllerDriveCmd(_drivetrain,XBOX_CONTROLLER));
     new Trigger(_driveController::getAButtonPressed)
         .onTrue(new AlignWithBlockGridCmd(_drivetrain,_driveController,6));
-
   }
 
 
