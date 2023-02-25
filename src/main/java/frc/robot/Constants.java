@@ -4,22 +4,30 @@ import static frc.robot.Constants.RobotConstants.PhysicalConstants.TRACK_WIDTH;
 
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.math.trajectory.constraint.RectangularRegionConstraint;
+import edu.wpi.first.math.trajectory.constraint.TrajectoryConstraint;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import frc.robot.subsystems.RobotAlignment;
+import frc.robot.utilities.RobotNav;
 import java.nio.charset.StandardCharsets;
 
 
@@ -96,6 +104,9 @@ public class Constants {
     // Max speed of the robot in m/s
     public static DifferentialDriveKinematics DRIVE_KINEMATICS =
         new DifferentialDriveKinematics(TRACK_WIDTH);
+    public static final double TURN_DEG_PER_SEC_MAX = 10;
+    public static final double TURN_ACCEL_DEG_PER_SECSQ_MAX = 2;
+
 
     public static final double RAMSETE_B = 2; // Tuning parameter (b > 0 rad^2/m^2) for which larger values make convergence more aggressive like a proportional term.
     public static final double RAMSETE_ZETA = 0.5; // Tuning parameter (0 rad-1 < zeta < 1 rad-1) for which larger values provide more damping in response.
@@ -109,6 +120,9 @@ public class Constants {
     public static double VOLTS_MAX = 1.103;
     public static double VOLTS_SECONDS_PER_METER = 2.0061;
     public static double VOLTS_SECONDS_SQ_PER_METER = 1.4236;
+
+    /*public static RectangularRegionConstraint FIELD_CONSTRAINT =
+        new RectangularRegionConstraint(1.0,2.0, 1.0, 2.00);*/
 
     public static DifferentialDriveVoltageConstraint AUTO_VOLTAGE_CONSTRAINT =
         new DifferentialDriveVoltageConstraint(
@@ -134,11 +148,20 @@ public class Constants {
       public static Solenoid WRIST_PISTON = new Solenoid(PneumaticsModuleType.CTREPCM, 12);
 
       public record RPistonControl(Solenoid solenoid, DoubleSolenoid doubleSolenoid, double pulseDuration, long delay) {}
+
+
     }
 
     public static class ControlsConstants{
 
+      public static RobotAlignment ALIGNMENT = new RobotAlignment(new ProfiledPIDController(0.0, 0.0, 0.0,new TrapezoidProfile.Constraints(
+          TURN_DEG_PER_SEC_MAX,
+          TURN_ACCEL_DEG_PER_SECSQ_MAX)),
+          RobotNav.getGyro().getFusedHeading());
     }
+    public static double STAB_PID_P = 0;
+    public static double STAB_PID_I = 0;
+    public static double STAB_PID_D = 0.0;
 
   }
 

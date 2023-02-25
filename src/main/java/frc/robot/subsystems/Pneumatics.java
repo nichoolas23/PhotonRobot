@@ -6,20 +6,19 @@ import frc.robot.Constants.RobotConstants.PneumaticsConstants.RPistonControl;
 public class Pneumatics extends SubsystemBase {
 
 
-
   public Pneumatics() {
-
 
   }
 
-/**
-* Sets the piston to the desired state.
- * @param piston
-*/
+  /**
+   * Sets the piston to the desired state.
+   *
+   * @param piston
+   */
   public static void setPiston(RPistonControl piston) {
     piston.solenoid().setPulseDuration(piston.pulseDuration());
     try {
-      Thread.sleep(piston.delay()*1000);
+      Thread.sleep(piston.delay() * 1000);
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
     }

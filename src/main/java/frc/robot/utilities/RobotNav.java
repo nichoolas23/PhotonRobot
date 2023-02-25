@@ -68,5 +68,12 @@ public class RobotNav {
       LimelightHelpers.getLatestResults("limelight");
   }
 
+  public static double getHeading() {
+    return _gyro.getFusedHeading();
+  }
+  public double getTurnRate() {
+    return _gyro.getRate();
+
+  }
 }
 
