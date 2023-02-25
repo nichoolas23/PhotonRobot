@@ -1,33 +1,29 @@
 package frc.robot.commands.auto;
 
 
+import static frc.robot.Constants.RobotConstants.ControlsConstants.ALIGNMENT;
+import static frc.robot.PhysicalInputs.XBOX_CONTROLLER;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.RobotAlignment;
 import frc.robot.utilities.LimelightHelpers;
 import frc.robot.utilities.RobotNav;
 
 
 public class AlignWithBlockGridCmd extends CommandBase {
 
-  final double ANGULAR_P = 3;
-  final double ANGULAR_D = 0;
 
   private final XboxController _controller;
-  private static RobotAlignment _alignment = new RobotAlignment(new PIDController(0.0, 0.0, 0.0),
-      RobotNav.getGyro().getFusedHeading());
 
   private Drivetrain _drivetrain;
-  private Pose3d _targetTagPose;
-
+  private static double _targetTagHeadingError;
+  private static double _toCorrect;
   private int _tagId;
 
-  public AlignWithBlockGridCmd(Drivetrain drive, XboxController controller,int targetTagID) {
+  public AlignWithBlockGridCmd(Drivetrain drive, XboxController controller, int targetTagID) {
     _drivetrain = drive;
     _controller = controller;
     _tagId = targetTagID;
@@ -42,28 +38,47 @@ public class AlignWithBlockGridCmd extends CommandBase {
   public void execute() {
 
     double rotationSpeed = 0;
-
+    Pose3d targetTag;
     if (LimelightHelpers.getTV("")) {
 
       // Calculate angular turn power
       // -1.0 required to ensure positive PID controller effort _increases_ yaw
       var result = LimelightHelpers.getLatestResults("");
       var aprilTagTargets = result.targetingResults.targets_Fiducials;
-      _targetTagPose = null;
+      var targetFound = false;
       for (var tag :
           aprilTagTargets) {
         if (tag.fiducialID == 6) {
-          _targetTagPose = tag.getRobotPose_TargetSpace();
+          _targetTagHeadingError = tag.tx;
+          targetFound = true;
+
         }
-
       }
-      if (_targetTagPose != null) {
-        rotationSpeed = -_alignment.getController().calculate(_targetTagPose.getRotation().getZ(), 0);
-      }
-      DriverStation.reportError(rotationSpeed+ "",true);
 
-      _drivetrain.drive(_controller.getRightTriggerAxis(), _controller.getLeftTriggerAxis(),
-          rotationSpeed*10);
+      _toCorrect = RobotNav.getHeading() + _targetTagHeadingError;
+      ALIGNMENT.setGoal(_toCorrect);
+      if (_targetTagHeadingError != 0.02) {
+
+        rotationSpeed = ALIGNMENT.getController().calculate(RobotNav.getHeading(), _toCorrect);
+      }
+      SmartDashboard.putNumber("Period",ALIGNMENT.getController().getPeriod());
+
+      SmartDashboard.putNumber("Alignment measurementZ", _targetTagHeadingError);
+      SmartDashboard.putNumber("Heading", RobotNav.getHeading());
+      SmartDashboard.putNumber("Corrected Heading", _toCorrect);
+      /*SmartDashboard.putNumber("TargetYaw", _);*/
+      if (Math.abs(rotationSpeed) < .4) {
+        if (rotationSpeed < 0) {
+          rotationSpeed -= 0.4;
+        } else if (rotationSpeed > 0) {
+          rotationSpeed += .4;
+        }
+      }
+    // period = .02
+
+      SmartDashboard.putNumber("Alignment Rot Speed", rotationSpeed);
+      _drivetrain.drive(XBOX_CONTROLLER.getRightTriggerAxis(), XBOX_CONTROLLER.getLeftTriggerAxis(),
+          rotationSpeed);
     }
 
     //DriverStation.reportWarning("foundTarget: " + result.hasTargets() + " rotationSpeed: " + rotationSpeed, false);
@@ -72,20 +87,24 @@ public class AlignWithBlockGridCmd extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
+    SmartDashboard.putBoolean("Stabilized", true);
+
+    //_controller.setRumble(RumbleType.kBothRumble,.1);
   }
 
   /**
    * Stops if any of the following are true:
    * <p>
-   * if the robot is within a certain distance of the target<br>
-   * if the controller is being used to turn<br>
-   * if the robot loses the target
+   * if the robot is within a certain distance of the target<br> if the controller is being used to
+   * turn<br> if the robot loses the target
+   *
    * @return true when the command should end.
    */
   @Override
   public boolean isFinished() {
-    return (_targetTagPose.getRotation().getZ() > -.001 && _targetTagPose.getRotation().getZ() < .001)
-        || Math.abs(_controller.getRightX()) > .3 || !LimelightHelpers.getTV("");
+    return (
+        Math.abs(_controller.getRightX()) > .3 || (RobotNav.getGyro().getRate() < .1
+            && ALIGNMENT.getController().atSetpoint()));
   }
 
 }

@@ -56,8 +56,11 @@ public class RobotContainer {
    * Use this method to define your trigger->command mappings.
    */
   private void configureBindings() {
-    new Trigger(()->(XBOX_CONTROLLER.getRightX() > -.06 && XBOX_CONTROLLER.getRightX() <.06) && Math.abs(RobotNav.getGyro().getRate())<4).whileTrue(new StabilizedDriveCmd(_drivetrain,XBOX_CONTROLLER,_robotNav)).whileFalse(new ControllerDriveCmd(_drivetrain,XBOX_CONTROLLER));
-    new Trigger(_driveController::getAButtonPressed).onTrue(new AlignWithBlockGridCmd(_drivetrain,_driveController,6));
+    new Trigger(()->(XBOX_CONTROLLER.getRightX() > -.06 && XBOX_CONTROLLER.getRightX() <.06) && Math.abs(RobotNav.getGyro().getRate())<4)
+        .whileTrue(new StabilizedDriveCmd(_drivetrain,XBOX_CONTROLLER,_robotNav))
+        .whileFalse(new ControllerDriveCmd(_drivetrain,XBOX_CONTROLLER));
+    new Trigger(_driveController::getAButtonPressed)
+        .onTrue(new AlignWithBlockGridCmd(_drivetrain,_driveController,6));
 
   }
 

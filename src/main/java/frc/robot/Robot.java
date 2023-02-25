@@ -5,6 +5,7 @@
 
 package frc.robot;
 
+import static frc.robot.Constants.RobotConstants.ControlsConstants.ALIGNMENT;
 import static frc.robot.Constants.RobotConstants.LEFT_ENCODER;
 import static frc.robot.Constants.RobotConstants.RIGHT_ENCODER;
 import static frc.robot.PhysicalInputs.XBOX_CONTROLLER;
@@ -39,7 +40,7 @@ public class Robot extends TimedRobot {
 
 
   private final Drivetrain _drivetrain = new Drivetrain();
-  private final RobotAlignment _robotAlignment = new RobotAlignment(new PIDController(0, 0, 0), 0);
+
   private Command _autonomousCommand;
   private RobotContainer _robotContainer;
   private final RobotNav _robotNav = new RobotNav();
@@ -52,14 +53,15 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+
     SmartDashboard.putNumber("num",RobotNav.getGyro().getRate());
     PathPlannerServer.startServer(5811);
-
+    SmartDashboard.setDefaultBoolean("Stabilized",false);
     RoboField.fieldSetup();
     _robotContainer = new RobotContainer();
     RobotNav.setStdDevVision();
     _drivetrain.setBrakeMode();
-    SmartDashboard.putData("PID Controller",_robotAlignment.getController());
+    SmartDashboard.putData("PID Controller",ALIGNMENT.getController());
   }
 
   @Override
@@ -69,7 +71,7 @@ public class Robot extends TimedRobot {
       _autonomousCommand.cancel();
 
     }
-
+    SmartDashboard.putData("alignment",ALIGNMENT.getController());
     var command = new PathFindCommand(_drivetrain);
     //command.schedule();
 
@@ -93,7 +95,7 @@ public void disabledInit()
 
   @Override
   public void robotPeriodic() {
-   SmartDashboard.putData("navx",RobotNav.getGyro());
+   SmartDashboard.putNumber("Heading",RobotNav.getHeading());
 
     /*if(Math.abs(RobotNav.getGyro().getRate())>1){
       CommandScheduler.getInstance().cancelAll();

@@ -5,6 +5,7 @@ import static frc.robot.Constants.RobotConstants.PhysicalConstants.TRACK_WIDTH;
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -17,6 +18,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.math.trajectory.constraint.RectangularRegionConstraint;
 import edu.wpi.first.math.trajectory.constraint.TrajectoryConstraint;
@@ -102,8 +104,8 @@ public class Constants {
     // Max speed of the robot in m/s
     public static DifferentialDriveKinematics DRIVE_KINEMATICS =
         new DifferentialDriveKinematics(TRACK_WIDTH);
-    public static final double TURN_DEG_PER_SEC_MAX = 5;
-    public static final double TURN_ACCEL_DEG_PER_SECSQ_MAX = 1;
+    public static final double TURN_DEG_PER_SEC_MAX = 10;
+    public static final double TURN_ACCEL_DEG_PER_SECSQ_MAX = 2;
 
 
     public static final double RAMSETE_B = 2; // Tuning parameter (b > 0 rad^2/m^2) for which larger values make convergence more aggressive like a proportional term.
@@ -151,8 +153,11 @@ public class Constants {
     }
 
     public static class ControlsConstants{
-     /* public static RobotAlignment ALIGNMENT = new RobotAlignment(new PIDController(0.0, 0.0, 0.0),
-          RobotNav.getGyro().getFusedHeading());*/
+
+      public static RobotAlignment ALIGNMENT = new RobotAlignment(new ProfiledPIDController(0.0, 0.0, 0.0,new TrapezoidProfile.Constraints(
+          TURN_DEG_PER_SEC_MAX,
+          TURN_ACCEL_DEG_PER_SECSQ_MAX)),
+          RobotNav.getGyro().getFusedHeading());
     }
     public static double STAB_PID_P = 0;
     public static double STAB_PID_I = 0;

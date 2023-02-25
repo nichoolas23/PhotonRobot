@@ -31,14 +31,20 @@ public class Drivetrain extends SubsystemBase {
   private static boolean isAuto = false;
 
 private static boolean isStabilized = false;
-  private static final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSRX(1),
+/*  private static final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSRX(1),
       new WPI_TalonSRX(3), new WPI_TalonSRX(2), new WPI_TalonSRX(4)};
   private static final MotorControllerGroup _leftDrive = new MotorControllerGroup(wpi_talonSRXES[0],
       wpi_talonSRXES[1]);
   private static final MotorControllerGroup _rightDrive = new MotorControllerGroup(
       wpi_talonSRXES[2],
-      wpi_talonSRXES[3]);
-
+      wpi_talonSRXES[3]);*/
+  private static final WPI_TalonSRX[] wpi_talonSRXES = {new WPI_TalonSRX(0),
+      new WPI_TalonSRX(1), new WPI_TalonSRX(2), new WPI_TalonSRX(3),new WPI_TalonSRX(4),new WPI_TalonSRX(5),new WPI_TalonSRX(6),new WPI_TalonSRX(7),new WPI_TalonSRX(8),new WPI_TalonSRX(9),new WPI_TalonSRX(10),new WPI_TalonSRX(11),new WPI_TalonSRX(12),new WPI_TalonSRX(13),new WPI_TalonSRX(14),new WPI_TalonSRX(15)};
+  private static final MotorControllerGroup _leftDrive = new MotorControllerGroup(wpi_talonSRXES[0],
+      wpi_talonSRXES[1]);
+  private static final MotorControllerGroup _rightDrive = new MotorControllerGroup(
+      wpi_talonSRXES[4],
+      wpi_talonSRXES[5]);
 
 /*  private static final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSRX(1),
        new WPI_TalonSRX(3), new WPI_TalonSRX(2), new WPI_TalonSRX(4)};
@@ -131,7 +137,7 @@ private static boolean isStabilized = false;
     RobotNav.set_diffDrivePose(_diffPoseEstimator);
   }
 
-  public void setBrakeMode() {
+  public void   setBrakeMode() {
     for (var motor : wpi_talonSRXES) {
       motor.setNeutralMode(NeutralMode.Coast);
     }
@@ -189,8 +195,7 @@ private static boolean isStabilized = false;
 
 
   public void drive(double forwardSpeed, double reverseSpeed, double rotateToAngleRate, boolean b) {
-    DriverStation.reportError(forwardSpeed+"",false);
-    DriverStation.reportError(rotateToAngleRate+"",false);
+
 
     SmartDashboard.putNumber("turn out",rotateToAngleRate);
     _differentialDrive.arcadeDrive(reverseSpeed > 0 ? reverseSpeed * -1 : forwardSpeed,rotateToAngleRate);

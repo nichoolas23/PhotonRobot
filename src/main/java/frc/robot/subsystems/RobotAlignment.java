@@ -4,25 +4,30 @@ import static frc.robot.Constants.RobotConstants.VOLTS_MAX;
 import static frc.robot.Constants.RobotConstants.VOLTS_SECONDS_PER_METER;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import edu.wpi.first.wpilibj2.command.button.NetworkButton;
 
-public class RobotAlignment extends PIDSubsystem {
+public class RobotAlignment extends ProfiledPIDSubsystem {
   private final SimpleMotorFeedforward _shooterFeedforward =
       new SimpleMotorFeedforward(
           VOLTS_MAX, VOLTS_SECONDS_PER_METER);
-  public RobotAlignment(PIDController controller,
+  public RobotAlignment(ProfiledPIDController controller,
       double initialPosition) {
     super(controller, initialPosition);
-
+this.getController().setTolerance(.1);
+this.getController().enableContinuousInput(0,360);
 
   }
 
+
   @Override
-  protected void useOutput(double output, double setpoint) {
+  protected void useOutput(double output, State setpoint) {
 
   }
 
