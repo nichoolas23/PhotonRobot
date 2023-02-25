@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.Field.RoboField;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.commands.StabilizedDriveCmd;
 import frc.robot.commands.auto.PathFindCommand;
 import frc.robot.subsystems.Drivetrain;
@@ -54,9 +55,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
-    SmartDashboard.putNumber("num",RobotNav.getGyro().getRate());
     PathPlannerServer.startServer(5811);
-    SmartDashboard.setDefaultBoolean("Stabilized",false);
     RoboField.fieldSetup();
     _robotContainer = new RobotContainer();
     RobotNav.setStdDevVision();
@@ -72,8 +71,8 @@ public class Robot extends TimedRobot {
 
     }
     SmartDashboard.putData("alignment",ALIGNMENT.getController());
-    var command = new PathFindCommand(_drivetrain);
-    //command.schedule();
+    var pathFindCommand = new PathFindCommand(_drivetrain, FieldConstants.FIRST_BLUE_GRID);
+    pathFindCommand.schedule();
 
   }
 @Override

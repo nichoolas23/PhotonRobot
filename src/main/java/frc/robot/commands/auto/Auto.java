@@ -5,6 +5,8 @@
 
 package frc.robot.commands.auto;
 
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.Drivetrain;
@@ -12,11 +14,13 @@ import frc.robot.subsystems.Drivetrain;
 
 public final class Auto
 {
+
   /** Example static factory for an autonomous command. */
   public static CommandBase autoFactory(Drivetrain drivetrain)
   {
-    return Commands.sequence(new PathFindCommand(drivetrain));//new PathFollowCmd()
+    return Commands.sequence();//new PathFollowCmd()
   }
+
 
 
   private Auto()

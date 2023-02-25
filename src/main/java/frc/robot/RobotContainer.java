@@ -7,29 +7,22 @@ package frc.robot;
 
 
 
-import static frc.robot.Constants.RobotConstants.STAB_PID_D;
-import static frc.robot.Constants.RobotConstants.STAB_PID_I;
-import static frc.robot.Constants.RobotConstants.STAB_PID_P;
 import static frc.robot.PhysicalInputs.XBOX_CONTROLLER;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ControllerDriveCmd;
 
 import frc.robot.commands.StabilizedDriveCmd;
 import frc.robot.commands.auto.AlignWithBlockGridCmd;
-import frc.robot.commands.auto.Auto;
 
-import frc.robot.commands.auto.TurnToAngleProfiled;
+import frc.robot.commands.auto.PathFindCommand;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.RobotAlignment;
 import frc.robot.utilities.RobotNav;
-import frc.robot.utilities.TrajectoryGen;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -43,12 +36,24 @@ public class RobotContainer {
   private final RobotNav _robotNav = new RobotNav();
   private Drivetrain _drivetrain = new Drivetrain();
   private final XboxController _driveController = new XboxController(0);
-
+  private SendableChooser<Command> _commandSendableChooser = new SendableChooser<>();
 
   public RobotContainer() {
-
+    SmartDashboard.putData(_commandSendableChooser);
     // Configure the trigger bindings
     configureBindings();
+  }
+  private void configureAutoChooser(){
+    _commandSendableChooser.setDefaultOption("Default Auto", new PathFindCommand(_drivetrain));
+
+    _commandSendableChooser.addOption("Far Left Blue Auto", new PathFindCommand(_drivetrain));
+    _commandSendableChooser.addOption("Middle Blue Auto", new PathFindCommand(_drivetrain));
+    _commandSendableChooser.addOption("Far Right Blue Auto", new PathFindCommand(_drivetrain));
+
+    _commandSendableChooser.addOption("Far Left Red Auto", new PathFindCommand(_drivetrain));
+    _commandSendableChooser.addOption("Middle Red Auto", new PathFindCommand(_drivetrain));
+    _commandSendableChooser.addOption("Far Right Red Auto", new PathFindCommand(_drivetrain));
+
   }
 
 
@@ -71,7 +76,7 @@ public class RobotContainer {
     return new ControllerDriveCmd(new Drivetrain(), _driveController);
   }
   public Command getAutonomousCommand(){
-    return Auto.autoFactory(_drivetrain);
+    return _commandSendableChooser.getSelected();
   }
 
 

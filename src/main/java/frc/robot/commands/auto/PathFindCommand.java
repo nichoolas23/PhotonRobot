@@ -1,26 +1,27 @@
 package frc.robot.commands.auto;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.Field.RoboField;
-import frc.robot.Constants.FieldConstants;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.utilities.LimelightHelpers;
 import frc.robot.utilities.RobotNav;
 import java.util.List;
 
 public class PathFindCommand extends CommandBase {
 
-Drivetrain _drivetrain;
+private Drivetrain _drivetrain;
+private Pose2d _target;
 
 
 /**
-* Command that finds a path from the robot's current position to the target position and sends it to the drive train.
+* Command that finds a path from the robot's current position to the _target position and sends it to the drive train.
 */
-  public PathFindCommand(Drivetrain drivetrain) {
+  public PathFindCommand(Drivetrain drivetrain, Pose2d target) {
     _drivetrain = drivetrain;
+    this._target = target;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements();
@@ -38,7 +39,7 @@ Drivetrain _drivetrain;
 
    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
         RobotNav.get_diffDrivePose().getEstimatedPosition(), List.of(),
-        FieldConstants.FIRST_BLUE_GRID,
+       _target,
         new TrajectoryConfig(2, 2)
     );
     RoboField.putTraj(trajectory);

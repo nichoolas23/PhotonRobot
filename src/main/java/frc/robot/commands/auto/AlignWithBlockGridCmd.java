@@ -45,12 +45,10 @@ public class AlignWithBlockGridCmd extends CommandBase {
       // -1.0 required to ensure positive PID controller effort _increases_ yaw
       var result = LimelightHelpers.getLatestResults("");
       var aprilTagTargets = result.targetingResults.targets_Fiducials;
-      var targetFound = false;
       for (var tag :
           aprilTagTargets) {
         if (tag.fiducialID == 6) {
           _targetTagHeadingError = tag.tx;
-          targetFound = true;
 
         }
       }
@@ -58,15 +56,13 @@ public class AlignWithBlockGridCmd extends CommandBase {
       _toCorrect = RobotNav.getHeading() + _targetTagHeadingError;
       ALIGNMENT.setGoal(_toCorrect);
       if (_targetTagHeadingError != 0.02) {
-
         rotationSpeed = ALIGNMENT.getController().calculate(RobotNav.getHeading(), _toCorrect);
       }
-      SmartDashboard.putNumber("Period",ALIGNMENT.getController().getPeriod());
-
+      SmartDashboard.putNumber("Period", ALIGNMENT.getController().getPeriod());
       SmartDashboard.putNumber("Alignment measurementZ", _targetTagHeadingError);
       SmartDashboard.putNumber("Heading", RobotNav.getHeading());
       SmartDashboard.putNumber("Corrected Heading", _toCorrect);
-      /*SmartDashboard.putNumber("TargetYaw", _);*/
+
       if (Math.abs(rotationSpeed) < .4) {
         if (rotationSpeed < 0) {
           rotationSpeed -= 0.4;
@@ -74,22 +70,19 @@ public class AlignWithBlockGridCmd extends CommandBase {
           rotationSpeed += .4;
         }
       }
-    // period = .02
+      // period = .02
 
       SmartDashboard.putNumber("Alignment Rot Speed", rotationSpeed);
       _drivetrain.drive(XBOX_CONTROLLER.getRightTriggerAxis(), XBOX_CONTROLLER.getLeftTriggerAxis(),
           rotationSpeed);
     }
 
-    //DriverStation.reportWarning("foundTarget: " + result.hasTargets() + " rotationSpeed: " + rotationSpeed, false);
 
   }
 
   @Override
   public void end(boolean interrupted) {
     SmartDashboard.putBoolean("Stabilized", true);
-
-    //_controller.setRumble(RumbleType.kBothRumble,.1);
   }
 
   /**

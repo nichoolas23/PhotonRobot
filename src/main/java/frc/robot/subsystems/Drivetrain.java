@@ -14,50 +14,51 @@ import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Field.RoboField;
-import frc.robot.commands.ControllerDriveCmd;
 import frc.robot.utilities.LimelightHelpers;
 import frc.robot.utilities.RobotNav;
 
 public class Drivetrain extends SubsystemBase {
 
-  private static boolean isCalibrated = false;
+  private static final boolean isCalibrated = false;
   private static boolean isAuto = false;
 
-private static boolean isStabilized = false;
-/*  private static final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSRX(1),
-      new WPI_TalonSRX(3), new WPI_TalonSRX(2), new WPI_TalonSRX(4)};
-  private static final MotorControllerGroup _leftDrive = new MotorControllerGroup(wpi_talonSRXES[0],
-      wpi_talonSRXES[1]);
-  private static final MotorControllerGroup _rightDrive = new MotorControllerGroup(
-      wpi_talonSRXES[2],
-      wpi_talonSRXES[3]);*/
+  private static boolean isStabilized = false;
+  /*  private static final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSRX(1),
+        new WPI_TalonSRX(3), new WPI_TalonSRX(2), new WPI_TalonSRX(4)};
+    private static final MotorControllerGroup _leftDrive = new MotorControllerGroup(wpi_talonSRXES[0],
+        wpi_talonSRXES[1]);
+    private static final MotorControllerGroup _rightDrive = new MotorControllerGroup(
+        wpi_talonSRXES[2],
+        wpi_talonSRXES[3]);*/
   private static final WPI_TalonSRX[] wpi_talonSRXES = {new WPI_TalonSRX(0),
-      new WPI_TalonSRX(1), new WPI_TalonSRX(2), new WPI_TalonSRX(3),new WPI_TalonSRX(4),new WPI_TalonSRX(5),new WPI_TalonSRX(6),new WPI_TalonSRX(7),new WPI_TalonSRX(8),new WPI_TalonSRX(9),new WPI_TalonSRX(10),new WPI_TalonSRX(11),new WPI_TalonSRX(12),new WPI_TalonSRX(13),new WPI_TalonSRX(14),new WPI_TalonSRX(15)};
+      new WPI_TalonSRX(1), new WPI_TalonSRX(2), new WPI_TalonSRX(3), new WPI_TalonSRX(4),
+      new WPI_TalonSRX(5), new WPI_TalonSRX(6), new WPI_TalonSRX(7), new WPI_TalonSRX(8),
+      new WPI_TalonSRX(9), new WPI_TalonSRX(10), new WPI_TalonSRX(11), new WPI_TalonSRX(12),
+      new WPI_TalonSRX(13), new WPI_TalonSRX(14), new WPI_TalonSRX(15)};
   private static final MotorControllerGroup _leftDrive = new MotorControllerGroup(wpi_talonSRXES[0],
       wpi_talonSRXES[1]);
   private static final MotorControllerGroup _rightDrive = new MotorControllerGroup(
       wpi_talonSRXES[4],
       wpi_talonSRXES[5]);
 
-/*  private static final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSRX(1),
-       new WPI_TalonSRX(3), new WPI_TalonSRX(2), new WPI_TalonSRX(4)};
-   private static final MotorControllerGroup _leftDrive = new MotorControllerGroup(wpi_talonSRXES[1],
-       wpi_talonSRXES[3]);
-   private static final MotorControllerGroup _rightDrive = new MotorControllerGroup(wpi_talonSRXES[0],
-       wpi_talonSRXES[2]);*/
+  /*  private static final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSRX(1),
+         new WPI_TalonSRX(3), new WPI_TalonSRX(2), new WPI_TalonSRX(4)};
+     private static final MotorControllerGroup _leftDrive = new MotorControllerGroup(wpi_talonSRXES[1],
+         wpi_talonSRXES[3]);
+     private static final MotorControllerGroup _rightDrive = new MotorControllerGroup(wpi_talonSRXES[0],
+         wpi_talonSRXES[2]);*/
   private static final DifferentialDrive _differentialDrive = new DifferentialDrive(_leftDrive,
       _rightDrive);
   private static final AHRS _gyro = new AHRS();
 
   // Start motor setup
-  private static DifferentialDrivePoseEstimator _diffPoseEstimator =
+  private static final DifferentialDrivePoseEstimator _diffPoseEstimator =
       new DifferentialDrivePoseEstimator(
           DRIVE_KINEMATICS, _gyro.getRotation2d(), 0.0, 0.0, new Pose2d());
   private static final DifferentialDriveWheelSpeeds _diffDriveWheelSpeeds = new DifferentialDriveWheelSpeeds(
@@ -68,7 +69,6 @@ private static boolean isStabilized = false;
 
 
   public Drivetrain() {
-
 
     LEFT_ENCODER.setDistancePerPulse(WHEEL_CIRCUM / 357.75);
     LEFT_ENCODER.setReverseDirection(true);
@@ -82,12 +82,11 @@ private static boolean isStabilized = false;
   }
 
 
-
   public static void setIsAuto(boolean isAuto) {
     Drivetrain.isAuto = isAuto;
   }
 
-    public static void setIsStabilized(boolean isStabilized) {
+  public static void setIsStabilized(boolean isStabilized) {
     Drivetrain.isStabilized = isStabilized;
   }
 
@@ -117,18 +116,19 @@ private static boolean isStabilized = false;
     SmartDashboard.putNumber("Left Encoder Rate", LEFT_ENCODER.getRate());
     SmartDashboard.putNumber("Right Encoder Rate", RIGHT_ENCODER.getRate());
 
-    // Also apply vision measurements. We use 0.3 seconds in the past as an example
-    // -- on
-    // a real robot, this must be calculated based either on latency or timestamps.
     if (LimelightHelpers.getTV("")) {
       if (isCalibrated) {
         if (RobotNav.getFieldAdjPose(LimelightHelpers.getBotPose2d("")).getTranslation()
             .getDistance(_diffPoseEstimator.getEstimatedPosition().getTranslation()) < .4) {
 
-          // _diffPoseEstimator.addVisionMeasurement(RobotNav.getFieldAdjPose(LimelightHelpers.getBotPose2d("")), Timer.getFPGATimestamp(),VISION_STD_DEV);
+          _diffPoseEstimator.addVisionMeasurement(
+              RobotNav.getFieldAdjPose(LimelightHelpers.getBotPose2d("")), Timer.getFPGATimestamp(),
+              VISION_STD_DEV);
         }
       } else {
-        // _diffPoseEstimator.addVisionMeasurement(RobotNav.getFieldAdjPose(LimelightHelpers.getBotPose2d("")), Timer.getFPGATimestamp(),VISION_STD_DEV);
+        _diffPoseEstimator.addVisionMeasurement(
+            RobotNav.getFieldAdjPose(LimelightHelpers.getBotPose2d("")), Timer.getFPGATimestamp(),
+            VISION_STD_DEV);
       }
 
     }
@@ -137,7 +137,7 @@ private static boolean isStabilized = false;
     RobotNav.set_diffDrivePose(_diffPoseEstimator);
   }
 
-  public void   setBrakeMode() {
+  public void setBrakeMode() {
     for (var motor : wpi_talonSRXES) {
       motor.setNeutralMode(NeutralMode.Coast);
     }
@@ -168,8 +168,6 @@ private static boolean isStabilized = false;
   }
 
 
-
-
   /**
    * Controls the driving mechanism of the robot.
    *
@@ -179,26 +177,25 @@ private static boolean isStabilized = false;
    */
   public void drive(double forwardSpeed, double reverseSpeed, double rot) {
 
-      _differentialDrive.arcadeDrive(reverseSpeed > 0 ? reverseSpeed * -1 : forwardSpeed, rot * -1);
+    _differentialDrive.arcadeDrive(reverseSpeed > 0 ? reverseSpeed * -1 : forwardSpeed, rot * -1);
 
   }
 
 
+  public void arcadeDrive(double forwardSpeed, double reverseSpeed, double rotateToAngleRate) {
 
+    SmartDashboard.putNumber("turn out", rotateToAngleRate);
+    _differentialDrive.arcadeDrive(reverseSpeed > 0 ? reverseSpeed * -1 : forwardSpeed,
+        rotateToAngleRate);
 
-  public void arcadeDrive(double forwardSpeed,double reverseSpeed, double rotateToAngleRate){
-
-      SmartDashboard.putNumber("turn out",rotateToAngleRate);
-      _differentialDrive.arcadeDrive(reverseSpeed > 0 ? reverseSpeed * -1 : forwardSpeed,rotateToAngleRate);
-
-    }
+  }
 
 
   public void drive(double forwardSpeed, double reverseSpeed, double rotateToAngleRate, boolean b) {
 
-
-    SmartDashboard.putNumber("turn out",rotateToAngleRate);
-    _differentialDrive.arcadeDrive(reverseSpeed > 0 ? reverseSpeed * -1 : forwardSpeed,rotateToAngleRate);
+    SmartDashboard.putNumber("turn out", rotateToAngleRate);
+    _differentialDrive.arcadeDrive(reverseSpeed > 0 ? reverseSpeed * -1 : forwardSpeed,
+        rotateToAngleRate);
 
   }
 }
