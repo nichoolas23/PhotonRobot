@@ -2,6 +2,8 @@ package frc.robot;
 
 import static frc.robot.Constants.RobotConstants.PhysicalConstants.TRACK_WIDTH;
 
+import com.ctre.phoenix.motorcontrol.SensorCollection;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.PIDController;
@@ -26,6 +28,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.RobotAlignment;
 import frc.robot.utilities.RobotNav;
 import java.nio.charset.StandardCharsets;
@@ -64,7 +67,7 @@ public class Constants {
     public static AprilTag TAG_SIX = new AprilTag(6, new Pose3d(new Pose2d(5.720, 3.275, Rotation2d.fromDegrees(180))));
 
 
-    public static Pose2d FIRST_BLUE_GRID = new Pose2d( 2.56+1.8, 0.3065+ 1.8825, Rotation2d.fromDegrees(0));
+    public static Pose2d FIRST_BLUE_GRID = new Pose2d( 2.56+2.2, 0.3065+ 1.8825, Rotation2d.fromDegrees(0));
     public static Pose2d SECOND_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
     public static Pose2d THIRD_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
     public static Pose2d FOURTH_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
@@ -141,8 +144,8 @@ public class Constants {
             .setKinematics(DRIVE_KINEMATICS)
             // Apply the voltage constraint
             .addConstraint(AUTO_VOLTAGE_CONSTRAINT);
-    public static Encoder LEFT_ENCODER = new Encoder(0, 1);
-    public static Encoder RIGHT_ENCODER = new Encoder(2, 3);
+   public static SensorCollection LEFT_ENCODER = new WPI_TalonSRX(0).getSensorCollection();
+   public static SensorCollection RIGHT_ENCODER = new WPI_TalonSRX(5).getSensorCollection();
 
     public static class PneumaticsConstants {
       public static Solenoid WRIST_PISTON = new Solenoid(PneumaticsModuleType.CTREPCM, 12);

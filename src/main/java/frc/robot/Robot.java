@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.Field.RoboField;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.commands.StabilizedDriveCmd;
+import frc.robot.commands.auto.Auto;
 import frc.robot.commands.auto.PathFindCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.RobotAlignment;
@@ -71,8 +72,8 @@ public class Robot extends TimedRobot {
 
     }
     SmartDashboard.putData("alignment",ALIGNMENT.getController());
-    var pathFindCommand = new PathFindCommand(_drivetrain, FieldConstants.FIRST_BLUE_GRID);
-    pathFindCommand.schedule();
+   /* var pathFindCommand = new PathFindCommand(_drivetrain, FieldConstants.FIRST_BLUE_GRID);
+    pathFindCommand.schedule();*/
 
   }
 @Override
@@ -82,8 +83,8 @@ public void disabledInit()
 
   @Override
   public void autonomousInit() {
-    Command _autonomousCommand;
-    _autonomousCommand = TrajectoryGen.getTrajCmd(_drivetrain);
+    Command _autonomousCommand = Auto.autoFactory(_drivetrain);
+   // _autonomousCommand = TrajectoryGen.getTrajCmd(_drivetrain);
     // schedule the autonomous command (example)
     if (_autonomousCommand != null) {
       _autonomousCommand.schedule();
@@ -111,8 +112,8 @@ public void disabledInit()
       RoboField.fieldUpdate(RobotNav.getEstimatedRobotPose().estimatedPose.toPose2d());
     }*/
     if (XBOX_CONTROLLER.getBButton()) {
-      LEFT_ENCODER.reset(); //-357.750000
-      RIGHT_ENCODER.reset(); //355.000000
+     /* LEFT_ENCODER.reset(); //-357.750000
+      RIGHT_ENCODER.reset(); //355.000000*/
     }
 
   }

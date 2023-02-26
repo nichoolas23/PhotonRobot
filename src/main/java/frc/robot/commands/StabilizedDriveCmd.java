@@ -24,11 +24,11 @@ public class StabilizedDriveCmd extends PIDCommand {
   private XboxController _controller;
   public StabilizedDriveCmd(Drivetrain drivetrain, XboxController controller,RobotNav robotNav) {
     super(
-        new PIDController(
-            STAB_PID_P,
-            STAB_PID_I,
-            STAB_PID_D),
-        // Close the loop on the turn rate
+          new PIDController(
+              STAB_PID_P,
+              STAB_PID_I,
+              STAB_PID_D),
+          // Close the loop on the turn rate
         robotNav::getTurnRate,
         // Setpoint is 0
         0,
@@ -37,12 +37,14 @@ public class StabilizedDriveCmd extends PIDCommand {
 
         // Require the robot drive
         drivetrain);
+
 this._robotNav = robotNav;
    SmartDashboard.putData("Stab pid",this.getController());
 // CTR: CAN frame not received/too-stale
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements();
   }
+
   // Called when the command is initially scheduled.
 
   // Called once the command ends or is interrupted.
@@ -52,13 +54,15 @@ this._robotNav = robotNav;
 Drivetrain.setIsStabilized(false);
 
    XBOX_CONTROLLER.setRumble(RumbleType.kBothRumble,0);
-
   }
+
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-   // DriverStation.reportError((_controller.getRightX() != 0) +"",true);
+
+
+    //DriverStation.reportError((_controller.getRightX() != 0) +"",true);
     return false;
   }
 

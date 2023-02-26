@@ -7,6 +7,8 @@ package frc.robot;
 
 
 
+import static frc.robot.Constants.FieldConstants.FIRST_BLUE_GRID;
+import static frc.robot.Constants.FieldConstants.THIRD_BLUE_GRID;
 import static frc.robot.PhysicalInputs.XBOX_CONTROLLER;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -15,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.RobotConstants;
 import frc.robot.commands.ControllerDriveCmd;
 
 import frc.robot.commands.StabilizedDriveCmd;
@@ -44,16 +47,17 @@ public class RobotContainer {
     configureBindings();
   }
   private void configureAutoChooser(){
-  /*  _commandSendableChooser.setDefaultOption("Default Auto", new PathFindCommand(_drivetrain, new Pose2d(0,0,0)));
 
-    _commandSendableChooser.addOption("Far Left Blue Auto", new PathFindCommand(_drivetrain, new Pose2d(0,0,0)
-    _commandSendableChooser.addOption("Middle Blue Auto", new PathFindCommand(_drivetrain, new Pose2d(0,0,0));
-    _commandSendableChooser.addOption("Far Right Blue Auto", new PathFindCommand(_drivetrain, new Pose2d(0,0,0));
+   _commandSendableChooser.setDefaultOption("Default Auto", new PathFindCommand(_drivetrain, FIRST_BLUE_GRID));
 
-    _commandSendableChooser.addOption("Far Left Red Auto", new PathFindCommand(_drivetrain, new Pose2d(0,0,0));
-    _commandSendableChooser.addOption("Middle Red Auto", new PathFindCommand(_drivetrain, new Pose2d(0,0,0));
-    _commandSendableChooser.addOption("Far Right Red Auto", new PathFindCommand(_drivetrain,  new Pose2d(0,0,0));
-*/
+    /*_commandSendableChooser.addOption("Far Left Blue Auto", new PathFindCommand(_drivetrain,THIRD_BLUE_GRID));
+    _commandSendableChooser.addOption("Middle Blue Auto", new PathFindCommand(_drivetrain, FIRST_BLUE_GRID));
+    _commandSendableChooser.addOption("Far Right Blue Auto", new PathFindCommand(_drivetrain, FIRST_BLUE_GRID));
+
+    _commandSendableChooser.addOption("Far Left Red Auto", new PathFindCommand(_drivetrain, FIRST_BLUE_GRID));
+    _commandSendableChooser.addOption("Middle Red Auto", new PathFindCommand(_drivetrain, FIRST_BLUE_GRID));
+    _commandSendableChooser.addOption("Far Right Red Auto", new PathFindCommand(_drivetrain,  FIRST_BLUE_GRID));
+SmartDashboard.putData("Auto Chooser",_commandSendableChooser);*/
   }
 
 

@@ -7,6 +7,7 @@ import static frc.robot.Constants.RobotConstants.RIGHT_ENCODER;
 import static frc.robot.Constants.VisionConstants.VISION_STD_DEV;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SensorCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.controller.DifferentialDriveWheelVoltages;
@@ -14,6 +15,7 @@ import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -36,7 +38,8 @@ public class Drivetrain extends SubsystemBase {
     private static final MotorControllerGroup _rightDrive = new MotorControllerGroup(
         wpi_talonSRXES[2],
         wpi_talonSRXES[3]);*/
-  private static final WPI_TalonSRX[] wpi_talonSRXES = {new WPI_TalonSRX(0),
+
+  public static final WPI_TalonSRX[] wpi_talonSRXES = {new WPI_TalonSRX(0),
       new WPI_TalonSRX(1), new WPI_TalonSRX(2), new WPI_TalonSRX(3), new WPI_TalonSRX(4),
       new WPI_TalonSRX(5), new WPI_TalonSRX(6), new WPI_TalonSRX(7), new WPI_TalonSRX(8),
       new WPI_TalonSRX(9), new WPI_TalonSRX(10), new WPI_TalonSRX(11), new WPI_TalonSRX(12),
@@ -46,6 +49,7 @@ public class Drivetrain extends SubsystemBase {
   private static final MotorControllerGroup _rightDrive = new MotorControllerGroup(
       wpi_talonSRXES[4],
       wpi_talonSRXES[5]);
+
 
   /*  private static final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSRX(1),
          new WPI_TalonSRX(3), new WPI_TalonSRX(2), new WPI_TalonSRX(4)};
@@ -70,13 +74,14 @@ public class Drivetrain extends SubsystemBase {
 
   public Drivetrain() {
 
-    LEFT_ENCODER.setDistancePerPulse(WHEEL_CIRCUM / 357.75);
-    LEFT_ENCODER.setReverseDirection(true);
-    RIGHT_ENCODER.setDistancePerPulse(WHEEL_CIRCUM / 357.75);
+   /* LEFT_ENCODER.setQuadraturePosition(WHEEL_CIRCUM / 357.75);
+    LEFT_ENCODER.(true);
+    RIGHT_ENCODER.setDistancePerPulse(WHEEL_CIRCUM / 357.75);*/
 
     _rightDrive.setInverted(true);
     _differentialDrive.setSafetyEnabled(false);
-
+    var robotSensors = wpi_talonSRXES[0].getSensorCollection();
+    //robotSensors.getQuadraturePosition()
     _diffPoseEstimator.setVisionMeasurementStdDevs(VISION_STD_DEV);
 //this.setDefaultCommand(new ControllerDriveCmd(this,new XboxController(0)));
   }
@@ -93,28 +98,34 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
+  }
 
+  private double getDistance(SensorCollection sensorCollection){
+    return sensorCollection.getQuadraturePosition() *((Units.inchesToMeters(6)*Math.PI)/ 1085);
+  }
+  private double getRate(SensorCollection sensorCollection){
+    return sensorCollection.getQuadratureVelocity()*((Units.inchesToMeters(6)*Math.PI)/1085);
   }
 
   public void updateOdometry() {
 
-    _diffDriveOdometry.update(_gyro.getRotation2d(), LEFT_ENCODER.getDistance(),
-        RIGHT_ENCODER.getDistance());
+    _diffDriveOdometry.update(_gyro.getRotation2d(),getDistance(LEFT_ENCODER),
+        getDistance(RIGHT_ENCODER));
 
-    _diffDriveWheelSpeeds.leftMetersPerSecond = LEFT_ENCODER.getRate();
-    _diffDriveWheelSpeeds.rightMetersPerSecond = RIGHT_ENCODER.getRate();
+    _diffDriveWheelSpeeds.leftMetersPerSecond = getRate(LEFT_ENCODER);
+    _diffDriveWheelSpeeds.rightMetersPerSecond = getRate(RIGHT_ENCODER);
 
     _diffDriveWheelVoltages.left =
         wpi_talonSRXES[0].getMotorOutputVoltage() + wpi_talonSRXES[1].getMotorOutputVoltage();
     _diffDriveWheelVoltages.right =
         wpi_talonSRXES[3].getMotorOutputVoltage() + wpi_talonSRXES[2].getMotorOutputVoltage();
 
-    _diffPoseEstimator.update(_gyro.getRotation2d(), LEFT_ENCODER.getDistance(),
-        RIGHT_ENCODER.getDistance());
-    SmartDashboard.putNumber("Left Encoder", LEFT_ENCODER.getDistance());
-    SmartDashboard.putNumber("Right Encoder", RIGHT_ENCODER.getDistance());
-    SmartDashboard.putNumber("Left Encoder Rate", LEFT_ENCODER.getRate());
-    SmartDashboard.putNumber("Right Encoder Rate", RIGHT_ENCODER.getRate());
+    _diffPoseEstimator.update(_gyro.getRotation2d(), getDistance(LEFT_ENCODER),
+        getDistance(RIGHT_ENCODER));
+    SmartDashboard.putNumber("Left Encoder", getDistance(LEFT_ENCODER));
+    SmartDashboard.putNumber("Right Encoder", getDistance(RIGHT_ENCODER));
+    SmartDashboard.putNumber("Left Encoder Rate", getRate(LEFT_ENCODER));
+    SmartDashboard.putNumber("Right Encoder Rate",getRate(RIGHT_ENCODER));
 
     if (LimelightHelpers.getTV("")) {
       if (isCalibrated) {
@@ -157,14 +168,14 @@ public class Drivetrain extends SubsystemBase {
     resetEncoders();
     _diffDriveOdometry.resetPosition(
         _gyro.getRotation2d(),
-        LEFT_ENCODER.getDistance(),
-        RIGHT_ENCODER.getDistance(),
+        getDistance(LEFT_ENCODER),
+       getDistance(RIGHT_ENCODER),
         initialPose);
   }
 
   public void resetEncoders() {
-    LEFT_ENCODER.reset();
-    RIGHT_ENCODER.reset();
+    LEFT_ENCODER.setQuadraturePosition(0,0);
+    RIGHT_ENCODER.setQuadraturePosition(0,0);
   }
 
 

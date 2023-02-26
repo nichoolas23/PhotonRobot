@@ -37,12 +37,12 @@ private Pose2d _target;
   @Override
   public void execute() {
 
-   Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+  /* Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
         RobotNav.get_diffDrivePose().getEstimatedPosition(), List.of(),
        _target,
         new TrajectoryConfig(2, 2)
     );
-    RoboField.putTraj(trajectory);
+    RoboField.putTraj(trajectory);*/
 
   }
 
