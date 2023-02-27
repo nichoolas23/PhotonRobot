@@ -157,7 +157,7 @@ public class Drivetrain extends SubsystemBase {
     _diffDriveOdometry.resetPosition(
         _gyro.getRotation2d(),
         RobotNav.getLeftEncoderPosition(),
-       RobotNav.getRightEncoderPosition(),
+        RobotNav.getRightEncoderPosition(),
         initialPose);
   }
 
