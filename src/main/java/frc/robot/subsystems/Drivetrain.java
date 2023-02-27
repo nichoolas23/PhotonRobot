@@ -22,6 +22,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Field.RoboField;
@@ -82,8 +83,6 @@ public class Drivetrain extends SubsystemBase {
 
     _rightDrive.setInverted(true);
     _differentialDrive.setSafetyEnabled(false);
-    var robotSensors = wpi_talonSRXES[0].getSensorCollection();
-    //robotSensors.getQuadraturePosition()
     _diffPoseEstimator.setVisionMeasurementStdDevs(VISION_STD_DEV);
 //this.setDefaultCommand(new ControllerDriveCmd(this,new XboxController(0)));
   }
@@ -91,6 +90,7 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
+
   }
 
 

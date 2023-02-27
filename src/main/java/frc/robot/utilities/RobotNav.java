@@ -84,6 +84,8 @@ public class RobotNav {
     return _gyro.getFusedHeading();
   }
   public double getTurnRate() {return _gyro.getRate();}
+  public double getRobotPitch() {
+    return _gyro.getPitch();}
 
   public static double getLeftEncoderPosition() {
     return _leftEncoder.getQuadraturePosition() *ENCODER_SCALE_CONSTANT;

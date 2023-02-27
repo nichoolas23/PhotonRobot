@@ -71,7 +71,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    Command _autonomousCommand = Auto.autoFactory(_drivetrain);
+    _autonomousCommand = _robotContainer.getAutonomousCommand();
     if (_autonomousCommand != null) {
       _autonomousCommand.schedule();
 
@@ -96,4 +96,5 @@ public class Robot extends TimedRobot {
     alignmentEnable.setBoolean(true);
 
   }
+
 }

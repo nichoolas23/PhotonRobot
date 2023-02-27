@@ -1,19 +1,14 @@
-package frc.robot.commands.auto;
+package frc.robot.commands.visionmanagement;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
-import frc.robot.utilities.TrajectoryGen;
+import frc.robot.utilities.LimelightHelpers;
 
-public class PathFollowCmd extends CommandBase {
-
-  private final Drivetrain _drivetrain;
-  /**
-   * Creates a new PathFollowCmd.
+public class LimelightSeekingCmd extends CommandBase {
+/**
+   * Creates a new LimelightSeekingCmd.
    */
-  public PathFollowCmd(Drivetrain drivetrain) {
-    _drivetrain = drivetrain;
+  public LimelightSeekingCmd() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements();
   }
 
   // Called when the command is initially scheduled.
@@ -24,19 +19,18 @@ public class PathFollowCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    TrajectoryGen.getTrajCmd(_drivetrain).schedule();
+    LimelightHelpers.setPipelineIndex("seeking",0);
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-
     return false;
   }
 

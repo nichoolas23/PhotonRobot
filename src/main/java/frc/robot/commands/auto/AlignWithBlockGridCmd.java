@@ -17,6 +17,7 @@ public class AlignWithBlockGridCmd extends CommandBase {
 
 
   private final XboxController _controller;
+  private int _targetTagID;
 
   private final Drivetrain _drivetrain;
   private static double _targetTagHeadingError;
@@ -24,6 +25,7 @@ public class AlignWithBlockGridCmd extends CommandBase {
   public AlignWithBlockGridCmd(Drivetrain drive, XboxController controller, int targetTagID) {
     _drivetrain = drive;
     _controller = controller;
+    _targetTagID = targetTagID;
     addRequirements();
   }
 
@@ -44,7 +46,7 @@ public class AlignWithBlockGridCmd extends CommandBase {
       var aprilTagTargets = result.targetingResults.targets_Fiducials;
       for (var tag :
           aprilTagTargets) {
-        if (tag.fiducialID == 6) {
+        if (tag.fiducialID == _targetTagID) {
           _targetTagHeadingError = tag.tx;
 
         }

@@ -20,6 +20,7 @@ public class StabilizedDriveCmd extends PIDCommand {
    */
   private Drivetrain _drivetrain;
   private XboxController _controller;
+  //TODO: Tune this PID
   public StabilizedDriveCmd(Drivetrain drivetrain, XboxController controller,RobotNav robotNav) {
     super(
           new PIDController(
@@ -37,7 +38,7 @@ public class StabilizedDriveCmd extends PIDCommand {
         drivetrain);
 
     SmartDashboard.putData("Stab pid",this.getController());
-// CTR: CAN frame not received/too-stale
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements();
   }
@@ -48,7 +49,6 @@ public class StabilizedDriveCmd extends PIDCommand {
   @Override
   public void end(boolean interrupted) {
    XBOX_CONTROLLER.setRumble(RumbleType.kBothRumble,.50);
-
    XBOX_CONTROLLER.setRumble(RumbleType.kBothRumble,0);
   }
 
@@ -56,8 +56,6 @@ public class StabilizedDriveCmd extends PIDCommand {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-
-
     //DriverStation.reportError((_controller.getRightX() != 0) +"",true);
     return false;
   }

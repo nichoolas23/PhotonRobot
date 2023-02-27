@@ -738,8 +738,8 @@ public class LimelightHelpers {
     try {
       results = mapper.readValue(getJSONDump(limelightName), LimelightResults.class);
     } catch (JsonProcessingException e) {
-      System.err.println("lljson error: " + e.getMessage());
-    }
+      //System.err.println("lljson error: " + e.getMessage());
+    }//TODO: UNDO THIS
 
     long end = System.nanoTime();
     double millis = (end - start) * .000001;

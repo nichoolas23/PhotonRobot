@@ -16,12 +16,9 @@ public class RoboField {
     _field.getObject("Trajectory").setTrajectory(trajectory);
   }
 
-  public static Pose2d fieldUpdate(Pose2d robotPos) {
+  public static void fieldUpdate(Pose2d robotPos) {
     if(robotPos != null){
       _field.setRobotPose(robotPos);
-      return robotPos;
-    }else{
-      return robotPos;
     }
 
   }
