@@ -37,9 +37,9 @@ import frc.robot.utilities.RobotNav;
 public class RobotContainer {
 
   private final RobotNav _robotNav = new RobotNav();
-  private Drivetrain _drivetrain = new Drivetrain();
+  private final Drivetrain _drivetrain = new Drivetrain();
   private final XboxController _driveController = new XboxController(0);
-  private SendableChooser<Command> _commandSendableChooser = new SendableChooser<>();
+  private final SendableChooser<Command> _commandSendableChooser = new SendableChooser<>();
 
   public RobotContainer() {
     SmartDashboard.putData(_commandSendableChooser);

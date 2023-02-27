@@ -6,17 +6,15 @@ import static frc.robot.Constants.RobotConstants.STAB_PID_P;
 import static frc.robot.PhysicalInputs.XBOX_CONTROLLER;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.utilities.RobotNav;
 
 public class StabilizedDriveCmd extends PIDCommand {
-  private RobotNav _robotNav;
+
   /**
    * Creates a new StabilizedDriveCmd.
    */
@@ -33,13 +31,12 @@ public class StabilizedDriveCmd extends PIDCommand {
         // Setpoint is 0
         0,
         // Pipe the output to the turning controls
-        output -> drivetrain.drive(controller.getRightTriggerAxis(),controller.getLeftTriggerAxis(), output,true),
+        output -> drivetrain.drive(controller.getRightTriggerAxis(),controller.getLeftTriggerAxis(), output),
 
         // Require the robot drive
         drivetrain);
 
-this._robotNav = robotNav;
-   SmartDashboard.putData("Stab pid",this.getController());
+    SmartDashboard.putData("Stab pid",this.getController());
 // CTR: CAN frame not received/too-stale
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements();
@@ -51,7 +48,6 @@ this._robotNav = robotNav;
   @Override
   public void end(boolean interrupted) {
    XBOX_CONTROLLER.setRumble(RumbleType.kBothRumble,.50);
-Drivetrain.setIsStabilized(false);
 
    XBOX_CONTROLLER.setRumble(RumbleType.kBothRumble,0);
   }

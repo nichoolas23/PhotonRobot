@@ -26,7 +26,7 @@ import java.util.List;
 
 public class PathFollowCmd extends CommandBase {
 
-  private Drivetrain _drivetrain;
+  private final Drivetrain _drivetrain;
   /**
    * Creates a new PathFollowCmd.
    */
@@ -44,7 +44,7 @@ addRequirements();
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Drivetrain.setIsAuto(true);
+
     TrajectoryGen.getTrajCmd(_drivetrain).schedule();
 
     // An example trajectory to follow.  All units in meters.
@@ -85,7 +85,7 @@ addRequirements();
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Drivetrain.setIsAuto(false);
+
   }
 
   // Returns true when the command should end.

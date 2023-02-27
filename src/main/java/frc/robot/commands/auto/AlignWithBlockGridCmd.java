@@ -18,15 +18,12 @@ public class AlignWithBlockGridCmd extends CommandBase {
 
   private final XboxController _controller;
 
-  private Drivetrain _drivetrain;
+  private final Drivetrain _drivetrain;
   private static double _targetTagHeadingError;
-  private static double _toCorrect;
-  private int _tagId;
 
   public AlignWithBlockGridCmd(Drivetrain drive, XboxController controller, int targetTagID) {
     _drivetrain = drive;
     _controller = controller;
-    _tagId = targetTagID;
     addRequirements();
   }
 
@@ -52,8 +49,7 @@ public class AlignWithBlockGridCmd extends CommandBase {
 
         }
       }
-
-      _toCorrect = RobotNav.getHeading() + _targetTagHeadingError;
+      double _toCorrect = RobotNav.getHeading() + _targetTagHeadingError;
       ALIGNMENT.setGoal(_toCorrect);
       if (_targetTagHeadingError != 0.02) {
         rotationSpeed = ALIGNMENT.getController().calculate(RobotNav.getHeading(), _toCorrect);

@@ -17,27 +17,11 @@ import frc.robot.utilities.RobotNav;
 public class ControllerDriveCmd extends CommandBase {
 
 
-  private Drivetrain _drivetrain;
+  private final Drivetrain _drivetrain;
 
   private final XboxController _controller;
 
   public ControllerDriveCmd(Drivetrain drive, XboxController controller) {
-    /*super(new PIDController(
-            STAB_PID_P,
-            STAB_PID_I,
-            STAB_PID_D),
-        // Close the loop on the turn rate
-        RobotNav::getTurnRate,
-        // Setpoint is 0
-        0,
-        // Pipe the output to the turning controls
-        output -> {
-          SmartDashboard.putNumber("output",output);
-          drive.drive(controller.getRightTriggerAxis(),controller.getLeftTriggerAxis(), output);
-        },
-
-        // Require the robot drive
-        drive);*/
     _drivetrain = drive;
     _controller = controller;
     addRequirements(_drivetrain);
@@ -65,5 +49,5 @@ public class ControllerDriveCmd extends CommandBase {
   public boolean isFinished() {
     return false;
   }
-  // Returns true when the command should end.
+
  }

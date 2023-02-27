@@ -22,7 +22,7 @@ public class TurnToAngleProfiled extends ProfiledPIDCommand {
    * @param targetAngleDegrees The angle to turn to
    * @param drive The drive subsystem to use
    */
-private ShuffleboardTab tab = Shuffleboard.getTab("Heading");
+private final ShuffleboardTab tab = Shuffleboard.getTab("Heading");
 
 public TurnToAngleProfiled(double targetAngleDegrees, Drivetrain drive, RobotAlignment robotAlignment) {
 

@@ -1,13 +1,17 @@
 package frc.robot.subsystems;
 
 import static frc.robot.Constants.RobotConstants.DRIVE_KINEMATICS;
-import static frc.robot.Constants.RobotConstants.LEFT_ENCODER;
-import static frc.robot.Constants.RobotConstants.PhysicalConstants.WHEEL_CIRCUM;
-import static frc.robot.Constants.RobotConstants.RIGHT_ENCODER;
 import static frc.robot.Constants.VisionConstants.VISION_STD_DEV;
+import static frc.robot.utilities.RobotNav.getFieldAdjPose;
+import static frc.robot.utilities.RobotNav.getLeftEncoderPosition;
+import static frc.robot.utilities.RobotNav.getLeftEncoderVelocity;
+import static frc.robot.utilities.RobotNav.getRightEncoderPosition;
+import static frc.robot.utilities.RobotNav.getRightEncoderVelocity;
+import static frc.robot.utilities.RobotNav.get_leftEncoder;
+import static frc.robot.utilities.RobotNav.get_rightEncoder;
+import static frc.robot.utilities.RobotNav.set_diffDrivePose;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.SensorCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.controller.DifferentialDriveWheelVoltages;
@@ -15,7 +19,6 @@ import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -28,9 +31,8 @@ import frc.robot.utilities.RobotNav;
 public class Drivetrain extends SubsystemBase {
 
   private static final boolean isCalibrated = false;
-  private static boolean isAuto = false;
 
-  private static boolean isStabilized = false;
+
   /*  private static final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSRX(1),
         new WPI_TalonSRX(3), new WPI_TalonSRX(2), new WPI_TalonSRX(4)};
     private static final MotorControllerGroup _leftDrive = new MotorControllerGroup(wpi_talonSRXES[0],
@@ -87,65 +89,51 @@ public class Drivetrain extends SubsystemBase {
   }
 
 
-  public static void setIsAuto(boolean isAuto) {
-    Drivetrain.isAuto = isAuto;
-  }
-
-  public static void setIsStabilized(boolean isStabilized) {
-    Drivetrain.isStabilized = isStabilized;
-  }
-
-
   @Override
   public void periodic() {
   }
 
-  private double getDistance(SensorCollection sensorCollection){
-    return sensorCollection.getQuadraturePosition() *((Units.inchesToMeters(6)*Math.PI)/ 1085);
-  }
-  private double getRate(SensorCollection sensorCollection){
-    return sensorCollection.getQuadratureVelocity()*((Units.inchesToMeters(6)*Math.PI)/1085);
-  }
+
 
   public void updateOdometry() {
 
-    _diffDriveOdometry.update(_gyro.getRotation2d(),getDistance(LEFT_ENCODER),
-        getDistance(RIGHT_ENCODER));
+    _diffDriveOdometry.update(_gyro.getRotation2d(), getLeftEncoderPosition(),
+       getRightEncoderPosition());
 
-    _diffDriveWheelSpeeds.leftMetersPerSecond = getRate(LEFT_ENCODER);
-    _diffDriveWheelSpeeds.rightMetersPerSecond = getRate(RIGHT_ENCODER);
+    _diffDriveWheelSpeeds.leftMetersPerSecond = getLeftEncoderVelocity();
+    _diffDriveWheelSpeeds.rightMetersPerSecond = getRightEncoderVelocity();
 
     _diffDriveWheelVoltages.left =
         wpi_talonSRXES[0].getMotorOutputVoltage() + wpi_talonSRXES[1].getMotorOutputVoltage();
     _diffDriveWheelVoltages.right =
         wpi_talonSRXES[3].getMotorOutputVoltage() + wpi_talonSRXES[2].getMotorOutputVoltage();
 
-    _diffPoseEstimator.update(_gyro.getRotation2d(), getDistance(LEFT_ENCODER),
-        getDistance(RIGHT_ENCODER));
-    SmartDashboard.putNumber("Left Encoder", getDistance(LEFT_ENCODER));
-    SmartDashboard.putNumber("Right Encoder", getDistance(RIGHT_ENCODER));
-    SmartDashboard.putNumber("Left Encoder Rate", getRate(LEFT_ENCODER));
-    SmartDashboard.putNumber("Right Encoder Rate",getRate(RIGHT_ENCODER));
+    _diffPoseEstimator.update(_gyro.getRotation2d(), getLeftEncoderPosition(),
+        getRightEncoderPosition());
+    SmartDashboard.putNumber("Left Encoder", getLeftEncoderPosition());
+    SmartDashboard.putNumber("Right Encoder", getRightEncoderPosition());
+    SmartDashboard.putNumber("Left Encoder Rate", getLeftEncoderVelocity());
+    SmartDashboard.putNumber("Right Encoder Rate", getRightEncoderVelocity());
 
     if (LimelightHelpers.getTV("")) {
       if (isCalibrated) {
-        if (RobotNav.getFieldAdjPose(LimelightHelpers.getBotPose2d("")).getTranslation()
+        if (getFieldAdjPose(LimelightHelpers.getBotPose2d("")).getTranslation()
             .getDistance(_diffPoseEstimator.getEstimatedPosition().getTranslation()) < .4) {
 
           _diffPoseEstimator.addVisionMeasurement(
-              RobotNav.getFieldAdjPose(LimelightHelpers.getBotPose2d("")), Timer.getFPGATimestamp(),
+              getFieldAdjPose(LimelightHelpers.getBotPose2d("")), Timer.getFPGATimestamp(),
               VISION_STD_DEV);
         }
       } else {
         _diffPoseEstimator.addVisionMeasurement(
-            RobotNav.getFieldAdjPose(LimelightHelpers.getBotPose2d("")), Timer.getFPGATimestamp(),
+            getFieldAdjPose(LimelightHelpers.getBotPose2d("")), Timer.getFPGATimestamp(),
             VISION_STD_DEV);
       }
 
     }
 
     RoboField.fieldUpdate(_diffPoseEstimator.getEstimatedPosition());
-    RobotNav.set_diffDrivePose(_diffPoseEstimator);
+    set_diffDrivePose(_diffPoseEstimator);
   }
 
   public void setBrakeMode() {
@@ -168,14 +156,15 @@ public class Drivetrain extends SubsystemBase {
     resetEncoders();
     _diffDriveOdometry.resetPosition(
         _gyro.getRotation2d(),
-        getDistance(LEFT_ENCODER),
-       getDistance(RIGHT_ENCODER),
+        RobotNav.getLeftEncoderPosition(),
+       RobotNav.getRightEncoderPosition(),
         initialPose);
   }
 
   public void resetEncoders() {
-    LEFT_ENCODER.setQuadraturePosition(0,0);
-    RIGHT_ENCODER.setQuadraturePosition(0,0);
+
+    get_leftEncoder().setQuadraturePosition(0,0);
+    get_rightEncoder().setQuadraturePosition(0,0);
   }
 
 
@@ -198,15 +187,5 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("turn out", rotateToAngleRate);
     _differentialDrive.arcadeDrive(reverseSpeed > 0 ? reverseSpeed * -1 : forwardSpeed,
         rotateToAngleRate);
-
-  }
-
-
-  public void drive(double forwardSpeed, double reverseSpeed, double rotateToAngleRate, boolean b) {
-
-    SmartDashboard.putNumber("turn out", rotateToAngleRate);
-    _differentialDrive.arcadeDrive(reverseSpeed > 0 ? reverseSpeed * -1 : forwardSpeed,
-        rotateToAngleRate);
-
   }
 }

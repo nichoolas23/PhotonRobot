@@ -12,16 +12,11 @@ import java.util.List;
 
 public class PathFindCommand extends CommandBase {
 
-private Drivetrain _drivetrain;
-private Pose2d _target;
 
-
-/**
+  /**
 * Command that finds a path from the robot's current position to the _target position and sends it to the drive train.
 */
   public PathFindCommand(Drivetrain drivetrain, Pose2d target) {
-    _drivetrain = drivetrain;
-    this._target = target;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements();

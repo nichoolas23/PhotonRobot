@@ -24,6 +24,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.math.trajectory.constraint.RectangularRegionConstraint;
 import edu.wpi.first.math.trajectory.constraint.TrajectoryConstraint;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -103,7 +104,7 @@ public class Constants {
      public static final double WHEEL_CIRCUM = .6283185;
      public static final double TRACK_WIDTH = 0.72;
    }
-
+    public static double ENCODER_SCALE_CONSTANT =  ((Units.inchesToMeters(6)*Math.PI)/ 1085);
     // Max speed of the robot in m/s
     public static DifferentialDriveKinematics DRIVE_KINEMATICS =
         new DifferentialDriveKinematics(TRACK_WIDTH);
@@ -144,8 +145,7 @@ public class Constants {
             .setKinematics(DRIVE_KINEMATICS)
             // Apply the voltage constraint
             .addConstraint(AUTO_VOLTAGE_CONSTRAINT);
-   public static SensorCollection LEFT_ENCODER = new WPI_TalonSRX(0).getSensorCollection();
-   public static SensorCollection RIGHT_ENCODER = new WPI_TalonSRX(5).getSensorCollection();
+
 
     public static class PneumaticsConstants {
       public static Solenoid WRIST_PISTON = new Solenoid(PneumaticsModuleType.CTREPCM, 12);
