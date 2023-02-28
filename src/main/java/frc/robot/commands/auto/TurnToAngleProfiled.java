@@ -3,6 +3,7 @@ package frc.robot.commands.auto;
 import static frc.robot.Constants.RobotConstants.TURN_ACCEL_DEG_PER_SECSQ_MAX;
 import static frc.robot.Constants.RobotConstants.TURN_DEG_PER_SEC_MAX;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 

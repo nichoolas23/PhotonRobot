@@ -48,8 +48,6 @@ public class StabilizedDriveCmd extends PIDCommand {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-   XBOX_CONTROLLER.setRumble(RumbleType.kBothRumble,.50);
-   XBOX_CONTROLLER.setRumble(RumbleType.kBothRumble,0);
   }
 
 
