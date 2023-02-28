@@ -37,7 +37,7 @@ public class LimelightTrackingCmd extends CommandBase {
       var maxX = 100.0;
       var minX = 0.0;
 
-      for(var tag: results){
+      for(var tag : results){
         if(tag.ty > maxY){
           maxY = tag.ty;
         }

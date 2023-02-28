@@ -39,7 +39,7 @@ public TurnToAngleProfiled(double targetAngleDegrees, Drivetrain drive, RobotAli
         // Set reference to target
         targetAngleDegrees,
         // Pipe output to turn robot
-        (output, setpoint) -> drive.arcadeDrive(0,0, output),
+        (output, setpoint) -> drive.drive(0, output),
         // Require the drive
         drive);
 
@@ -48,7 +48,7 @@ public TurnToAngleProfiled(double targetAngleDegrees, Drivetrain drive, RobotAli
     // Set the controller tolerance - the delta tolerance ensures the robot is stationary at the
     // setpoint before it is considered as having reached the reference
     getController()
-        .setTolerance(.1, .05);
+        .setTolerance(.1, .2);
   }
 
   @Override

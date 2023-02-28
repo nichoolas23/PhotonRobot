@@ -22,7 +22,6 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Field.RoboField;
@@ -94,11 +93,10 @@ public class Drivetrain extends SubsystemBase {
   }
 
 
-
   public void updateOdometry() {
 
     _diffDriveOdometry.update(_gyro.getRotation2d(), getLeftEncoderPosition(),
-       getRightEncoderPosition());
+        getRightEncoderPosition());
 
     _diffDriveWheelSpeeds.leftMetersPerSecond = getLeftEncoderVelocity();
     _diffDriveWheelSpeeds.rightMetersPerSecond = getRightEncoderVelocity();
@@ -163,8 +161,8 @@ public class Drivetrain extends SubsystemBase {
 
   public void resetEncoders() {
 
-    get_leftEncoder().setQuadraturePosition(0,0);
-    get_rightEncoder().setQuadraturePosition(0,0);
+    get_leftEncoder().setQuadraturePosition(0, 0);
+    get_rightEncoder().setQuadraturePosition(0, 0);
   }
 
 
@@ -182,10 +180,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
 
-  public void arcadeDrive(double forwardSpeed, double reverseSpeed, double rotateToAngleRate) {
-
-    SmartDashboard.putNumber("turn out", rotateToAngleRate);
-    _differentialDrive.arcadeDrive(reverseSpeed > 0 ? reverseSpeed * -1 : forwardSpeed,
-        rotateToAngleRate);
+  public void drive(double speed, double rot) {
+    _differentialDrive.arcadeDrive(speed, rot);
   }
 }

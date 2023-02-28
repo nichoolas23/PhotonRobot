@@ -35,7 +35,6 @@ public class AlignWithBlockGridCmd extends CommandBase {
 
   @Override
   public void execute() {
-
     double rotationSpeed = 0;
     Pose3d targetTag;
     if (LimelightHelpers.getTV("")) {

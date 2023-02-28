@@ -20,7 +20,8 @@ public class ChargeStationBalanceCmd extends ProfiledPIDCommand {
         new ProfiledPIDController(
             STAB_PID_P,
             STAB_PID_I,
-            STAB_PID_D,new Constraints(.1,.1)),
+            STAB_PID_D,
+            new Constraints(.1,.1)),
         // Close th se loop on the turn rate
         robotNav::getRobotPitch,
         // Setpoint is 0
@@ -33,6 +34,7 @@ public class ChargeStationBalanceCmd extends ProfiledPIDCommand {
 
         // Require the robot drive
         drivetrain);
+    getController().enableContinuousInput(-180, 180);
     this.getController().setTolerance(0.2,.1);
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements();
