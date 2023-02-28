@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ControllerDriveCmd;
 import frc.robot.commands.StabilizedDriveCmd;
 import frc.robot.commands.auto.AlignWithBlockGridCmd;
+import frc.robot.commands.auto.ChargeStationBalanceCmd;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.utilities.RobotNav;
 
@@ -67,6 +68,8 @@ public class RobotContainer {
         .whileFalse(new ControllerDriveCmd(_drivetrain, XBOX_CONTROLLER));
     new Trigger(_driveController::getAButtonPressed)
         .onTrue(new AlignWithBlockGridCmd(_drivetrain, _driveController, 6));
+    new Trigger(_driveController::getXButtonPressed)
+        .onTrue(new ChargeStationBalanceCmd(_robotNav,_drivetrain));
   }
 
 

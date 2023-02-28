@@ -154,7 +154,7 @@ public class Constants {
           TURN_ACCEL_DEG_PER_SECSQ_MAX)),
           RobotNav.getGyro().getFusedHeading());
     }
-    public static double STAB_PID_P = 0;
+    public static double STAB_PID_P = .3;
     public static double STAB_PID_I = 0;
     public static double STAB_PID_D = 0.0;
 

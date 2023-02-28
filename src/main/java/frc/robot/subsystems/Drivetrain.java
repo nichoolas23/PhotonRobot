@@ -138,7 +138,7 @@ public class Drivetrain extends SubsystemBase {
 
   public void setBrakeMode() {
     for (var motor : wpi_talonSRXES) {
-      motor.setNeutralMode(NeutralMode.Coast);
+      motor.setNeutralMode(NeutralMode.Brake);
     }
   }
 
