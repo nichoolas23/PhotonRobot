@@ -4,6 +4,7 @@ import static frc.robot.Constants.RobotConstants.PhysicalConstants.TRACK_WIDTH;
 
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -96,7 +97,7 @@ public class Constants {
      public static final double WHEEL_CIRCUM = .6283185;
      public static final double TRACK_WIDTH = 0.72;
    }
-    public static double ENCODER_SCALE_CONSTANT =  ((Units.inchesToMeters(6)*Math.PI)/ 1085);
+    public static double ENCODER_SCALE_CONSTANT =  ((Units.inchesToMeters(6)*Math.PI)/ 1024);
     // Max speed of the robot in m/s
     public static DifferentialDriveKinematics DRIVE_KINEMATICS =
         new DifferentialDriveKinematics(TRACK_WIDTH);
@@ -113,19 +114,35 @@ public class Constants {
     public static double AUTO_MAX_ACCEL = 3;
 
     public static double P_GAIN_DRIVE_VEL = 3.1519;
-    public static double VOLTS_MAX = 1.103;
-    public static double VOLTS_SECONDS_PER_METER = 2.0061;
-    public static double VOLTS_SECONDS_SQ_PER_METER = 1.4236;
 
+    //COMBINED FEED FORWARD
+    public static double COMBINED_VOLTS_MAX = 0.65488;
+    public static double COMBINED_VOLTS_SECONDS_PER_METER = 2.7164;
+    public static double COMBINED_VOLTS_SECONDS_SQ_PER_METER = 0.10304;
+    //LEFT SIDE FEED FORWARD
+    public static double LEFT_VOLTS_MAX = 0.91107;
+    public static double LEFT_VOLTS_SECONDS_PER_METER = 1.0051;
+    public static double LEFT_VOLTS_SECONDS_SQ_PER_METER = 0.58786;
+
+    // LEFT SIDE FEEDBACK
+    public static double LEFT_VEL_METERS_PER_SECOND = 3.4268;
+
+    //RIGHT SIDE FEED FORWARD
+    public static double RIGHT_VOLTS_MAX = 0.74523;
+    public static double RIGHT_VOLTS_SECONDS_PER_METER = 2.5707;
+    public static double RIGHT_VOLTS_SECONDS_SQ_PER_METER = 0.37322;
     /*public static RectangularRegionConstraint FIELD_CONSTRAINT =
         new RectangularRegionConstraint(1.0,2.0, 1.0, 2.00);*/
 
+    // POSITION PID CONSTANTS
+    public static double COMBINED_P_GAIN_POS = 0.19333;
+    public static double COMBINED_D_GAIN_POS = 0.022148;
     public static DifferentialDriveVoltageConstraint AUTO_VOLTAGE_CONSTRAINT =
         new DifferentialDriveVoltageConstraint(
             new SimpleMotorFeedforward(
-                VOLTS_MAX,
-                VOLTS_SECONDS_PER_METER,
-                VOLTS_SECONDS_SQ_PER_METER),
+                COMBINED_VOLTS_MAX,
+                COMBINED_VOLTS_SECONDS_PER_METER,
+                COMBINED_VOLTS_SECONDS_SQ_PER_METER),
             DRIVE_KINEMATICS,
             10);
 
@@ -141,6 +158,8 @@ public class Constants {
 
     public static class PneumaticsConstants {
       public static Solenoid WRIST_PISTON = new Solenoid(PneumaticsModuleType.CTREPCM, 12);
+      public static Solenoid LEFT_HILO_GEARSHIFT = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
+      public static Solenoid RIGHT_HILO_GEARSHIFT = new Solenoid(PneumaticsModuleType.CTREPCM, 1);
 
       public record RPistonControl(Solenoid solenoid, DoubleSolenoid doubleSolenoid, double pulseDuration, long delay) {}
 
@@ -149,14 +168,15 @@ public class Constants {
 
     public static class ControlsConstants{
 
-      public static RobotAlignment ALIGNMENT = new RobotAlignment(new ProfiledPIDController(0.0, 0.0, 0.0,new TrapezoidProfile.Constraints(
-          TURN_DEG_PER_SEC_MAX,
-          TURN_ACCEL_DEG_PER_SECSQ_MAX)),
-          RobotNav.getGyro().getFusedHeading());
+      public static RobotAlignment ALIGNMENT = new RobotAlignment(new PIDController(0.0, 0.0, 0.0),RobotNav.getGyro().getFusedHeading());
     }
     public static double STAB_PID_P = .2;
     public static double STAB_PID_I = 0;
     public static double STAB_PID_D = 0.0;
+
+    public static double BALANCE_PID_P = .02;
+    public static double BALANCE_PID_I = 0.0;
+    public static double BALANCE_PID_D = 0.0;
 
   }
 

@@ -22,10 +22,10 @@ private Drivetrain _drivetrain;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
   }
-  {
+
 
     // Use addRequirements() here to declare subsystem dependencies.
-  }
+
 
   // Called when the command is initially scheduled.
   @Override

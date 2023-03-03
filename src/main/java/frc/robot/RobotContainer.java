@@ -6,7 +6,6 @@
 package frc.robot;
 
 
-import static frc.robot.Constants.FieldConstants.FIRST_BLUE_GRID;
 import static frc.robot.PhysicalInputs.XBOX_CONTROLLER;
 import static frc.robot.commands.auto.Auto.autoFactory;
 
@@ -37,24 +36,19 @@ public class RobotContainer {
   private final XboxController _driveController = new XboxController(0);
   private final SendableChooser<Command> _commandSendableChooser = new SendableChooser<>();
 
+
   public RobotContainer() {
+    configureAutoChooser();
+
     SmartDashboard.putData(_commandSendableChooser);
+    
     // Configure the trigger bindings
     configureBindings();
   }
 
   private void configureAutoChooser() {
-
-    /*_commandSendableChooser.setDefaultOption("Default Auto",
-        new PathFindCommand(_drivetrain, FIRST_BLUE_GRID));
-
-    _commandSendableChooser.addOption("Far Left Blue Auto", new PathFindCommand(_drivetrain, FIRST_BLUE_GRID));
-    _commandSendableChooser.addOption("Middle Blue Auto", new PathFindCommand(_drivetrain, FIRST_BLUE_GRID));
-    _commandSendableChooser.addOption("Far Right Blue Auto", new PathFindCommand(_drivetrain, FIRST_BLUE_GRID));
-
-    _commandSendableChooser.addOption("Far Left Red Auto", new PathFindCommand(_drivetrain, FIRST_BLUE_GRID));
-    _commandSendableChooser.addOption("Middle Red Auto", new PathFindCommand(_drivetrain, FIRST_BLUE_GRID));
-    _commandSendableChooser.addOption("Far Right Red Auto", new PathFindCommand(_drivetrain,  FIRST_BLUE_GRID));*/
+    _commandSendableChooser.addOption("Blue Auto", autoFactory(_drivetrain, _robotNav, true));
+    _commandSendableChooser.addOption("Red Auto", autoFactory(_drivetrain, _robotNav, false));
   }
 
 
@@ -62,6 +56,7 @@ public class RobotContainer {
    * Use this method to define your trigger->command mappings.
    */
   private void configureBindings() {
+
     new Trigger(() -> (XBOX_CONTROLLER.getRightX() > -.06 && XBOX_CONTROLLER.getRightX() < .06)
         && Math.abs(RobotNav.getGyro().getRate()) < 4)
         .whileTrue(new StabilizedDriveCmd(_drivetrain, XBOX_CONTROLLER, _robotNav))
@@ -79,7 +74,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return autoFactory(_drivetrain, _robotNav);
+    return _commandSendableChooser.getSelected();
   }
 
 

@@ -43,6 +43,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+
     PathPlannerServer.startServer(5811);
     RoboField.fieldSetup();
     _robotContainer = new RobotContainer();
@@ -58,8 +59,7 @@ public class Robot extends TimedRobot {
 
     }
     SmartDashboard.putData("alignment", ALIGNMENT.getController());
-   /* var pathFindCommand = new PathFindCommand(_drivetrain, FieldConstants.FIRST_BLUE_GRID);
-    pathFindCommand.schedule();*/
+_teleopCommand.schedule();
 
   }
 

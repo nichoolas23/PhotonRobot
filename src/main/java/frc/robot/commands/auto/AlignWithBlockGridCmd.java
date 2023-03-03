@@ -51,10 +51,11 @@ public class AlignWithBlockGridCmd extends CommandBase {
         }
       }
       double _toCorrect = RobotNav.getHeading() + _targetTagHeadingError;
-      ALIGNMENT.setGoal(_toCorrect);
+      ALIGNMENT.setSetpoint(_toCorrect);
       if (_targetTagHeadingError != 0.02) {
         rotationSpeed = ALIGNMENT.getController().calculate(RobotNav.getHeading(), _toCorrect);
       }
+
       SmartDashboard.putNumber("Period", ALIGNMENT.getController().getPeriod());
       SmartDashboard.putNumber("Alignment measurementZ", _targetTagHeadingError);
       SmartDashboard.putNumber("Heading", RobotNav.getHeading());

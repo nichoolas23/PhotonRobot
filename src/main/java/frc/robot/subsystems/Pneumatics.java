@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.RobotConstants.PneumaticsConstants.RPistonControl;
 
@@ -15,7 +16,7 @@ public class Pneumatics extends SubsystemBase {
    *
    * @param piston
    */
-  public static void setPiston(RPistonControl piston) {
+  public void setPiston(RPistonControl piston) {
     piston.solenoid().setPulseDuration(piston.pulseDuration());
     try {
       Thread.sleep(piston.delay() * 1000);
@@ -27,5 +28,13 @@ public class Pneumatics extends SubsystemBase {
 
   @Override
   public void periodic() {
+  }
+
+
+
+  public void setPiston( boolean isEnabled, Solenoid... solenoidArray) {
+    for (Solenoid solenoid : solenoidArray) {
+    solenoid.set(isEnabled);
+    }
   }
 }

@@ -6,9 +6,9 @@ import static frc.robot.Constants.RobotConstants.DRIVE_KINEMATICS;
 import static frc.robot.Constants.RobotConstants.P_GAIN_DRIVE_VEL;
 import static frc.robot.Constants.RobotConstants.RAMSETE_B;
 import static frc.robot.Constants.RobotConstants.RAMSETE_ZETA;
-import static frc.robot.Constants.RobotConstants.VOLTS_MAX;
-import static frc.robot.Constants.RobotConstants.VOLTS_SECONDS_PER_METER;
-import static frc.robot.Constants.RobotConstants.VOLTS_SECONDS_SQ_PER_METER;
+import static frc.robot.Constants.RobotConstants.LEFT_VOLTS_MAX;
+import static frc.robot.Constants.RobotConstants.LEFT_VOLTS_SECONDS_PER_METER;
+import static frc.robot.Constants.RobotConstants.LEFT_VOLTS_SECONDS_SQ_PER_METER;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.Field.RoboField;
 import frc.robot.Constants.FieldConstants;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
 import java.util.List;
 
@@ -33,9 +32,9 @@ public class TrajectoryGen {
     var autoVoltageConstraint =
         new DifferentialDriveVoltageConstraint(
             new SimpleMotorFeedforward(
-                VOLTS_MAX,
-                VOLTS_SECONDS_PER_METER,
-                VOLTS_SECONDS_SQ_PER_METER),
+                LEFT_VOLTS_MAX,
+                LEFT_VOLTS_SECONDS_PER_METER,
+                LEFT_VOLTS_SECONDS_SQ_PER_METER),
             DRIVE_KINEMATICS,
             10);
 
@@ -63,9 +62,9 @@ public class TrajectoryGen {
             RobotNav::getEstPose,
             new RamseteController(RAMSETE_B, RAMSETE_ZETA),
             new SimpleMotorFeedforward(
-                VOLTS_MAX,
-                VOLTS_SECONDS_PER_METER,
-                VOLTS_SECONDS_SQ_PER_METER),
+                LEFT_VOLTS_MAX,
+                LEFT_VOLTS_SECONDS_PER_METER,
+                LEFT_VOLTS_SECONDS_SQ_PER_METER),
             DRIVE_KINEMATICS,
             _drivetrain::getWheelSpeeds,
             new PIDController(P_GAIN_DRIVE_VEL, 0, 0),

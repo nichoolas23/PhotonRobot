@@ -11,10 +11,13 @@ import static frc.robot.utilities.RobotNav.get_leftEncoder;
 import static frc.robot.utilities.RobotNav.get_rightEncoder;
 import static frc.robot.utilities.RobotNav.set_diffDrivePose;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.controller.DifferentialDriveWheelVoltages;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -23,6 +26,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Field.RoboField;
 import frc.robot.utilities.LimelightHelpers;
@@ -144,6 +148,15 @@ public class Drivetrain extends SubsystemBase {
 
     return _diffDriveWheelSpeeds;
   }
+  public void emergencyStop() {
+    for (var motor : wpi_talonSRXES) {
+      motor.set(0);
+    }
+    _leftDrive.stopMotor();
+    _rightDrive.stopMotor();
+    CommandScheduler.getInstance().cancelAll();
+    throw new RuntimeException("EMERGENCY STOP");
+  }
 
   public void setVoltages(double leftVolts, double rightVolts) {
     _leftDrive.setVoltage(leftVolts * .25);
@@ -177,10 +190,12 @@ public class Drivetrain extends SubsystemBase {
 
     _differentialDrive.arcadeDrive(reverseSpeed > 0 ? reverseSpeed * -1 : forwardSpeed, rot * -1);
 
+
   }
 
 
   public void drive(double speed, double rot) {
+
     _differentialDrive.arcadeDrive(speed, rot);
   }
 }

@@ -1,5 +1,8 @@
 package frc.robot.commands.auto;
 
+import static frc.robot.Constants.RobotConstants.BALANCE_PID_D;
+import static frc.robot.Constants.RobotConstants.BALANCE_PID_I;
+import static frc.robot.Constants.RobotConstants.BALANCE_PID_P;
 import static frc.robot.Constants.RobotConstants.STAB_PID_D;
 import static frc.robot.Constants.RobotConstants.STAB_PID_I;
 import static frc.robot.Constants.RobotConstants.STAB_PID_P;
@@ -18,9 +21,9 @@ public class ChargeStationBalanceCmd extends ProfiledPIDCommand {
   public ChargeStationBalanceCmd(RobotNav robotNav, Drivetrain drivetrain) {
     super(
         new ProfiledPIDController(
-            STAB_PID_P,
-            STAB_PID_I,
-            STAB_PID_D,
+            BALANCE_PID_P,
+            BALANCE_PID_I,
+            BALANCE_PID_D,
             new Constraints(.1,.1)),
         // Close th se loop on the turn rate
         robotNav::getRobotPitch,
@@ -31,11 +34,10 @@ public class ChargeStationBalanceCmd extends ProfiledPIDCommand {
 
           drivetrain.drive(0, output * -.5, 0);
         },
-
-        // Require the robot drive
-        drivetrain);
-    getController().enableContinuousInput(-180, 180);
-    this.getController().setTolerance(0.2,.1);
+          // Require the robot drive
+          drivetrain);
+      getController().enableContinuousInput(-180, 180);
+      this.getController().setTolerance(0.2,.1);
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements();
   }

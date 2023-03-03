@@ -2,7 +2,14 @@ package frc.robot.utilities;
 
 public class RobotConfigSettings {
   public enum EAutoSpeed {
-    COMPETITION, PRACTICE, TEST
+    CRAWL(0.2),
+    SLOW(0.4),
+    MEDIUM(0.6),
+    FAST(0.8),
+    MAX(1.0);
+
+    EAutoSpeed(double v) {
+    }
   }
 
 }

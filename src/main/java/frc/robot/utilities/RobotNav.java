@@ -2,7 +2,7 @@ package frc.robot.utilities;
 
 import static frc.robot.Constants.RobotConstants.ENCODER_SCALE_CONSTANT;
 import static frc.robot.Constants.VisionConstants.VISION_STD_DEV;
-
+import static frc.robot.Constants.RobotConstants.DRIVE_KINEMATICS;
 import com.ctre.phoenix.motorcontrol.SensorCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
@@ -10,22 +10,28 @@ import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.I2C.Port;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utilities.LimelightHelpers.LimelightResults;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 
 
+
 public class RobotNav {
 
-  private static DifferentialDrivePoseEstimator _diffDrivePose;
+  private I2C i2C = new I2C(Port.kMXP,0x31);
+
+  ;
   private static final AHRS _gyro = new AHRS();
   private static double _rotateVal;
 
-  private static SensorCollection _leftEncoder = new WPI_TalonSRX(0).getSensorCollection();
-  private static SensorCollection _rightEncoder = new WPI_TalonSRX(5).getSensorCollection();
+  private static WPI_TalonSRX _leftEncoder = new WPI_TalonSRX(0);
+  private static WPI_TalonSRX _rightEncoder = new WPI_TalonSRX(5);
   //Limelight data
 
-
+  private static DifferentialDrivePoseEstimator _diffDrivePose =  new DifferentialDrivePoseEstimator(DRIVE_KINEMATICS, _gyro.getRotation2d(), 0.0, 0.0, new Pose2d());
   public static void setStdDevVision() {
     VISION_STD_DEV.set(0, 0, 0.5);
     VISION_STD_DEV.set(1, 0, 0.5);
@@ -68,11 +74,11 @@ public class RobotNav {
   }
 
   public static SensorCollection get_rightEncoder() {
-    return _rightEncoder;
+    return _rightEncoder.getSensorCollection();
   }
 
   public static SensorCollection get_leftEncoder() {
-    return _leftEncoder;
+    return _leftEncoder.getSensorCollection();
   }
 
 
@@ -88,16 +94,18 @@ public class RobotNav {
     return _gyro.getPitch();}
 
   public static double getLeftEncoderPosition() {
-    return _leftEncoder.getQuadraturePosition() *ENCODER_SCALE_CONSTANT;
+    SmartDashboard.putNumber("LeftEncoder Pos",_leftEncoder.getSensorCollection().getQuadraturePosition());
+
+    return _leftEncoder.getSensorCollection().getQuadraturePosition() *ENCODER_SCALE_CONSTANT;
   }
   public static double getRightEncoderPosition() {
-    return _rightEncoder.getQuadraturePosition() *ENCODER_SCALE_CONSTANT;
+    return _rightEncoder.getSensorCollection().getQuadraturePosition() *ENCODER_SCALE_CONSTANT;
   }
   public static double getLeftEncoderVelocity() {
-    return _leftEncoder.getQuadratureVelocity() *ENCODER_SCALE_CONSTANT;
+    return _leftEncoder.getSensorCollection().getQuadratureVelocity() *ENCODER_SCALE_CONSTANT;
   }
   public static double getRightEncoderVelocity() {
-    return _rightEncoder.getQuadratureVelocity() *ENCODER_SCALE_CONSTANT;
+    return _rightEncoder.getSensorCollection().getQuadratureVelocity() *ENCODER_SCALE_CONSTANT;
   }
 }
 

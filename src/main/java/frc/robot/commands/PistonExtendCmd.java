@@ -27,7 +27,7 @@ public class PistonExtendCmd extends CommandBase {
   @Override
   public void execute() {
     for (RPistonControl piston : _pistons) {
-      Pneumatics.setPiston(piston);
+      //Pneumatics.setPiston(piston);
 
     }
   }
