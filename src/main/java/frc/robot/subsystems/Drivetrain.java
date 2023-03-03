@@ -19,6 +19,7 @@ import edu.wpi.first.math.controller.DifferentialDriveWheelVoltages;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -76,7 +77,7 @@ public class Drivetrain extends SubsystemBase {
   private static final DifferentialDriveWheelVoltages _diffDriveWheelVoltages = new DifferentialDriveWheelVoltages();
   private static final DifferentialDriveOdometry _diffDriveOdometry = new DifferentialDriveOdometry(
       _gyro.getRotation2d(), 0, 0);
-
+private static SlewRateLimiter _slewRateLimiter = new SlewRateLimiter(0.5);
 
   public Drivetrain() {
 
@@ -187,6 +188,10 @@ public class Drivetrain extends SubsystemBase {
    * @param rot          Between -1.0 and 1.0 for turning
    */
   public void drive(double forwardSpeed, double reverseSpeed, double rot) {
+    forwardSpeed= _slewRateLimiter.calculate(forwardSpeed);
+    reverseSpeed= _slewRateLimiter.calculate(reverseSpeed);
+    rot= _slewRateLimiter.calculate(rot);
+
 
     _differentialDrive.arcadeDrive(reverseSpeed > 0 ? reverseSpeed * -1 : forwardSpeed, rot * -1);
 
@@ -195,7 +200,8 @@ public class Drivetrain extends SubsystemBase {
 
 
   public void drive(double speed, double rot) {
-
+speed =  _slewRateLimiter.calculate(speed);
+rot = _slewRateLimiter.calculate(rot);
     _differentialDrive.arcadeDrive(speed, rot);
   }
 }
