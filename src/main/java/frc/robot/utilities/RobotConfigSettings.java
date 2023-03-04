@@ -1,5 +1,5 @@
 package frc.robot.utilities;
-
+//TODO: Maybe needed for competition
 public class RobotConfigSettings {
   public enum EAutoSpeed {
     CRAWL(0.2),

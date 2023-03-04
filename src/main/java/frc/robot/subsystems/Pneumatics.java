@@ -16,7 +16,7 @@ public class Pneumatics extends SubsystemBase {
    *
    * @param piston
    */
-  public void setPiston(RPistonControl piston) {
+  public void setPiston(RPistonControl piston) { //TODO: Get rid of the damn record this is stupid
     piston.solenoid().setPulseDuration(piston.pulseDuration());
     try {
       Thread.sleep(piston.delay() * 1000);

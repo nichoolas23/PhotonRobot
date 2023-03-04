@@ -24,7 +24,7 @@ public final class Auto
   /** Example static factory for an autonomous command. */
   public static CommandBase autoFactory(Drivetrain drivetrain, RobotNav robotNav, AprilTag tag,boolean isBlue)
   {
-    List<Translation2d> waypoints = switch (tag.ID) {
+    List<Translation2d> waypoints = switch (tag.ID) { // TODO: Use path weaver to get coords then offset them according to limelight localization used to get around charge station and what not
       case 1,2,3 -> List.of(new Translation2d(-3.148, -3.148), new Translation2d(-5.265, -3.224));
       default -> List.of();
     };
