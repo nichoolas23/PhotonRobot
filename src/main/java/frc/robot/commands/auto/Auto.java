@@ -7,20 +7,28 @@ package frc.robot.commands.auto;
 
 import static frc.robot.PhysicalInputs.XBOX_CONTROLLER;
 
+import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.utilities.RobotNav;
 import frc.robot.utilities.TrajectoryGen;
+import java.util.List;
 
 
 public final class Auto
 {
 
   /** Example static factory for an autonomous command. */
-  public static CommandBase autoFactory(Drivetrain drivetrain, RobotNav robotNav,boolean isBlue)
+  public static CommandBase autoFactory(Drivetrain drivetrain, RobotNav robotNav, AprilTag tag,boolean isBlue)
   {
-    return Commands.sequence(new InitialDriveOutAutoCmd(drivetrain,robotNav,.2), TrajectoryGen.getTrajCmd(drivetrain),new AlignWithBlockGridCmd(drivetrain,XBOX_CONTROLLER,6));//new PathFollowCmd()
+    List<Translation2d> waypoints = switch (tag.ID) {
+      case 1,2,3 -> List.of(new Translation2d(-3.148, -3.148), new Translation2d(-5.265, -3.224));
+      default -> List.of();
+    };
+    return Commands.sequence(new InitialDriveOutAutoCmd(drivetrain,robotNav,.2), TrajectoryGen.getTrajCmd(drivetrain,tag,waypoints),new AlignWithBlockGridCmd(drivetrain,XBOX_CONTROLLER,6));//new Path
   }
 
 

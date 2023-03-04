@@ -50,27 +50,22 @@ public class Constants {
     /**
      *April Tags
      */
-    public static AprilTag TAG_ONE = new AprilTag(1, new Pose3d(new Pose2d(2.607, 4.392, Rotation2d.fromDegrees(270))));//00
+    public static AprilTag RED_GRID_BOTTOM_LEFT = new AprilTag(1, new Pose3d(new Pose2d(7.24310, -2.93659, Rotation2d.fromDegrees(270))));//00
 
-    public static AprilTag TAG_TWO = new AprilTag(2, new Pose3d(new Pose2d(1.69, 4.392, Rotation2d.fromDegrees(270))));
+    public static AprilTag RED_GRID_MIDDLE_RIGHT = new AprilTag(2, new Pose3d(new Pose2d(7.24310, -1.26019, Rotation2d.fromDegrees(270))));
 
-    public static AprilTag TAG_FOUR = new AprilTag(4, new Pose3d(new Pose2d(5.72, 2.357, Rotation2d.fromDegrees (180))));
+    public static AprilTag RED_GRID_TOP_RIGHT= new AprilTag(3, new Pose3d(new Pose2d(7.24310, 0.41621, Rotation2d.fromDegrees (180))));
 
-    public static AprilTag TAG_FIVE = new AprilTag(5, new Pose3d(new Pose2d(0, 2.164, Rotation2d.fromDegrees(0))));
+    public static AprilTag BLUE_PICKUP = new AprilTag(4, new Pose3d(new Pose2d(7.90832, 2.74161, Rotation2d.fromDegrees(180))));
 
-    public static AprilTag TAG_SIX = new AprilTag(6, new Pose3d(new Pose2d(5.720, 3.275, Rotation2d.fromDegrees(180))));
+    public static AprilTag RED_PICKUP = new AprilTag(5, new Pose3d(new Pose2d(-7.90832, 2.74161, Rotation2d.fromDegrees(0))));
+
+    public static AprilTag BLUE_GRID_TOP_LEFT= new AprilTag(6, new Pose3d(new Pose2d(-7.24310, 0.41621, Rotation2d.fromDegrees(180))));
+    public static AprilTag BLUE_GRID_MIDDLE_LEFT = new AprilTag(7, new Pose3d(new Pose2d(-7.24310, -1.26019, Rotation2d.fromDegrees(270))));
+    public static AprilTag BLUE_GRID_BOTTOM_LEFT = new AprilTag(8, new Pose3d(new Pose2d(-7.24310,-2.93659, Rotation2d.fromDegrees(270))));
 
 
-    public static Pose2d FIRST_BLUE_GRID = new Pose2d( 2.56+2.2, 0.3065+ 1.8825, Rotation2d.fromDegrees(0));
-    public static Pose2d SECOND_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
-    public static Pose2d THIRD_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
-    public static Pose2d FOURTH_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
-      public static Pose2d FIFTH_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
 
-    public static Pose2d BLUE_CHARGING_STATION = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
-    public static Pose2d RED_CHARGING_STATION = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
-
-    public static Pose2d FIRST_RED_GRID = new Pose2d(2.607, 4.392, Rotation2d.fromDegrees(270));
 
     public static Pose2d LOLA = new Pose2d("LolaX".getBytes(StandardCharsets.UTF_8).length,
         "LolaY".getBytes(StandardCharsets.UTF_8).length ,

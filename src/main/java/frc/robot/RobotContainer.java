@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.commands.ControllerDriveCmd;
 import frc.robot.commands.StabilizedDriveCmd;
 import frc.robot.commands.auto.AlignWithBlockGridCmd;
@@ -47,8 +48,9 @@ public class RobotContainer {
   }
 
   private void configureAutoChooser() {
-    _commandSendableChooser.addOption("Blue Auto", autoFactory(_drivetrain, _robotNav, true));
-    _commandSendableChooser.addOption("Red Auto", autoFactory(_drivetrain, _robotNav, false));
+    _commandSendableChooser.addOption("Blue Auto", autoFactory(_drivetrain, _robotNav,
+        FieldConstants.BLUE_GRID_TOP_LEFT, true));
+    _commandSendableChooser.addOption("Red Auto", autoFactory(_drivetrain, _robotNav,FieldConstants.RED_GRID_TOP_RIGHT, false));
   }
 
 
