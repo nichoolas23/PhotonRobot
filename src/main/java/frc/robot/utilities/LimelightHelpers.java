@@ -372,7 +372,7 @@ public class LimelightHelpers {
   static boolean profileJSON = false;
 
   static final String sanitizeName(String name) {
-    if (name == "" || name == null) {
+    if (name.equals("")) {
       return "limelight";
     }
     return name;
@@ -708,7 +708,7 @@ public class LimelightHelpers {
     try {
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
       connection.setRequestMethod("GET");
-      if (snapshotName != null && snapshotName != "") {
+      if (snapshotName != null && !snapshotName.equals("")) {
         connection.setRequestProperty("snapname", snapshotName);
       }
 
@@ -738,8 +738,8 @@ public class LimelightHelpers {
     try {
       results = mapper.readValue(getJSONDump(limelightName), LimelightResults.class);
     } catch (JsonProcessingException e) {
-      System.err.println("lljson error: " + e.getMessage());
-    }
+      //System.err.println("lljson error: " + e.getMessage());
+    }//TODO: UNDO THIS
 
     long end = System.nanoTime();
     double millis = (end - start) * .000001;

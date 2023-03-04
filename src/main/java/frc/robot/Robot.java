@@ -6,28 +6,19 @@
 package frc.robot;
 
 import static frc.robot.Constants.RobotConstants.ControlsConstants.ALIGNMENT;
-import static frc.robot.Constants.RobotConstants.LEFT_ENCODER;
-import static frc.robot.Constants.RobotConstants.RIGHT_ENCODER;
-import static frc.robot.PhysicalInputs.XBOX_CONTROLLER;
 
 import com.pathplanner.lib.server.PathPlannerServer;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.Field.RoboField;
-import frc.robot.Constants.FieldConstants;
-import frc.robot.commands.StabilizedDriveCmd;
-import frc.robot.commands.auto.PathFindCommand;
+import frc.robot.commands.auto.Auto;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.RobotAlignment;
 import frc.robot.utilities.RobotNav;
-import frc.robot.utilities.TrajectoryGen;
 
 
 /**
@@ -39,12 +30,10 @@ import frc.robot.utilities.TrajectoryGen;
 public class Robot extends TimedRobot {
 
 
-
   private final Drivetrain _drivetrain = new Drivetrain();
-
+  private final RobotNav _robotNav = new RobotNav();
   private Command _autonomousCommand;
   private RobotContainer _robotContainer;
-  private final RobotNav _robotNav = new RobotNav();
 
   /**
    * This method is run when the robot is first started up and should be used for any initialization
@@ -60,7 +49,6 @@ public class Robot extends TimedRobot {
     _robotContainer = new RobotContainer();
     RobotNav.setStdDevVision();
     _drivetrain.setBrakeMode();
-    SmartDashboard.putData("PID Controller",ALIGNMENT.getController());
   }
 
   @Override
@@ -70,52 +58,33 @@ public class Robot extends TimedRobot {
       _autonomousCommand.cancel();
 
     }
-    SmartDashboard.putData("alignment",ALIGNMENT.getController());
-    var pathFindCommand = new PathFindCommand(_drivetrain, FieldConstants.FIRST_BLUE_GRID);
-    pathFindCommand.schedule();
+    SmartDashboard.putData("alignment", ALIGNMENT.getController());
+_teleopCommand.schedule();
 
   }
-@Override
-public void disabledInit()
-{CommandScheduler.getInstance().cancelAll();}
+
+  @Override
+  public void disabledInit() {
+    CommandScheduler.getInstance().cancelAll();
+  }
 
 
   @Override
   public void autonomousInit() {
-    Command _autonomousCommand;
-    _autonomousCommand = TrajectoryGen.getTrajCmd(_drivetrain);
-    // schedule the autonomous command (example)
+    _autonomousCommand = _robotContainer.getAutonomousCommand();
     if (_autonomousCommand != null) {
       _autonomousCommand.schedule();
-
 
     }
   }
 
   @Override
   public void robotPeriodic() {
-   SmartDashboard.putNumber("Heading",RobotNav.getHeading());
-
-    /*if(Math.abs(RobotNav.getGyro().getRate())>1){
-      CommandScheduler.getInstance().cancelAll();
-      CommandScheduler.getInstance().disable();
-    }*/
     _drivetrain.updateOdometry();
     _robotNav.updateLL();
     CommandScheduler.getInstance().run();
-
-
-
-
-  /*  if (RobotNav.getEstimatedRobotPose() != null) {
-      RoboField.fieldUpdate(RobotNav.getEstimatedRobotPose().estimatedPose.toPose2d());
-    }*/
-    if (XBOX_CONTROLLER.getBButton()) {
-      LEFT_ENCODER.reset(); //-357.750000
-      RIGHT_ENCODER.reset(); //355.000000
-    }
-
   }
+
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
@@ -126,4 +95,5 @@ public void disabledInit()
     alignmentEnable.setBoolean(true);
 
   }
+
 }

@@ -3,6 +3,7 @@ package frc.robot.commands.auto;
 import static frc.robot.Constants.RobotConstants.TURN_ACCEL_DEG_PER_SECSQ_MAX;
 import static frc.robot.Constants.RobotConstants.TURN_DEG_PER_SEC_MAX;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
@@ -22,7 +23,7 @@ public class TurnToAngleProfiled extends ProfiledPIDCommand {
    * @param targetAngleDegrees The angle to turn to
    * @param drive The drive subsystem to use
    */
-private ShuffleboardTab tab = Shuffleboard.getTab("Heading");
+private final ShuffleboardTab tab = Shuffleboard.getTab("Heading");
 
 public TurnToAngleProfiled(double targetAngleDegrees, Drivetrain drive, RobotAlignment robotAlignment) {
 
@@ -39,7 +40,7 @@ public TurnToAngleProfiled(double targetAngleDegrees, Drivetrain drive, RobotAli
         // Set reference to target
         targetAngleDegrees,
         // Pipe output to turn robot
-        (output, setpoint) -> drive.arcadeDrive(0,0, output),
+        (output, setpoint) -> drive.drive(0, output),
         // Require the drive
         drive);
 
@@ -48,7 +49,7 @@ public TurnToAngleProfiled(double targetAngleDegrees, Drivetrain drive, RobotAli
     // Set the controller tolerance - the delta tolerance ensures the robot is stationary at the
     // setpoint before it is considered as having reached the reference
     getController()
-        .setTolerance(.1, .05);
+        .setTolerance(.1, .2);
   }
 
   @Override

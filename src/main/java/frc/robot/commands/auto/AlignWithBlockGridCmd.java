@@ -17,16 +17,15 @@ public class AlignWithBlockGridCmd extends CommandBase {
 
 
   private final XboxController _controller;
+  private int _targetTagID;
 
-  private Drivetrain _drivetrain;
+  private final Drivetrain _drivetrain;
   private static double _targetTagHeadingError;
-  private static double _toCorrect;
-  private int _tagId;
 
   public AlignWithBlockGridCmd(Drivetrain drive, XboxController controller, int targetTagID) {
     _drivetrain = drive;
     _controller = controller;
-    _tagId = targetTagID;
+    _targetTagID = targetTagID;
     addRequirements();
   }
 
@@ -36,7 +35,6 @@ public class AlignWithBlockGridCmd extends CommandBase {
 
   @Override
   public void execute() {
-
     double rotationSpeed = 0;
     Pose3d targetTag;
     if (LimelightHelpers.getTV("")) {
@@ -47,17 +45,17 @@ public class AlignWithBlockGridCmd extends CommandBase {
       var aprilTagTargets = result.targetingResults.targets_Fiducials;
       for (var tag :
           aprilTagTargets) {
-        if (tag.fiducialID == 6) {
+        if (tag.fiducialID == _targetTagID) {
           _targetTagHeadingError = tag.tx;
 
         }
       }
-
-      _toCorrect = RobotNav.getHeading() + _targetTagHeadingError;
-      ALIGNMENT.setGoal(_toCorrect);
+      double _toCorrect = RobotNav.getHeading() + _targetTagHeadingError;
+      ALIGNMENT.setSetpoint(_toCorrect);
       if (_targetTagHeadingError != 0.02) {
         rotationSpeed = ALIGNMENT.getController().calculate(RobotNav.getHeading(), _toCorrect);
       }
+
       SmartDashboard.putNumber("Period", ALIGNMENT.getController().getPeriod());
       SmartDashboard.putNumber("Alignment measurementZ", _targetTagHeadingError);
       SmartDashboard.putNumber("Heading", RobotNav.getHeading());

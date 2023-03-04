@@ -12,7 +12,6 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
@@ -20,10 +19,8 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
-import edu.wpi.first.math.trajectory.constraint.RectangularRegionConstraint;
-import edu.wpi.first.math.trajectory.constraint.TrajectoryConstraint;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import frc.robot.subsystems.RobotAlignment;
@@ -53,27 +50,22 @@ public class Constants {
     /**
      *April Tags
      */
-    public static AprilTag TAG_ONE = new AprilTag(1, new Pose3d(new Pose2d(2.607, 4.392, Rotation2d.fromDegrees(270))));//00
+    public static AprilTag RED_GRID_BOTTOM_LEFT = new AprilTag(1, new Pose3d(new Pose2d(7.24310, -2.93659, Rotation2d.fromDegrees(270))));//00
 
-    public static AprilTag TAG_TWO = new AprilTag(2, new Pose3d(new Pose2d(1.69, 4.392, Rotation2d.fromDegrees(270))));
+    public static AprilTag RED_GRID_MIDDLE_RIGHT = new AprilTag(2, new Pose3d(new Pose2d(7.24310, -1.26019, Rotation2d.fromDegrees(270))));
 
-    public static AprilTag TAG_FOUR = new AprilTag(4, new Pose3d(new Pose2d(5.72, 2.357, Rotation2d.fromDegrees (180))));
+    public static AprilTag RED_GRID_TOP_RIGHT= new AprilTag(3, new Pose3d(new Pose2d(7.24310, 0.41621, Rotation2d.fromDegrees (180))));
 
-    public static AprilTag TAG_FIVE = new AprilTag(5, new Pose3d(new Pose2d(0, 2.164, Rotation2d.fromDegrees(0))));
+    public static AprilTag BLUE_PICKUP = new AprilTag(4, new Pose3d(new Pose2d(7.90832, 2.74161, Rotation2d.fromDegrees(180))));
 
-    public static AprilTag TAG_SIX = new AprilTag(6, new Pose3d(new Pose2d(5.720, 3.275, Rotation2d.fromDegrees(180))));
+    public static AprilTag RED_PICKUP = new AprilTag(5, new Pose3d(new Pose2d(-7.90832, 2.74161, Rotation2d.fromDegrees(0))));
+
+    public static AprilTag BLUE_GRID_TOP_LEFT= new AprilTag(6, new Pose3d(new Pose2d(-7.24310, 0.41621, Rotation2d.fromDegrees(180))));
+    public static AprilTag BLUE_GRID_MIDDLE_LEFT = new AprilTag(7, new Pose3d(new Pose2d(-7.24310, -1.26019, Rotation2d.fromDegrees(270))));
+    public static AprilTag BLUE_GRID_BOTTOM_LEFT = new AprilTag(8, new Pose3d(new Pose2d(-7.24310,-2.93659, Rotation2d.fromDegrees(270))));
 
 
-    public static Pose2d FIRST_BLUE_GRID = new Pose2d( 2.56+1.8, 0.3065+ 1.8825, Rotation2d.fromDegrees(0));
-    public static Pose2d SECOND_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
-    public static Pose2d THIRD_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
-    public static Pose2d FOURTH_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
-      public static Pose2d FIFTH_BLUE_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
 
-    public static Pose2d BLUE_CHARGING_STATION = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
-    public static Pose2d RED_CHARGING_STATION = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
-
-    public static Pose2d FIRST_RED_GRID = new Pose2d(2.607, 4.392, Rotation2d.fromDegrees(270));
 
     public static Pose2d LOLA = new Pose2d("LolaX".getBytes(StandardCharsets.UTF_8).length,
         "LolaY".getBytes(StandardCharsets.UTF_8).length ,
@@ -100,7 +92,7 @@ public class Constants {
      public static final double WHEEL_CIRCUM = .6283185;
      public static final double TRACK_WIDTH = 0.72;
    }
-
+    public static double ENCODER_SCALE_CONSTANT =  ((Units.inchesToMeters(6)*Math.PI)/ 1024);
     // Max speed of the robot in m/s
     public static DifferentialDriveKinematics DRIVE_KINEMATICS =
         new DifferentialDriveKinematics(TRACK_WIDTH);
@@ -117,19 +109,35 @@ public class Constants {
     public static double AUTO_MAX_ACCEL = 3;
 
     public static double P_GAIN_DRIVE_VEL = 3.1519;
-    public static double VOLTS_MAX = 1.103;
-    public static double VOLTS_SECONDS_PER_METER = 2.0061;
-    public static double VOLTS_SECONDS_SQ_PER_METER = 1.4236;
 
+    //COMBINED FEED FORWARD
+    public static double COMBINED_VOLTS_MAX = 0.65488;
+    public static double COMBINED_VOLTS_SECONDS_PER_METER = 2.7164;
+    public static double COMBINED_VOLTS_SECONDS_SQ_PER_METER = 0.10304;
+    //LEFT SIDE FEED FORWARD
+    public static double LEFT_VOLTS_MAX = 0.91107;
+    public static double LEFT_VOLTS_SECONDS_PER_METER = 1.0051;
+    public static double LEFT_VOLTS_SECONDS_SQ_PER_METER = 0.58786;
+
+    // LEFT SIDE FEEDBACK
+    public static double LEFT_VEL_METERS_PER_SECOND = 3.4268;
+
+    //RIGHT SIDE FEED FORWARD
+    public static double RIGHT_VOLTS_MAX = 0.74523;
+    public static double RIGHT_VOLTS_SECONDS_PER_METER = 2.5707;
+    public static double RIGHT_VOLTS_SECONDS_SQ_PER_METER = 0.37322;
     /*public static RectangularRegionConstraint FIELD_CONSTRAINT =
         new RectangularRegionConstraint(1.0,2.0, 1.0, 2.00);*/
 
+    // POSITION PID CONSTANTS
+    public static double COMBINED_P_GAIN_POS = 0.19333;
+    public static double COMBINED_D_GAIN_POS = 0.022148;
     public static DifferentialDriveVoltageConstraint AUTO_VOLTAGE_CONSTRAINT =
         new DifferentialDriveVoltageConstraint(
             new SimpleMotorFeedforward(
-                VOLTS_MAX,
-                VOLTS_SECONDS_PER_METER,
-                VOLTS_SECONDS_SQ_PER_METER),
+                COMBINED_VOLTS_MAX,
+                COMBINED_VOLTS_SECONDS_PER_METER,
+                COMBINED_VOLTS_SECONDS_SQ_PER_METER),
             DRIVE_KINEMATICS,
             10);
 
@@ -141,11 +149,12 @@ public class Constants {
             .setKinematics(DRIVE_KINEMATICS)
             // Apply the voltage constraint
             .addConstraint(AUTO_VOLTAGE_CONSTRAINT);
-    public static Encoder LEFT_ENCODER = new Encoder(0, 1);
-    public static Encoder RIGHT_ENCODER = new Encoder(2, 3);
+
 
     public static class PneumaticsConstants {
       public static Solenoid WRIST_PISTON = new Solenoid(PneumaticsModuleType.CTREPCM, 12);
+      public static Solenoid LEFT_HILO_GEARSHIFT = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
+      public static Solenoid RIGHT_HILO_GEARSHIFT = new Solenoid(PneumaticsModuleType.CTREPCM, 1);
 
       public record RPistonControl(Solenoid solenoid, DoubleSolenoid doubleSolenoid, double pulseDuration, long delay) {}
 
@@ -154,14 +163,15 @@ public class Constants {
 
     public static class ControlsConstants{
 
-      public static RobotAlignment ALIGNMENT = new RobotAlignment(new ProfiledPIDController(0.0, 0.0, 0.0,new TrapezoidProfile.Constraints(
-          TURN_DEG_PER_SEC_MAX,
-          TURN_ACCEL_DEG_PER_SECSQ_MAX)),
-          RobotNav.getGyro().getFusedHeading());
+      public static RobotAlignment ALIGNMENT = new RobotAlignment(new PIDController(0.0, 0.0, 0.0),RobotNav.getGyro().getFusedHeading());
     }
-    public static double STAB_PID_P = 0;
+    public static double STAB_PID_P = .2;
     public static double STAB_PID_I = 0;
     public static double STAB_PID_D = 0.0;
+
+    public static double BALANCE_PID_P = .02;
+    public static double BALANCE_PID_I = 0.0;
+    public static double BALANCE_PID_D = 0.0;
 
   }
 
