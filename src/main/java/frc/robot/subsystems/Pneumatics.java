@@ -32,9 +32,11 @@ public class Pneumatics extends SubsystemBase {
 
 
 
-  public void setPiston( boolean isEnabled, Solenoid... solenoidArray) {
-    for (Solenoid solenoid : solenoidArray) {
-    solenoid.set(isEnabled);
+  public boolean setPiston( boolean isEnabled, Solenoid... solenoidArray) {
+    for (int i = 0; i < solenoidArray.length; i++) {
+      solenoidArray[i].toggle();
+
     }
+return true;
   }
 }

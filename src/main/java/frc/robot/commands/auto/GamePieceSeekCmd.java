@@ -8,10 +8,7 @@ import frc.robot.utilities.LimelightHelpers;
 import frc.robot.utilities.LimelightHelpers.LimelightTarget_Detector;
 
 public class GamePieceSeekCmd extends CommandBase { // TODO: This requires basement testing
-  /**
-   * Creates a new GamePieceSeekCmd.
-   */
-  private static double _id = 0;
+
   private static LimelightTarget_Detector _target;
   private final Drivetrain _drivetrain;
 
@@ -26,7 +23,10 @@ public class GamePieceSeekCmd extends CommandBase { // TODO: This requires basem
     var target = LimelightHelpers.getLatestResults("").targetingResults.targets_Detector;
 
     for (var t : target) {
-        _id = t.classID;
+      /**
+       * Creates a new GamePieceSeekCmd.
+       */
+        double id = t.classID;
         _target = t;
     }
   }

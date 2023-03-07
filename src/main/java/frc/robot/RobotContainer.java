@@ -6,21 +6,32 @@
 package frc.robot;
 
 
+import static frc.robot.PhysicalInputs.ARM_LIMIT_SWITCH;
 import static frc.robot.PhysicalInputs.XBOX_CONTROLLER;
 import static frc.robot.commands.auto.Auto.autoFactory;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.FieldConstants;
+import frc.robot.commands.ArmExtendCmd;
+import frc.robot.commands.ArmRaiseCmd;
+import frc.robot.commands.ChangeGearCmd;
+import frc.robot.commands.ClawIntakeCmd;
 import frc.robot.commands.ControllerDriveCmd;
+import frc.robot.commands.OpenWristCmd;
 import frc.robot.commands.StabilizedDriveCmd;
+import frc.robot.commands.WristRaiseCmd;
 import frc.robot.commands.auto.AlignWithBlockGridCmd;
 import frc.robot.commands.auto.ChargeStationBalanceCmd;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Pneumatics;
 import frc.robot.utilities.RobotNav;
 
 /**
@@ -35,8 +46,9 @@ public class RobotContainer {
   private final RobotNav _robotNav = new RobotNav();
   private final Drivetrain _drivetrain = new Drivetrain();
   private final XboxController _driveController = new XboxController(0);
+  private final Pneumatics _pneumatics = new Pneumatics();
   private final SendableChooser<Command> _commandSendableChooser = new SendableChooser<>();
-
+private final Arm _arm = new Arm();
 
   public RobotContainer() {
     configureAutoChooser();
@@ -58,6 +70,11 @@ public class RobotContainer {
    * Use this method to define your trigger->command mappings.
    */
   private void configureBindings() {
+    new Trigger(ARM_LIMIT_SWITCH::get).onTrue(new InstantCommand(()-> {
+      Drivetrain.wpi_talonSRXES[6].getSensorCollection().setQuadraturePosition( 0,0);
+      Drivetrain.wpi_talonSRXES[3].getSensorCollection().setQuadraturePosition( 0,0);
+    }));
+
 
     new Trigger(() -> (XBOX_CONTROLLER.getRightX() > -.06 && XBOX_CONTROLLER.getRightX() < .06)
         && Math.abs(RobotNav.getGyro().getRate()) < 4)
@@ -65,8 +82,18 @@ public class RobotContainer {
         .whileFalse(new ControllerDriveCmd(_drivetrain, XBOX_CONTROLLER));
     new Trigger(_driveController::getAButtonPressed)
         .onTrue(new AlignWithBlockGridCmd(_drivetrain, _driveController, 6));
-    new Trigger(_driveController::getXButtonPressed)
-        .onTrue(new ChargeStationBalanceCmd(_robotNav,_drivetrain));
+  /*  new Trigger(_driveController::getXButtonPressed)
+        .onTrue(new );*/
+    new Trigger(_driveController::getBButtonPressed)
+        .onTrue(new ChangeGearCmd(_pneumatics));
+    new Trigger(_driveController::getLeftBumperPressed).whileTrue(new OpenWristCmd(_pneumatics));
+  new Trigger(_driveController::getYButtonPressed)
+        .onTrue(new ArmRaiseCmd(_arm).andThen(new WristRaiseCmd()));
+    new Trigger(_driveController::getRightBumperPressed)
+        .onTrue(new ClawIntakeCmd());
+    new Trigger(_driveController::getLeftStickButtonPressed)
+        .onTrue(new ArmExtendCmd(_pneumatics));
+
   }
 
 
