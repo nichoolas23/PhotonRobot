@@ -21,8 +21,10 @@ import frc.robot.Constants.FieldConstants;
 import frc.robot.commands.arm.ArmExtendCmd;
 import frc.robot.commands.arm.ArmRaiseCmd;
 import frc.robot.commands.ChangeGearCmd;
+import frc.robot.commands.arm.ManualArmControlCmd;
 import frc.robot.commands.claw.ClawIntakeCmd;
 import frc.robot.commands.ControllerDriveCmd;
+import frc.robot.commands.wrist.ManualWristRaiseCmd;
 import frc.robot.commands.wrist.OpenWristCmd;
 import frc.robot.commands.StabilizedDriveCmd;
 import frc.robot.commands.wrist.WristRaiseCmd;
@@ -99,7 +101,8 @@ private final Arm _arm = new Arm();
 
   public Command getTeleopCommand() {
 
-    return new ControllerDriveCmd(new Drivetrain(), _driveController);
+    return new ControllerDriveCmd(new Drivetrain(), _driveController).alongWith(new ManualArmControlCmd(_arm),
+        new ManualWristRaiseCmd(_wrist));
   }
 
   public Command getAutonomousCommand() {
