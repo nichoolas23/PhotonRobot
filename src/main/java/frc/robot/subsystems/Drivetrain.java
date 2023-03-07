@@ -77,8 +77,8 @@ public class Drivetrain extends SubsystemBase { // TODO: clean this mess when co
   private static final DifferentialDriveWheelVoltages _diffDriveWheelVoltages = new DifferentialDriveWheelVoltages();
   private static final DifferentialDriveOdometry _diffDriveOdometry = new DifferentialDriveOdometry(
       _gyro.getRotation2d(), 0, 0);
-private SlewRateLimiter _revLimiter = new SlewRateLimiter(0.9);
-  private SlewRateLimiter _forwardLimiter = new SlewRateLimiter(0.9);
+private SlewRateLimiter _revLimiter = new SlewRateLimiter(0.95);
+  private SlewRateLimiter _forwardLimiter = new SlewRateLimiter(0.95);
   private SlewRateLimiter _rotRateLimiter = new SlewRateLimiter(0.9);
 
   public Drivetrain() {
@@ -193,7 +193,7 @@ SmartDashboard.putNumber("Arm Encoder",wpi_talonSRXES[6].getSensorCollection().g
   public void drive(double forwardSpeed, double reverseSpeed, double rot) {
     forwardSpeed= _forwardLimiter.calculate(forwardSpeed);
     reverseSpeed= _revLimiter.calculate(reverseSpeed);
-    rot= _rotRateLimiter.calculate(rot);
+
 SmartDashboard.putNumber("Rot",rot);
     SmartDashboard.putNumber("forward",forwardSpeed);
     SmartDashboard.putNumber("reverse",reverseSpeed);

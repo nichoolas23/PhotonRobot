@@ -47,5 +47,5 @@ public class WristRaiseCmd extends CommandBase {
   @Override
   public boolean isFinished() {
     return _wristSubSystem.controlWrist(200);
-  }
+  } // wrist 1212
 }

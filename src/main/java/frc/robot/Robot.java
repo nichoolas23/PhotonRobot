@@ -51,6 +51,8 @@ public class Robot extends TimedRobot {
     _robotContainer = new RobotContainer();
     RobotNav.setStdDevVision();
     _drivetrain.setBrakeMode();
+    Drivetrain.wpi_talonSRXES[6].getSensorCollection().setQuadraturePosition( 0,0);
+    Drivetrain.wpi_talonSRXES[3].getSensorCollection().setQuadraturePosition( 0,0);
   }
 
   @Override

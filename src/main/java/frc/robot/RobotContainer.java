@@ -78,10 +78,10 @@ private final Arm _arm = new Arm();
     }));
 
 
-    new Trigger(() -> (XBOX_CONTROLLER.getRightX() > -.06 && XBOX_CONTROLLER.getRightX() < .06)
+   /* new Trigger(() -> (XBOX_CONTROLLER.getRightX() > -.06 && XBOX_CONTROLLER.getRightX() < .06)
         && Math.abs(RobotNav.getGyro().getRate()) < 4)
         .whileTrue(new StabilizedDriveCmd(_drivetrain, XBOX_CONTROLLER, _robotNav))
-        .whileFalse(new ControllerDriveCmd(_drivetrain, XBOX_CONTROLLER));
+        .whileFalse(new ControllerDriveCmd(_drivetrain, XBOX_CONTROLLER));*/
     new Trigger(_driveController::getAButtonPressed)
         .onTrue(new AlignWithBlockGridCmd(_drivetrain, _driveController, 6));
   /*  new Trigger(_driveController::getXButtonPressed)
@@ -92,7 +92,7 @@ private final Arm _arm = new Arm();
   new Trigger(_driveController::getYButtonPressed)
         .onTrue(new ArmRaiseCmd(_arm).andThen(new WristRaiseCmd(_wrist)));
     new Trigger(_driveController::getRightBumperPressed)
-        .onTrue(new ClawIntakeCmd());
+        .toggleOnTrue(new ClawIntakeCmd());
     new Trigger(_driveController::getLeftStickButtonPressed)
         .onTrue(new ArmExtendCmd(_pneumatics));
 
@@ -106,6 +106,7 @@ private final Arm _arm = new Arm();
   }
 
   public Command getAutonomousCommand() {
+    RobotNav.getGyro().reset();
     return _commandSendableChooser.getSelected();
   }
 

@@ -28,7 +28,7 @@ public final class Auto
       case 1,2,3 -> List.of(new Translation2d(-3.148, -3.148), new Translation2d(-5.265, -3.224));
       default -> List.of();
     };
-    return Commands.sequence(new InitialDriveOutAutoCmd(drivetrain,robotNav,.2), TrajectoryGen.getTrajCmd(drivetrain,tag,waypoints),new AlignWithBlockGridCmd(drivetrain,XBOX_CONTROLLER,6));//new Path
+    return Commands.sequence(new InitialDriveOutAutoCmd(drivetrain,robotNav,1), TrajectoryGen.getTrajCmd(drivetrain,tag,waypoints),new AlignWithBlockGridCmd(drivetrain,XBOX_CONTROLLER,6));//new Path
   }
 
 

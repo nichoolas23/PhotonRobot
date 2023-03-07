@@ -8,6 +8,7 @@ import static frc.robot.Constants.RobotConstants.ControlsConstants.ArmConstants.
 import static frc.robot.Constants.RobotConstants.ControlsConstants.ArmConstants.MAX_ACCELERATION_RAD_PER_SEC_SQUARED;
 import static frc.robot.Constants.RobotConstants.ControlsConstants.ArmConstants.MAX_VELOCITY_RAD_PER_SEC;
 import static frc.robot.Constants.RobotConstants.ControlsConstants.ArmConstants.kP;
+import static frc.robot.Constants.RobotConstants.PneumaticsConstants.ARM_OPEN;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
@@ -33,6 +34,32 @@ public class Arm extends SubsystemBase {
   /** Create a new ArmSubsystem. */
   public Arm() {
 
+  }
+  public boolean setArmPosition(double targetPos) {
+
+    int kMeasuredPosHorizontal = 926; //Position measured when arm is horizontal
+    double kTicksPerDegree = 4096.0 / 360; //Sensor is 1:1 with arm rotation
+    double currentPos = _motorcontrollerRIGHT.getSensorCollection().getQuadraturePosition();
+
+    double degrees = (currentPos - kMeasuredPosHorizontal) / kTicksPerDegree;
+    double radians = java.lang.Math.toRadians(degrees);
+    double cosineScalar = java.lang.Math.cos(radians);
+    _motorcontrollerLEFT.setInverted(false);
+    _motorcontrollerRIGHT.setInverted(true);
+    double maxGravityFF = 0;
+    if(ARM_OPEN.get()){
+
+      maxGravityFF = 0.13;
+    }
+    else{
+      maxGravityFF = 0.09;
+    }
+    SmartDashboard.putNumber("Arm Gravity",(maxGravityFF * cosineScalar));
+    _motorcontrollerRIGHT.set(
+        ControlMode.Velocity, targetPos, DemandType.ArbitraryFeedForward, (maxGravityFF * cosineScalar));
+    _motorcontrollerLEFT.set(ControlMode.Follower,6);
+
+  return true;
   }
 
 

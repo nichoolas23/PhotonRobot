@@ -26,15 +26,16 @@ public class ManualArmControlCmd extends CommandBase {
 
   @Override
   public void execute() {
-    _armSubSystem.setArmGoalCommand(
-        _motorcontrollerRIGHT.getSelectedSensorPosition() + XBOX_CONTROLLER.getLeftY() * 900);
+
+    _armSubSystem.setArmPosition(
+       XBOX_CONTROLLER.getLeftY()*-1000);
   }
 
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    DriverStation.reportError("Raised", false);
+
   }
 
   // Returns true when the command should end.

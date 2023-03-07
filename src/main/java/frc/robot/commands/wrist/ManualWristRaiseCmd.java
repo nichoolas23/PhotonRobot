@@ -32,7 +32,7 @@ public class ManualWristRaiseCmd extends CommandBase {
    */
   @Override
   public void execute() {
-wrist.controlWrist(_motorcontrollerWRIST.getSelectedSensorPosition() + XBOX_CONTROLLER.getRightY() * 200);
+wrist.controlWristVelocity(XBOX_CONTROLLER.getRightY() * 500);
   }
 
 

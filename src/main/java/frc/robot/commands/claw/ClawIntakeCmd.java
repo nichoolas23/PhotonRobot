@@ -4,7 +4,9 @@ import static frc.robot.PhysicalInputs.XBOX_CONTROLLER;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 
@@ -22,6 +24,7 @@ MotorController intakeController = intakeMotor;
    */
   @Override
   public void initialize() {
+
 
   }
 
@@ -51,7 +54,7 @@ MotorController intakeController = intakeMotor;
   @Override
   public boolean isFinished() {
     // TODO: Make this return true when this Command no longer needs to run execute()
-    return XBOX_CONTROLLER.getRightBumperReleased();
+    return false;
   }
 
   /**
