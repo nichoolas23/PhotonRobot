@@ -1,20 +1,18 @@
-package frc.robot.commands;
+package frc.robot.commands.wrist;
 
-import static frc.robot.PhysicalInputs.XBOX_CONTROLLER;
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Wrist;
 
 
-public class ClawIntakeCmd extends CommandBase {
-WPI_TalonSRX intakeMotor = new WPI_TalonSRX(7 );
-MotorController intakeController = intakeMotor;
-  public ClawIntakeCmd() {
+public class ManualWristRaiseCmd extends CommandBase {
+
+  private final Wrist wrist;
+
+  public ManualWristRaiseCmd(Wrist wrist) {
+    this.wrist = wrist;
     // each subsystem used by the command must be passed into the
     // addRequirements() method (which takes a vararg of Subsystem)
-    addRequirements();
+    addRequirements(this.wrist);
   }
 
   /**
@@ -31,7 +29,7 @@ MotorController intakeController = intakeMotor;
    */
   @Override
   public void execute() {
-    if(intakeController.get() !=-.9) intakeController.set(-.9);
+
   }
 
   /**
@@ -51,7 +49,7 @@ MotorController intakeController = intakeMotor;
   @Override
   public boolean isFinished() {
     // TODO: Make this return true when this Command no longer needs to run execute()
-    return XBOX_CONTROLLER.getRightBumperReleased();
+    return false;
   }
 
   /**
@@ -64,7 +62,6 @@ MotorController intakeController = intakeMotor;
    */
   @Override
   public void end(boolean interrupted) {
-    intakeController.set(0);
 
   }
 }

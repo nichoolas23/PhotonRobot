@@ -36,7 +36,7 @@ public class Arm extends SubsystemBase {
   }
 
 
-  public void setArmGoalCommand(double targetPos) {
+  public boolean setArmGoalCommand(double targetPos) {
     _motorcontrollerRIGHT.setSensorPhase(true);
 
 
@@ -62,6 +62,7 @@ public class Arm extends SubsystemBase {
     SmartDashboard.putNumber("right arm",-(maxGravityFF * cosineScalar));
     SmartDashboard.putNumber("left arm ff",_motorcontrollerLEFT.getActiveTrajectoryArbFeedFwd());
     SmartDashboard.putNumber("right armff",_motorcontrollerRIGHT.getActiveTrajectoryArbFeedFwd());
+    return true;
   }
   public void armStop(){
     _motorcontrollerLEFT.stopMotor();

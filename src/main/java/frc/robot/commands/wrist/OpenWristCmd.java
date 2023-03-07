@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.wrist;
 
 import static frc.robot.Constants.RobotConstants.PneumaticsConstants.CLAW_OPEN;
 

@@ -1,18 +1,18 @@
-package frc.robot.commands;
+package frc.robot.commands.claw;
 
-import static frc.robot.Constants.RobotConstants.PneumaticsConstants.ARM_OPEN;
+import static frc.robot.PhysicalInputs.XBOX_CONTROLLER;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Pneumatics;
 
 
-public class ArmExtendCmd extends CommandBase {
-
-    private final Pneumatics _pneumatics;
-
-    public ArmExtendCmd(Pneumatics _pneumatics) {
-        this._pneumatics = _pneumatics;
-        // each subsystem used by the command must be passed into the
+public class ClawIntakeCmd extends CommandBase {
+WPI_TalonSRX intakeMotor = new WPI_TalonSRX(7 );
+MotorController intakeController = intakeMotor;
+  public ClawIntakeCmd() {
+    // each subsystem used by the command must be passed into the
     // addRequirements() method (which takes a vararg of Subsystem)
     addRequirements();
   }
@@ -31,7 +31,7 @@ public class ArmExtendCmd extends CommandBase {
    */
   @Override
   public void execute() {
-
+    if(intakeController.get() !=-.9) intakeController.set(-.9);
   }
 
   /**
@@ -51,7 +51,7 @@ public class ArmExtendCmd extends CommandBase {
   @Override
   public boolean isFinished() {
     // TODO: Make this return true when this Command no longer needs to run execute()
-    return _pneumatics.setPiston(true,ARM_OPEN);
+    return XBOX_CONTROLLER.getRightBumperReleased();
   }
 
   /**
@@ -64,6 +64,7 @@ public class ArmExtendCmd extends CommandBase {
    */
   @Override
   public void end(boolean interrupted) {
+    intakeController.set(0);
 
   }
 }

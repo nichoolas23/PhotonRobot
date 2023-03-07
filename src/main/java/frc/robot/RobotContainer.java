@@ -10,7 +10,6 @@ import static frc.robot.PhysicalInputs.ARM_LIMIT_SWITCH;
 import static frc.robot.PhysicalInputs.XBOX_CONTROLLER;
 import static frc.robot.commands.auto.Auto.autoFactory;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -19,19 +18,19 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.FieldConstants;
-import frc.robot.commands.ArmExtendCmd;
-import frc.robot.commands.ArmRaiseCmd;
+import frc.robot.commands.arm.ArmExtendCmd;
+import frc.robot.commands.arm.ArmRaiseCmd;
 import frc.robot.commands.ChangeGearCmd;
-import frc.robot.commands.ClawIntakeCmd;
+import frc.robot.commands.claw.ClawIntakeCmd;
 import frc.robot.commands.ControllerDriveCmd;
-import frc.robot.commands.OpenWristCmd;
+import frc.robot.commands.wrist.OpenWristCmd;
 import frc.robot.commands.StabilizedDriveCmd;
-import frc.robot.commands.WristRaiseCmd;
+import frc.robot.commands.wrist.WristRaiseCmd;
 import frc.robot.commands.auto.AlignWithBlockGridCmd;
-import frc.robot.commands.auto.ChargeStationBalanceCmd;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Pneumatics;
+import frc.robot.subsystems.Wrist;
 import frc.robot.utilities.RobotNav;
 
 /**
@@ -48,6 +47,7 @@ public class RobotContainer {
   private final XboxController _driveController = new XboxController(0);
   private final Pneumatics _pneumatics = new Pneumatics();
   private final SendableChooser<Command> _commandSendableChooser = new SendableChooser<>();
+  private final Wrist _wrist = new Wrist();
 private final Arm _arm = new Arm();
 
   public RobotContainer() {
@@ -88,7 +88,7 @@ private final Arm _arm = new Arm();
         .onTrue(new ChangeGearCmd(_pneumatics));
     new Trigger(_driveController::getLeftBumperPressed).whileTrue(new OpenWristCmd(_pneumatics));
   new Trigger(_driveController::getYButtonPressed)
-        .onTrue(new ArmRaiseCmd(_arm).andThen(new WristRaiseCmd()));
+        .onTrue(new ArmRaiseCmd(_arm).andThen(new WristRaiseCmd(_wrist)));
     new Trigger(_driveController::getRightBumperPressed)
         .onTrue(new ClawIntakeCmd());
     new Trigger(_driveController::getLeftStickButtonPressed)

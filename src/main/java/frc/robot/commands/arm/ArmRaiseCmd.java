@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.arm;
 
 import static frc.robot.PhysicalInputs.XBOX_CONTROLLER;
 
@@ -25,31 +25,10 @@ public class ArmRaiseCmd extends CommandBase {
     _armSubSystem = armSubSystem;
   }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute()
-  {
-  _armSubSystem.setArmGoalCommand(400);
-  }
-
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    _armSubSystem.armStop();
-    DriverStation.reportError("Raised",false);
-  }
-
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return XBOX_CONTROLLER.getLeftY() > .2;
+    return  _armSubSystem.setArmGoalCommand(400);
   }
 
 }

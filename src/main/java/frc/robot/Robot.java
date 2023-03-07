@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
+    Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
 
     PathPlannerServer.startServer(5811);
     RoboField.fieldSetup();
@@ -61,7 +61,7 @@ Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
 
     }
     SmartDashboard.putData("alignment", ALIGNMENT.getController());
-_teleopCommand.schedule();
+    _teleopCommand.schedule();
 
   }
 
