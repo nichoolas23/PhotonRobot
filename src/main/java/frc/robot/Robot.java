@@ -45,7 +45,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
-
     PathPlannerServer.startServer(5811);
     RoboField.fieldSetup();
     _robotContainer = new RobotContainer();

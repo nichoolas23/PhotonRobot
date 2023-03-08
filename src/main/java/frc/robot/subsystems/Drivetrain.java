@@ -194,7 +194,7 @@ SmartDashboard.putNumber("Arm Encoder",wpi_talonSRXES[6].getSensorCollection().g
     forwardSpeed= _forwardLimiter.calculate(forwardSpeed);
     reverseSpeed= _revLimiter.calculate(reverseSpeed);
 
-SmartDashboard.putNumber("Rot",rot);
+    SmartDashboard.putNumber("Rot",rot);
     SmartDashboard.putNumber("forward",forwardSpeed);
     SmartDashboard.putNumber("reverse",reverseSpeed);
 

@@ -32,6 +32,10 @@ public class ManualArmControlCmd extends CommandBase {
   }
 
 
+  /**
+   * @param interrupted whether the command was interrupted/canceled
+   *
+   */
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {

@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import static frc.robot.NickReplacementTroubleshooter.FEED_FORWARD_WRIST;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -41,9 +43,6 @@ public class Wrist extends SubsystemBase {
 
   public boolean controlWrist(double targetPos) {
 
-      //_motorcontrollerWRIST.setSensorPhase(true);
-
-
       int kMeasuredPosHorizontal = 250; //Position measured when arm is horizontal
       double kTicksPerDegree = 4096.0 / 360; //Sensor is 1:1 with arm rotation
       double currentPos = _motorcontrollerWRIST.getSensorCollection().getQuadraturePosition();
@@ -52,11 +51,8 @@ public class Wrist extends SubsystemBase {
       double radians = java.lang.Math.toRadians(degrees);
       double cosineScalar = java.lang.Math.cos(radians);
 
-      double maxGravityFF = 0.07;
+      double maxGravityFF = FEED_FORWARD_WRIST;
 
-
-      //_motorcontrollerLEFT.getActiveTrajectoryArbFeedFwd();
-      //, DemandType.ArbitraryFeedForward, maxGravityFF * cosineScalar
       _motorcontrollerWRIST.set(
           ControlMode.MotionMagic, targetPos, DemandType.ArbitraryFeedForward,
           (maxGravityFF * cosineScalar));

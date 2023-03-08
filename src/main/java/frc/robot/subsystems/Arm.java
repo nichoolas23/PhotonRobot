@@ -9,6 +9,8 @@ import static frc.robot.Constants.RobotConstants.ControlsConstants.ArmConstants.
 import static frc.robot.Constants.RobotConstants.ControlsConstants.ArmConstants.MAX_VELOCITY_RAD_PER_SEC;
 import static frc.robot.Constants.RobotConstants.ControlsConstants.ArmConstants.kP;
 import static frc.robot.Constants.RobotConstants.PneumaticsConstants.ARM_OPEN;
+import static frc.robot.NickReplacementTroubleshooter.FEED_FORWARD_ARM;
+import static frc.robot.NickReplacementTroubleshooter.FEED_FORWARD_ARM_EXTENDED;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
@@ -49,10 +51,10 @@ public class Arm extends SubsystemBase {
     double maxGravityFF = 0;
     if(ARM_OPEN.get()){
 
-      maxGravityFF = 0.13;
+      maxGravityFF = FEED_FORWARD_ARM_EXTENDED;
     }
     else{
-      maxGravityFF = 0.09;
+      maxGravityFF = FEED_FORWARD_ARM;
     }
     SmartDashboard.putNumber("Arm Gravity",(maxGravityFF * cosineScalar));
     _motorcontrollerRIGHT.set(
