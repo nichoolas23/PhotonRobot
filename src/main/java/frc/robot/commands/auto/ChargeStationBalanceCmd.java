@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.utilities.RobotNav;
 
-public class ChargeStationBalanceCmd extends ProfiledPIDCommand {
+public class ChargeStationBalanceCmd extends ProfiledPIDCommand { // TODO: LOW GEAR PLEASE PLEASE PLEASE omni wheels better not screw this up
 
 
   public ChargeStationBalanceCmd(RobotNav robotNav, Drivetrain drivetrain) {

@@ -11,7 +11,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 
-public class RobotAlignment extends PIDSubsystem {
+public class RobotAlignment extends PIDSubsystem { //TODO: SIMPLIFY THE PID CONTROLLERS INTO THEIR OWN PACKAGES AND CLASSES this is disgusting
 
   private final SimpleMotorFeedforward _leftFeedforward =
       new SimpleMotorFeedforward(

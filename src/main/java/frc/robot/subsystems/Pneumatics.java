@@ -11,20 +11,8 @@ public class Pneumatics extends SubsystemBase {
 
   }
 
-  /**
-   * Sets the piston to the desired state.
-   *
-   * @param piston
-   */
-  public void setPiston(RPistonControl piston) {
-    piston.solenoid().setPulseDuration(piston.pulseDuration());
-    try {
-      Thread.sleep(piston.delay() * 1000);
-    } catch (InterruptedException e) {
-      throw new RuntimeException(e);
-    }
-    piston.solenoid().startPulse();
-  }
+
+
 
   @Override
   public void periodic() {
@@ -32,9 +20,11 @@ public class Pneumatics extends SubsystemBase {
 
 
 
-  public void setPiston( boolean isEnabled, Solenoid... solenoidArray) {
+  public boolean setPiston( Solenoid... solenoidArray) {
     for (Solenoid solenoid : solenoidArray) {
-    solenoid.set(isEnabled);
+      solenoid.toggle();
+
     }
+return true;
   }
 }

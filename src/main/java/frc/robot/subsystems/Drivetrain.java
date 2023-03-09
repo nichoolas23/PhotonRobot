@@ -2,6 +2,12 @@ package frc.robot.subsystems;
 
 import static frc.robot.Constants.RobotConstants.DRIVE_KINEMATICS;
 import static frc.robot.Constants.VisionConstants.VISION_STD_DEV;
+import static frc.robot.NickReplacementTroubleshooter.FORWARD_SLEW_LIMITER;
+import static frc.robot.NickReplacementTroubleshooter.FORWARD_SPEED_COEFFICIENT;
+import static frc.robot.NickReplacementTroubleshooter.REVERSE_SLEW_LIMITER;
+import static frc.robot.NickReplacementTroubleshooter.REVERSE_SPEED_COEFFICIENT;
+import static frc.robot.NickReplacementTroubleshooter.ROTATE_SLEW_LIMITER;
+import static frc.robot.NickReplacementTroubleshooter.ROTATE_SPEED_COEFFICIENT;
 import static frc.robot.utilities.RobotNav.getFieldAdjPose;
 import static frc.robot.utilities.RobotNav.getLeftEncoderPosition;
 import static frc.robot.utilities.RobotNav.getLeftEncoderVelocity;
@@ -33,18 +39,11 @@ import frc.Field.RoboField;
 import frc.robot.utilities.LimelightHelpers;
 import frc.robot.utilities.RobotNav;
 
-public class Drivetrain extends SubsystemBase {
+public class Drivetrain extends SubsystemBase { // TODO: clean this mess when convenient
 
   private static final boolean isCalibrated = false;
 
 
-  /*  private static final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSRX(1),
-        new WPI_TalonSRX(3), new WPI_TalonSRX(2), new WPI_TalonSRX(4)};
-    private static final MotorControllerGroup _leftDrive = new MotorControllerGroup(wpi_talonSRXES[0],
-        wpi_talonSRXES[1]);
-    private static final MotorControllerGroup _rightDrive = new MotorControllerGroup(
-        wpi_talonSRXES[2],
-        wpi_talonSRXES[3]);*/
 
   public static final WPI_TalonSRX[] wpi_talonSRXES = {new WPI_TalonSRX(0),
       new WPI_TalonSRX(1), new WPI_TalonSRX(2), new WPI_TalonSRX(3), new WPI_TalonSRX(4),
@@ -58,12 +57,7 @@ public class Drivetrain extends SubsystemBase {
       wpi_talonSRXES[5]);
 
 
-  /*  private static final WPI_TalonSRX[] wpi_talonSRXES = new WPI_TalonSRX[]{new WPI_TalonSRX(1),
-         new WPI_TalonSRX(3), new WPI_TalonSRX(2), new WPI_TalonSRX(4)};
-     private static final MotorControllerGroup _leftDrive = new MotorControllerGroup(wpi_talonSRXES[1],
-         wpi_talonSRXES[3]);
-     private static final MotorControllerGroup _rightDrive = new MotorControllerGroup(wpi_talonSRXES[0],
-         wpi_talonSRXES[2]);*/
+
   private static final DifferentialDrive _differentialDrive = new DifferentialDrive(_leftDrive,
       _rightDrive);
   private static final AHRS _gyro = new AHRS();
@@ -77,24 +71,22 @@ public class Drivetrain extends SubsystemBase {
   private static final DifferentialDriveWheelVoltages _diffDriveWheelVoltages = new DifferentialDriveWheelVoltages();
   private static final DifferentialDriveOdometry _diffDriveOdometry = new DifferentialDriveOdometry(
       _gyro.getRotation2d(), 0, 0);
-private static SlewRateLimiter _slewRateLimiter = new SlewRateLimiter(0.5);
+private SlewRateLimiter _revLimiter = new SlewRateLimiter(REVERSE_SLEW_LIMITER);
+  private SlewRateLimiter _forwardLimiter = new SlewRateLimiter(FORWARD_SLEW_LIMITER);
+  private SlewRateLimiter _rotRateLimiter = new SlewRateLimiter(ROTATE_SLEW_LIMITER);
 
   public Drivetrain() {
-
-   /* LEFT_ENCODER.setQuadraturePosition(WHEEL_CIRCUM / 357.75);
-    LEFT_ENCODER.(true);
-    RIGHT_ENCODER.setDistancePerPulse(WHEEL_CIRCUM / 357.75);*/
 
     _rightDrive.setInverted(true);
     _differentialDrive.setSafetyEnabled(false);
     _diffPoseEstimator.setVisionMeasurementStdDevs(VISION_STD_DEV);
-//this.setDefaultCommand(new ControllerDriveCmd(this,new XboxController(0)));
+
   }
 
 
   @Override
   public void periodic() {
-
+SmartDashboard.putNumber("Arm Encoder",wpi_talonSRXES[6].getSensorCollection().getQuadraturePosition());
   }
 
 
@@ -143,21 +135,14 @@ private static SlewRateLimiter _slewRateLimiter = new SlewRateLimiter(0.5);
     for (var motor : wpi_talonSRXES) {
       motor.setNeutralMode(NeutralMode.Brake);
     }
+    
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
 
     return _diffDriveWheelSpeeds;
   }
-  public void emergencyStop() {
-    for (var motor : wpi_talonSRXES) {
-      motor.set(0);
-    }
-    _leftDrive.stopMotor();
-    _rightDrive.stopMotor();
-    CommandScheduler.getInstance().cancelAll();
-    throw new RuntimeException("EMERGENCY STOP");
-  }
+
 
   public void setVoltages(double leftVolts, double rightVolts) {
     _leftDrive.setVoltage(leftVolts * .25);
@@ -188,20 +173,23 @@ private static SlewRateLimiter _slewRateLimiter = new SlewRateLimiter(0.5);
    * @param rot          Between -1.0 and 1.0 for turning
    */
   public void drive(double forwardSpeed, double reverseSpeed, double rot) {
-    forwardSpeed= _slewRateLimiter.calculate(forwardSpeed);
-    reverseSpeed= _slewRateLimiter.calculate(reverseSpeed);
-    rot= _slewRateLimiter.calculate(rot);
+    forwardSpeed= _forwardLimiter.calculate(forwardSpeed);
+    reverseSpeed= _revLimiter.calculate(reverseSpeed);
 
+    SmartDashboard.putNumber("Rot",rot);
+    SmartDashboard.putNumber("forward",forwardSpeed);
+    SmartDashboard.putNumber("reverse",reverseSpeed);
 
-    _differentialDrive.arcadeDrive(reverseSpeed > 0 ? reverseSpeed * -1 : forwardSpeed, rot * -1);
+    _differentialDrive.arcadeDrive(reverseSpeed > 0 ? reverseSpeed * -REVERSE_SPEED_COEFFICIENT : forwardSpeed *FORWARD_SPEED_COEFFICIENT, rot * -ROTATE_SPEED_COEFFICIENT);
 
 
   }
 
 
   public void drive(double speed, double rot) {
-speed =  _slewRateLimiter.calculate(speed);
-rot = _slewRateLimiter.calculate(rot);
+    _forwardLimiter.reset(0.0);
+    speed = _forwardLimiter.calculate(speed);
+    rot = _rotRateLimiter.calculate(rot);
     _differentialDrive.arcadeDrive(speed, rot);
   }
 }

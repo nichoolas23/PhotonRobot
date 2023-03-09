@@ -37,62 +37,71 @@ public class Constants {
 
   public static class VisionConstants {
 
-    public static final Transform3d ROBOT_TO_CAM = new Transform3d(new Translation3d(0.00, .38, 0.15),
+    public static final Transform3d ROBOT_TO_CAM = new Transform3d(
+        new Translation3d(0.00, .38, 0.15),
         new Rotation3d(0, 0, 0));
     public static Matrix<N3, N1> VISION_STD_DEV = new Matrix<>(N3.instance, N1.instance);
 
 
   }
 
-  public static class FieldConstants  {
+  public static class FieldConstants {
 
 
     /**
-     *April Tags
+     * April Tags
      */
-    public static AprilTag RED_GRID_BOTTOM_LEFT = new AprilTag(1, new Pose3d(new Pose2d(7.24310, -2.93659, Rotation2d.fromDegrees(270))));//00
+    public static AprilTag RED_GRID_BOTTOM_LEFT = new AprilTag(1,
+        new Pose3d(new Pose2d(7.24310, -2.93659, Rotation2d.fromDegrees(270))));//00
 
-    public static AprilTag RED_GRID_MIDDLE_RIGHT = new AprilTag(2, new Pose3d(new Pose2d(7.24310, -1.26019, Rotation2d.fromDegrees(270))));
+    public static AprilTag RED_GRID_MIDDLE_RIGHT = new AprilTag(2,
+        new Pose3d(new Pose2d(7.24310, -1.26019, Rotation2d.fromDegrees(270))));
 
-    public static AprilTag RED_GRID_TOP_RIGHT= new AprilTag(3, new Pose3d(new Pose2d(7.24310, 0.41621, Rotation2d.fromDegrees (180))));
+    public static AprilTag RED_GRID_TOP_RIGHT = new AprilTag(3,
+        new Pose3d(new Pose2d(7.24310, 0.41621, Rotation2d.fromDegrees(180))));
 
-    public static AprilTag BLUE_PICKUP = new AprilTag(4, new Pose3d(new Pose2d(7.90832, 2.74161, Rotation2d.fromDegrees(180))));
+    public static AprilTag BLUE_PICKUP = new AprilTag(4,
+        new Pose3d(new Pose2d(7.90832, 2.74161, Rotation2d.fromDegrees(180))));
 
-    public static AprilTag RED_PICKUP = new AprilTag(5, new Pose3d(new Pose2d(-7.90832, 2.74161, Rotation2d.fromDegrees(0))));
+    public static AprilTag RED_PICKUP = new AprilTag(5,
+        new Pose3d(new Pose2d(-7.90832, 2.74161, Rotation2d.fromDegrees(0))));
 
-    public static AprilTag BLUE_GRID_TOP_LEFT= new AprilTag(6, new Pose3d(new Pose2d(-7.24310, 0.41621, Rotation2d.fromDegrees(180))));
-    public static AprilTag BLUE_GRID_MIDDLE_LEFT = new AprilTag(7, new Pose3d(new Pose2d(-7.24310, -1.26019, Rotation2d.fromDegrees(270))));
-    public static AprilTag BLUE_GRID_BOTTOM_LEFT = new AprilTag(8, new Pose3d(new Pose2d(-7.24310,-2.93659, Rotation2d.fromDegrees(270))));
-
-
+    public static AprilTag BLUE_GRID_TOP_LEFT = new AprilTag(6,
+        new Pose3d(new Pose2d(-7.24310, 0.41621, Rotation2d.fromDegrees(180))));
+    public static AprilTag BLUE_GRID_MIDDLE_LEFT = new AprilTag(7,
+        new Pose3d(new Pose2d(-7.24310, -1.26019, Rotation2d.fromDegrees(270))));
+    public static AprilTag BLUE_GRID_BOTTOM_LEFT = new AprilTag(8,
+        new Pose3d(new Pose2d(-7.24310, -2.93659, Rotation2d.fromDegrees(270))));
 
 
     public static Pose2d LOLA = new Pose2d("LolaX".getBytes(StandardCharsets.UTF_8).length,
-        "LolaY".getBytes(StandardCharsets.UTF_8).length ,
+        "LolaY".getBytes(StandardCharsets.UTF_8).length,
         Rotation2d.fromDegrees(270));
     public static Pose2d SECOND_RED_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
     public static Pose2d THIRD_RED_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
-    public static Pose2d FOURTH_RED_GRID = new Pose2d(5.72, 2.357, Rotation2d.fromDegrees (180));
+    public static Pose2d FOURTH_RED_GRID = new Pose2d(5.72, 2.357, Rotation2d.fromDegrees(180));
     public static Pose2d FIFTH_RED_GRID = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0));
 
 
-       /**
-     *  Field Dimensions
+    /**
+     * Field Dimensions
      */
     public static double FIELD_LENGTH = 3.27;
     public static double FIELD_WIDTH = 4.234;
 
 
   }
+
   public static class RobotConstants {
 
 
+    public static class PhysicalConstants {
 
-   public static class PhysicalConstants {
-     public static final double WHEEL_CIRCUM = .6283185;
-     public static final double TRACK_WIDTH = 0.72;
-   }
-    public static double ENCODER_SCALE_CONSTANT =  ((Units.inchesToMeters(6)*Math.PI)/ 1024);
+      public static final double WHEEL_CIRCUM = .6283185;
+      public static final double TRACK_WIDTH = 0.72;
+    }
+
+    public static double ENCODER_SCALE_CONSTANT = ((Units.inchesToMeters(6) * Math.PI) / 1024);
     // Max speed of the robot in m/s
     public static DifferentialDriveKinematics DRIVE_KINEMATICS =
         new DifferentialDriveKinematics(TRACK_WIDTH);
@@ -104,7 +113,7 @@ public class Constants {
     public static final double RAMSETE_ZETA = 0.5; // Tuning parameter (0 rad-1 < zeta < 1 rad-1) for which larger values provide more damping in response.
 
 
-//RAMSETE SETUP
+    //RAMSETE SETUP
     public static double AUTO_MAX_SPEED = 3;
     public static double AUTO_MAX_ACCEL = 3;
 
@@ -152,20 +161,46 @@ public class Constants {
 
 
     public static class PneumaticsConstants {
-      public static Solenoid WRIST_PISTON = new Solenoid(PneumaticsModuleType.CTREPCM, 12);
-      public static Solenoid LEFT_HILO_GEARSHIFT = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
-      public static Solenoid RIGHT_HILO_GEARSHIFT = new Solenoid(PneumaticsModuleType.CTREPCM, 1);
 
-      public record RPistonControl(Solenoid solenoid, DoubleSolenoid doubleSolenoid, double pulseDuration, long delay) {}
+
+      public static Solenoid LEFT_HILO_GEARSHIFT = new Solenoid(PneumaticsModuleType.CTREPCM, 3);
+      public static Solenoid RIGHT_HILO_GEARSHIFT = new Solenoid(PneumaticsModuleType.CTREPCM, 4);
+      public static Solenoid CLAW_OPEN = new Solenoid(PneumaticsModuleType.CTREPCM, 2);
+      public static Solenoid ARM_OPEN = new Solenoid(PneumaticsModuleType.CTREPCM, 1);
+
+
+      public record RPistonControl(Solenoid solenoid, DoubleSolenoid doubleSolenoid,
+                                   double pulseDuration, long delay) {
+
+      }
 
 
     }
 
-    public static class ControlsConstants{
+    public static class ControlsConstants {
 
-      public static RobotAlignment ALIGNMENT = new RobotAlignment(new PIDController(0.0, 0.0, 0.0),RobotNav.getGyro().getFusedHeading());
+      public static class ArmConstants {
+
+        public static final int kMotorPort = 4;
+
+        public static final double kP = 1;
+
+        public static final double ARM_S_VOLTS = 1;
+        public static final double ARM_G_VOLTS = 1;
+        public static final double ARM_VOLT_SEC_PER_RAD = 1;
+        public static final double ARM_VOLT_SEC_SQUARED_PER_RAD = 0.1;
+        public static final double MAX_VELOCITY_RAD_PER_SEC = 3;
+        public static final double MAX_ACCELERATION_RAD_PER_SEC_SQUARED = 10;
+        public static final double ARM_OFFSET_RADS = 0.5;
+      }
+
+
+      public static RobotAlignment ALIGNMENT = new RobotAlignment(new PIDController(0.0, 0.0, 0.0),
+          RobotNav.getGyro().getFusedHeading());
     }
+
     public static double STAB_PID_P = .2;
+
     public static double STAB_PID_I = 0;
     public static double STAB_PID_D = 0.0;
 
@@ -174,6 +209,7 @@ public class Constants {
     public static double BALANCE_PID_D = 0.0;
 
   }
-
-
 }
+
+
+

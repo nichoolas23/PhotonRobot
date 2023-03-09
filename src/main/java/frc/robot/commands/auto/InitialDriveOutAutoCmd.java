@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.utilities.RobotNav;
 
-public class InitialDriveOutAutoCmd extends CommandBase {
+public class InitialDriveOutAutoCmd extends CommandBase { // TODO: Perhaps we use something other than the navx to judge distance. I am talking to myself now
   private final PIDController _controller = new PIDController(0.1, 0, 0);
 private Drivetrain _drivetrain;
   private RobotNav _robotNav;
