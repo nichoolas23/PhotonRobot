@@ -37,6 +37,21 @@ public static double ROTATE_SPEED_COEFFICIENT = 1; // between 0.0 and 1.0 [0.0 =
 public static double FORWARD_SPEED_COEFFICIENT = 1; // I wouldn't recommend changing this
 public static double REVERSE_SPEED_COEFFICIENT = 1;// I wouldn't recommend changing this
 
-
+/*
+*
+* Tips and Tricks for le robot
+*
+* When starting the robot it is extremely extremely important that the arm is vertical and the wrist is tucked otherwise the encoders will not calibrate
+* Also the claw doesn't account for the angle of the arm when compensating feed forward I will fix that when I arrive it really isn't that critical
+*
+* When picking up the cones open the wrist and make sure the arm is on the lower thicker part of the cone and then close it
+* for the cubes you can honestly try and close the wrist around them hopefully they don't pop but when I tested them they only squished
+*
+* I don't have autonomous doing anything right now other than driving out which really sucks, but I simply could not get the arm to be reliably controlled in time.
+* Also the charging station auto balance is a bit dangerous since there was no testing done on that with the actual robot and I do not want risk the robot being tipped on its first try. I will play around with it when I get there
+*
+* please for the love of god do not put the robot in front of the charging station in preparation for autonomous because as of now it just drives out until the navx thinks its gone 3 meters
+*
+ */
 
 }

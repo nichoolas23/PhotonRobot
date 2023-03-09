@@ -22,6 +22,7 @@ import frc.robot.commands.ControllerDriveCmd;
 import frc.robot.commands.arm.ArmExtendCmd;
 import frc.robot.commands.arm.ArmRaiseCmd;
 import frc.robot.commands.arm.ManualArmControlCmd;
+import frc.robot.commands.auto.InitialDriveOutAutoCmd;
 import frc.robot.commands.claw.ClawIntakeCmd;
 import frc.robot.commands.wrist.ManualWristRaiseCmd;
 import frc.robot.commands.wrist.OpenWristCmd;
@@ -105,6 +106,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     RobotNav.getGyro().reset();
-    return _commandSendableChooser.getSelected();
+    return new InitialDriveOutAutoCmd(_drivetrain, _robotNav,3);
+    //return _commandSendableChooser.getSelected();
   }
 }
