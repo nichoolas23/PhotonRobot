@@ -1,19 +1,19 @@
 package frc.robot.commands.claw;
 
-import static frc.robot.PhysicalInputs.XBOX_CONTROLLER;
+import static frc.robot.NickReplacementTroubleshooter.CLAW_SPEED;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 
 public class ClawIntakeCmd extends CommandBase {
-WPI_TalonSRX intakeMotor = new WPI_TalonSRX(7 );
+
+  private final boolean _spitOut;
+  WPI_TalonSRX intakeMotor = new WPI_TalonSRX(7 );
 MotorController intakeController = intakeMotor;
-  public ClawIntakeCmd() {
+  public ClawIntakeCmd(boolean spitOut) {
+    _spitOut = spitOut;
     // each subsystem used by the command must be passed into the
     // addRequirements() method (which takes a vararg of Subsystem)
     addRequirements();
@@ -34,7 +34,11 @@ MotorController intakeController = intakeMotor;
    */
   @Override
   public void execute() {
-    if(intakeController.get() !=-.9) intakeController.set(-.9);
+    if(_spitOut){
+      intakeController.set(CLAW_SPEED);
+    }else{
+      intakeController.set(-CLAW_SPEED);
+    }
   }
 
   /**

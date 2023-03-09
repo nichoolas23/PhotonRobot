@@ -2,8 +2,6 @@ package frc.robot.commands.wrist;
 
 import static frc.robot.Constants.RobotConstants.PneumaticsConstants.CLAW_OPEN;
 
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Pneumatics;
 
@@ -36,7 +34,7 @@ public class OpenWristCmd extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return _pneumatics.setPiston(true,CLAW_OPEN);
+    return _pneumatics.setPiston(CLAW_OPEN);
   }
 
 }

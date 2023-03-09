@@ -41,7 +41,7 @@ public class ChangeGearCmd extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return _pneumatics.setPiston( !LEFT_HILO_GEARSHIFT.get(),LEFT_HILO_GEARSHIFT,RIGHT_HILO_GEARSHIFT);
+    return _pneumatics.setPiston( LEFT_HILO_GEARSHIFT,RIGHT_HILO_GEARSHIFT);
   }
 
 }

@@ -28,7 +28,7 @@ public class ManualArmControlCmd extends CommandBase {
   public void execute() {
 
     _armSubSystem.setArmPosition(
-       XBOX_CONTROLLER.getLeftY()*-1000);
+       XBOX_CONTROLLER.getRightY()*-1000);
   }
 
 

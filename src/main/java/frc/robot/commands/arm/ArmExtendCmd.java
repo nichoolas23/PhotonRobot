@@ -34,7 +34,7 @@ public class ArmExtendCmd extends CommandBase {
   @Override
   public boolean isFinished() {
     // TODO: Make this return true when this Command no longer needs to run execute()
-    return _pneumatics.setPiston(true, ARM_OPEN);
+    return _pneumatics.setPiston(ARM_OPEN);
   }
 
 

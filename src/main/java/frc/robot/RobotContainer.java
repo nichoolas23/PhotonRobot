@@ -22,7 +22,6 @@ import frc.robot.commands.ControllerDriveCmd;
 import frc.robot.commands.arm.ArmExtendCmd;
 import frc.robot.commands.arm.ArmRaiseCmd;
 import frc.robot.commands.arm.ManualArmControlCmd;
-import frc.robot.commands.auto.AlignWithBlockGridCmd;
 import frc.robot.commands.claw.ClawIntakeCmd;
 import frc.robot.commands.wrist.ManualWristRaiseCmd;
 import frc.robot.commands.wrist.OpenWristCmd;
@@ -59,13 +58,16 @@ public class RobotContainer {
     configureBindings();
   }
 
+  private static Pose2d getbotpose() {
+    return RobotNav.get_diffDrivePose().getEstimatedPosition();
+  }
+
   private void configureAutoChooser() {
     _commandSendableChooser.addOption("Blue Auto", autoFactory(_drivetrain, _robotNav,
         FieldConstants.BLUE_GRID_TOP_LEFT, true));
     _commandSendableChooser.addOption("Red Auto",
         autoFactory(_drivetrain, _robotNav, FieldConstants.RED_GRID_TOP_RIGHT, false));
   }
-
 
   /**
    * Use this method to define your trigger->command mappings.
@@ -78,20 +80,21 @@ public class RobotContainer {
 
 
 
+/*    new Trigger(_driveController::getAButtonPressed)
+        .onTrue(new AlignWithBlockGridCmd(_drivetrain, _driveController, 6));*/
     new Trigger(_driveController::getAButtonPressed)
-        .onTrue(new AlignWithBlockGridCmd(_drivetrain, _driveController, 6));
+        .onTrue(new ClawIntakeCmd(true));
     new Trigger(_driveController::getBButtonPressed)
         .onTrue(new ChangeGearCmd(_pneumatics));
     new Trigger(_driveController::getLeftBumperPressed).onTrue(new OpenWristCmd(_pneumatics));
     new Trigger(_driveController::getYButtonPressed)
         .onTrue(new ArmRaiseCmd(_arm).andThen(new WristRaiseCmd(_wrist)));
     new Trigger(_driveController::getRightBumperPressed)
-        .toggleOnTrue(new ClawIntakeCmd());
+        .toggleOnTrue(new ClawIntakeCmd(false));
     new Trigger(_driveController::getLeftStickButtonPressed)
         .onTrue(new ArmExtendCmd(_pneumatics));
 
   }
-
 
   public Command getTeleopCommand() {
 
@@ -103,10 +106,5 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     RobotNav.getGyro().reset();
     return _commandSendableChooser.getSelected();
-  }
-
-
-  private static Pose2d getbotpose() {
-    return RobotNav.get_diffDrivePose().getEstimatedPosition();
   }
 }
